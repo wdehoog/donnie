@@ -49,9 +49,11 @@ DISTFILES += \
     qml/pages/PlayerPage.qml \
     qml/pages/RendererPage.qml \
     qml/pages/SettingsPage.qml \
-    qml/pages/UPnPDeviceDetails.qml
+    qml/pages/UPnPDeviceDetails.qml \
+    qml/icons/icon-m-stop.png
 
 HEADERS += \
     src/upnp.h \
     src/upnpbrowseworker.h \
-    src/upnpdiscoveryworker.h
+    src/upnpdiscoveryworker.h \
+    src/IconProvider.h

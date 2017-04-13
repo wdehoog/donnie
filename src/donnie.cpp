@@ -34,6 +34,7 @@
 
 #include <sailfishapp.h>
 
+#include "IconProvider.h"
 #include "upnp.h"
 
 int main(int argc, char *argv[])
@@ -49,6 +50,9 @@ int main(int argc, char *argv[])
 
     QGuiApplication * app = SailfishApp::application(argc,argv);
     QQuickView * view = SailfishApp::createView();
+
+    QQmlEngine *engine = view->engine();
+    engine->addImageProvider(QLatin1String("donnie-icons"), new IconProvider);
 
     UPNP upnp;
     view->rootContext()->setContextProperty("upnp", &upnp);

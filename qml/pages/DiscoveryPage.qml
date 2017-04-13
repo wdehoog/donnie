@@ -260,7 +260,7 @@ Page {
                 var renderer = app.discoveredRenderers[i];
                 selected = renderer["UDN"] === renderer_udn.value;
                 if(selected) {
-                    app.currentRenderer = renderer;
+                    app.setCurrentRenderer(renderer);
                     hasSelected = true;
                 }
                 devicesModel.append({
@@ -306,7 +306,7 @@ Page {
                 var server = app.discoveredServers[i];
                 selected = server["UDN"] === server_udn.value;
                 if(selected) {
-                    app.currentServer = server;
+                    app.setCurrentServer(server);
                     hasSelected = true;
                 }
                 devicesModel.append({

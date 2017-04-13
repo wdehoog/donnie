@@ -185,7 +185,8 @@ Page {
 
                   IconButton {
                       anchors.horizontalCenter: parent.horizontalCenter
-                      icon.source: "image://theme/icon-m-clear"
+                      //icon.source: "image://theme/icon-m-clear"
+                      icon.source: "image://donnie-icons/icon-m-stop"
                       onClicked: stop()
                   }
 
