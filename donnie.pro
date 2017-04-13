@@ -50,7 +50,9 @@ DISTFILES += \
     qml/pages/RendererPage.qml \
     qml/pages/SettingsPage.qml \
     qml/pages/UPnPDeviceDetails.qml \
-    qml/icons/icon-m-stop.png
+    qml/icons/icon-m-stop.png \
+    qml/pages/AboutPage.qml \
+    qml/license/License.txt
 
 HEADERS += \
     src/upnp.h \

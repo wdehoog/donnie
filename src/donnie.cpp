@@ -30,6 +30,10 @@
 
 #ifdef QT_QML_DEBUG
 #include <QtQuick>
+#else
+#include <QQuickView>
+#include <QQmlContext>
+#include <QGuiApplication>
 #endif
 
 #include <sailfishapp.h>

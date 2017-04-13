@@ -76,10 +76,12 @@ Page {
             //    onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"));
             //}
             MenuItem {
+                text: qsTr("About")
+                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"));
+            }
+            MenuItem {
                 text: qsTr("Discover UPnP Devices")
-                onClicked: {
-                    discover();
-                }
+                onClicked: discover();
             }
             MenuItem {
                 text: qsTr("Browse")

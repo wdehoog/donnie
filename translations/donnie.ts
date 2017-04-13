@@ -2,6 +2,21 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>AboutPage</name>
+    <message>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UPnP control point and player for Sailfish OS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thanks to</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Browse</name>
     <message>
         <source>Browse</source>
@@ -31,6 +46,10 @@
     </message>
     <message>
         <source>UPnP Devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

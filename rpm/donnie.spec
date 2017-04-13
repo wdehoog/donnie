@@ -15,20 +15,22 @@ Name:       donnie
 Summary:    UPnP Controller with built in Player
 Version:    0.1
 Release:    1
-Group:      Qt/Qt
-License:    LICENSE
+Group:      Applications/Music
+License:    GPLv2
 URL:        http://example.org/
-Source0:    %{name}-%{version}.tar.bz2
+Source0:    %{name}-%{version}.tar.gz
 Source100:  donnie.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
+Requires:   libupnpp >= 0.15.1
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
+BuildRequires:  libupnpp >= 0.15.1
 BuildRequires:  desktop-file-utils
 
 %description
-Short description of my Sailfish OS Application
+UPnP control point and player for Sailfish OS
 
 
 %prep

@@ -4,15 +4,15 @@ Version: 0.1
 Release: 1
 # The contents of the Group field should be one of the groups listed here:
 # http://gitorious.org/meego-developer-tools/spectacle/blobs/master/data/GROUPS
-Group: Qt/Qt
+Group: Applications/Music
 URL: http://example.org/
-License: LICENSE
+License: GPLv2
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
 Sources:
-- '%{name}-%{version}.tar.bz2'
+- '%{name}-%{version}.tar.gz'
 Description: |
-  Short description of my Sailfish OS Application
+  UPnP control point and player for Sailfish OS
 Configure: none
 # The qtc5 builder inserts macros to allow QtCreator to have fine
 # control over qmake/make execution
@@ -27,12 +27,13 @@ PkgConfigBR:
   - Qt5Quick
 
 # Build dependencies without a pkgconfig setup can be listed here
-# PkgBR:
-#   - package-needed-to-build
+PkgBR:
+  - libupnpp >= 0.15.1
 
 # Runtime dependencies which are not automatically detected
 Requires:
   - sailfishsilica-qt5 >= 0.10.9 
+  - libupnpp >= 0.15.1
 
 # All installed files
 Files:
