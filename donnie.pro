@@ -52,7 +52,8 @@ DISTFILES += \
     qml/pages/UPnPDeviceDetails.qml \
     qml/icons/icon-m-stop.png \
     qml/pages/AboutPage.qml \
-    qml/license/License.txt
+    qml/license/License.txt \
+    qml/UPnP.js
 
 HEADERS += \
     src/upnp.h \

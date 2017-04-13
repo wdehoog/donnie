@@ -85,7 +85,10 @@ Page {
             }
             MenuItem {
                 text: qsTr("Browse")
-                onClicked: pageStack.push(browsePage, {cid: "0"});
+                onClicked: {
+                    browsePage.reset();
+                    pageStack.push(browsePage, {cid: "0"});
+                }
             }
         }
 
@@ -177,10 +180,14 @@ Page {
 
                     // update for new choice
                     devicesModel.set(index, { "selected": true })
-                    if(device.type === "Server")
+                    if(device.type === "Server") {
+                        app.setCurrentServer(app.discoveredServers[device.discoveryIndex]);
                         storeSelectedServer(device.UDN);
-                    else
+                    } else {
+                        app.setCurrentRenderer(app.discoveredRenderers[device.discoveryIndex]);
                         storeSelectedRenderer(device.UDN);
+
+                    }
                     // VISIT
                     // app.currentServer =
                     // app.useBuildInPlayer =
@@ -283,6 +290,7 @@ Page {
                 hasSelected = true;
             devicesModel.append({
                 type: "Renderer",
+                discoveryIndex: i,
                 friendlyName: "Build in Player",
                 manufacturer: "donnie",
                 modelName: "Sailfish QTAudio Player",
@@ -313,6 +321,7 @@ Page {
                 }
                 devicesModel.append({
                     type: "Content Server",
+                    discoveryIndex: i,
                     friendlyName: server["friendlyName"],
                     manufacturer: server["manufacturer"],
                     modelName: server["modelName"],

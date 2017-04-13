@@ -310,6 +310,11 @@ Page {
         }
     }
 
+    function reset() {
+        pathListModel.clear();
+        app.currentBrowseStack.empty();
+    }
+
     function popFromBrowseStackUntil(id) {
         do {
             if(app.currentBrowseStack.peek().id === id)

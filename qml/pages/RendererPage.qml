@@ -18,6 +18,10 @@ Page {
     property int timeSliderMaximumValue : 0
     property string timeSliderValueText : ""
 
+    property string prevTrackURI: ""
+    property int prevTrackDuration: -1
+    property int prevTrackTime: -1
+
     property int volumeSliderValue
     property string muteIconSource : "image://theme/icon-m-speaker"
 
@@ -31,14 +35,14 @@ Page {
         if(currentItem >= (trackListModel.count-1))
             return;
         currentItem++;
-        loadTrack(trackListModel.get(currentItem));
+        loadTrack();
     }
 
     function prev() {
         if(currentItem <= 0)
             return;
         currentItem--;
-        loadTrack(trackListModel.get(currentItem));
+        loadTrack();
     }
 
     function pause() {
@@ -81,7 +85,21 @@ Page {
         }
     }
 
-    function loadTrack(track) {
+    function onChangedTrack(track) {
+        imageItemSource = track.albumArtURI;
+        cover.imageSource = track.albumArtURI;
+        trackText = track.titleText;
+        albumText = track.metaText;
+
+        // if available set next track
+        if(trackListModel.count > (currentItem+1)) {
+            track = trackListModel.get(currentItem+1);
+            upnp.setNextTrack(track.uri, track.didl);
+        }
+    }
+
+    function loadTrack(trackIndex) {
+        var track = trackListModel.get(currentItem);
         upnp.setTrack(track.uri, track.didl);
         imageItemSource = track.albumArtURI;
         cover.imageSource = track.albumArtURI;
@@ -94,6 +112,16 @@ Page {
 
         trackText = track.titleText;
         albumText = track.metaText;
+
+        prevTrackURI = track.uri;
+        //prevTrackDuration = trackduration;
+        //prevTrackTime = tracktime;
+
+        // if available set next track
+        if(trackListModel.count > (currentItem+1)) {
+            track = trackListModel.get(currentItem+1);
+            upnp.setNextTrack(track.uri, track.didl);
+        }
     }
 
     function clearList(){
@@ -288,8 +316,7 @@ Page {
 
             onClicked: {
                 currentItem = index;
-                var track = trackListModel.get(index);
-                loadTrack(track);
+                loadTrack();
             }
         }
 
@@ -353,16 +380,32 @@ Page {
                 + zeroPad(seconds, 2);
     }
 
+    function getTrackForURI(uri) {
+        var i;
+        for(i=0;i<trackListModel.count;i++) {
+            var track = trackListModel.get(i);
+            if(track.uri === uri)
+                return track;
+        }
+        return null;
+    }
+
+
+
     Timer {
         interval: 1000;
         running: rendererPageActive;
         repeat: true
         onTriggered: {
+
+            // read time to update ui and detect track changes
+
             // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
             var pinfoJson = upnp.getPositionInfoJson();
             console.log(pinfoJson);
             var pinfo = JSON.parse(pinfoJson);
 
+            var trackuri = pinfo["trackuri"];
             var trackduration = parseInt(pinfo["trackduration"]);
             var tracktime = parseInt(pinfo["reltime"]);
 
@@ -390,6 +433,28 @@ Page {
             else
               cover.coverProgressBar.label = ""
 
+            // how to detect track change? uri will mostly work but not when a track appears twice and next to each other.
+            // upplay has a nifty solution but I am too lazy now.
+            // (should also use upplay's avtransport_qo.h etc.)
+            if(prevTrackURI != trackuri) {
+                var track = getTrackForURI(trackuri);
+                if(track)
+                    onChangedTrack(track);
+            }
+
+            // unfortunately I cannot get rygel to play the next uri automatically
+            // so at the end we receive time values with zero
+            if(tracktime == 0 && prevTrackTime > 0) {
+               if(pinfo["abstime"] == 0) {
+                   // now what?
+                   //upnp.play(); does not help
+               }
+            }
+
+            //
+            prevTrackURI = trackuri;
+            prevTrackDuration = trackduration;
+            prevTrackTime = tracktime;
         }
     }
 

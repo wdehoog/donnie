@@ -322,6 +322,7 @@ void UPNP::setTrack(QString uri, QString didl) {
         emit error("UPNP::setTrack: Device has no AVTransport service");
         return;
     }
+    std::cerr << didl.toStdString() <<  std::endl;
     avt->setAVTransportURI(uri.toStdString(), didl.toStdString());
 }
 
@@ -333,6 +334,7 @@ void UPNP::setNextTrack(QString uri, QString didl) {
         emit error("UPNP::setNextTrack: Device has no AVTransport service");
         return;
     }
+    std::cerr << didl.toStdString() <<  std::endl;
     avt->setNextAVTransportURI(uri.toStdString(), didl.toStdString());
 }
 
@@ -503,6 +505,7 @@ QString UPNP::getPositionInfoJson() {
 
     QJsonObject positionInfo;
 
+    positionInfo["trackuri"] = QString::fromStdString(info.trackuri);
     positionInfo["trackduration"] = QString::number(info.trackduration);
     positionInfo["reltime"] = QString::number(info.reltime);
     positionInfo["abstime"] = QString::number(info.abstime);

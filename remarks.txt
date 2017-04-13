@@ -1,0 +1,507 @@
+https://www.shareicon.net/media-social-media-social-spotify-network-music-web-880804
+
+album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg/AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg/Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg
+https://github.com/aadsm/jsmediatags
+{
+   "renderers":[
+      {
+         "UDN":"uuid:104e8fdf-e3c1-4f32-a8e9-48e38fa6fac1",
+         "URLBase":"http://192.168.4.26:43643/",
+         "deviceType":"urn:schemas-upnp-org:device:MediaRenderer:2",
+         "friendlyName":"Audio/Video playback on Sailfish",
+         "manufacturer":"Rygel Developers",
+         "modelName":"Rygel"
+      }
+   ],
+   "servers":[
+      {
+         "UDN":"uuid:4d696e69-444c-164e-9d41-02450881da25",
+         "URLBase":"http://192.168.4.106:8200/",
+         "deviceType":"urn:schemas-upnp-org:device:MediaServer:1",
+         "friendlyName":"MiniDLNA Server on OpenMediaVault",
+         "manufacturer":"Justin Maggard",
+         "modelName":"Windows Media Connect compatible (MiniDLNA)"
+      }
+   ]
+}
+
+directory:
+{
+   "containers":[
+      {
+         "id":"64",
+         "pid":"0",
+         "properties":{
+            "upnp:class":"object.container.storageFolder",
+            "upnp:storageUsed":"-1"
+         },
+         "resources":{
+
+         },
+         "title":"Browse Folders"
+      },
+      {
+         "id":"1",
+         "pid":"0",
+         "properties":{
+            "upnp:class":"object.container.storageFolder",
+            "upnp:storageUsed":"-1"
+         },
+         "resources":{
+
+         },
+         "title":"Music"
+      },
+      {
+         "id":"3",
+         "pid":"0",
+         "properties":{
+            "upnp:class":"object.container.storageFolder",
+            "upnp:storageUsed":"-1"
+         },
+         "resources":{
+
+         },
+         "title":"Pictures"
+      },
+      {
+         "id":"2",
+         "pid":"0",
+         "properties":{
+            "upnp:class":"object.container.storageFolder",
+            "upnp:storageUsed":"-1"
+         },
+         "resources":{
+
+         },
+         "title":"Video"
+      }
+   ],
+   "items":[
+
+   ]
+}
+
+album:
+{
+  "containers": [],
+  "items": [
+    {
+      "id": "64$4$0$2C$1$0",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/696-1747.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "1"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1747.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:06:18.049",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "9080364"
+          }
+        }
+      ],
+      "title": "Digital Nation"
+    },
+    {
+      "id": "64$4$0$2C$1$1",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/697-1751.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "2"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1751.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:05:26.065",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "7832755"
+          }
+        }
+      ],
+      "title": "Hysteria"
+    },
+    {
+      "id": "64$4$0$2C$1$2",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/698-1752.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "3"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1752.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:04:58.062",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "7160677"
+          }
+        }
+      ],
+      "title": "Breathe"
+    },
+    {
+      "id": "64$4$0$2C$1$3",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/699-1753.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "4"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1753.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:03:46.069",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "5432834"
+          }
+        }
+      ],
+      "title": "Toxin"
+    },
+    {
+      "id": "64$4$0$2C$1$4",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/700-1754.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "5"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1754.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:05:32.047",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "7976324"
+          }
+        }
+      ],
+      "title": "Believe"
+    },
+    {
+      "id": "64$4$0$2C$1$5",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/701-1755.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "6"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1755.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:04:55.058",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "7088579"
+          }
+        }
+      ],
+      "title": "Spacewalk"
+    },
+    {
+      "id": "64$4$0$2C$1$6",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/702-1756.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "7"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1756.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:05:00.047",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "7208324"
+          }
+        }
+      ],
+      "title": "Navajo"
+    },
+    {
+      "id": "64$4$0$2C$1$7",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/703-1757.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "8"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1757.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:04:34.055",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "6584520"
+          }
+        }
+      ],
+      "title": "Infinity"
+    },
+    {
+      "id": "64$4$0$2C$1$8",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/704-1758.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "9"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1758.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:04:06.052",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "5912442"
+          }
+        }
+      ],
+      "title": "Crucafixion"
+    },
+    {
+      "id": "64$4$0$2C$1$9",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/705-1759.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "10"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1759.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:04:20.054",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "6248481"
+          }
+        }
+      ],
+      "title": "Dream Thief"
+    },
+    {
+      "id": "64$4$0$2C$1$A",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/706-1760.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "11"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1760.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:04:48.057",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "6920559"
+          }
+        }
+      ],
+      "title": "Spider"
+    },
+    {
+      "id": "64$4$0$2C$1$B",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/707-1761.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "12"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1761.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:04:02.055",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "5816520"
+          }
+        }
+      ],
+      "title": "Night Train"
+    },
+    {
+      "id": "64$4$0$2C$1$C",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/708-1762.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "13"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1762.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:04:47.064",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "6896736"
+          }
+        }
+      ],
+      "title": "Synthetic Sister"
+    },
+    {
+      "id": "64$4$0$2C$1$D",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "dc:creator": ")EI3( - Bad Company",
+        "dc:date": "2000-01-01",
+        "upnp:album": "Digital Nation - Mix CD",
+        "upnp:albumArtURI": "http://192.168.4.106:8200/AlbumArt/709-1763.jpg",
+        "upnp:artist": ")EI3( - Bad Company",
+        "upnp:class": "object.item.audioItem.musicTrack",
+        "upnp:genre": "Drum & Bass",
+        "upnp:originalTrackNumber": "14"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/1763.mp3",
+          "attributes": {
+            "bitrate": "192000",
+            "duration": "0:05:41.660",
+            "nrAudioChannels": "2",
+            "protocolInfo": "http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+            "sampleFrequency": "44100",
+            "size": "8207038"
+          }
+        }
+      ],
+      "title": "Son of Nitrous"
+    },
+    {
+      "id": "64$4$0$2C$1$E",
+      "pid": "64$4$0$2C$1",
+      "properties": {
+        "upnp:class": "object.item.imageItem.photo"
+      },
+      "resources": [
+        {
+          "Uri": "http://192.168.4.106:8200/MediaItems/38446.jpg",
+          "attributes": {
+            "protocolInfo": "http-get:*:image/jpeg:DLNA.ORG_PN=JPEG_SM;DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=00F00000000000000000000000000000",
+            "resolution": "225x225",
+            "size": "6391"
+          }
+        },
+        {
+          "Uri": "http://192.168.4.106:8200/Resized/38446.jpg?width=160,height=159",
+          "attributes": {
+            "protocolInfo": "http-get:*:image/jpeg:DLNA.ORG_PN=JPEG_TN;DLNA.ORG_CI=1;DLNA.ORG_FLAGS=00F00000000000000000000000000000",
+            "resolution": "160x159"
+          }
+        }
+      ],
+      "title": "cover"
+    }
+  ]
+}
