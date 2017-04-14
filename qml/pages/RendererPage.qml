@@ -27,6 +27,8 @@ Page {
     property int volumeSliderValue
     property string muteIconSource : "image://theme/icon-m-speaker"
 
+    property bool useNextURI : false
+
     function getTransportState() {
         var stateJson = upnp.getTransportInfoJson()
         var tstate = JSON.parse(stateJson);
@@ -90,14 +92,20 @@ Page {
     function onChangedTrack(trackIndex) {
         currentItem = trackIndex;
         var track = trackListModel.get(currentItem);
-        imageItemSource = track.albumArtURI;
-        cover.imageSource = track.albumArtURI;
+        if(track.albumArtURI) {
+            imageItemSource = track.albumArtURI;
+            cover.imageSource = track.albumArtURI;
+        } else {
+            imageItemSource = "";
+            cover.imageSource = "";
+        }
         trackText = track.titleText;
         albumText = track.metaText;
 
         // if available set next track
-        if(trackListModel.count > (currentItem+1)) {
+        if(useNextURI && trackListModel.count > (currentItem+1)) {
             track = trackListModel.get(currentItem+1);
+            console.log("onChangedTrack setNextTrack "+track.uri);
             upnp.setNextTrack(track.uri, track.didl);
         }
         console.log("onChangedTrack: index="+trackIndex);
@@ -105,9 +113,21 @@ Page {
 
     function loadTrack() {
         var track = trackListModel.get(currentItem);
+
+        prevTrackURI = track.uri;
+        prevTrackDuration = -1;
+        prevTrackTime = -1;
+
+        console.log("loadTrack " + currentItem + ", "+track.uri);
         upnp.setTrack(track.uri, track.didl);
-        imageItemSource = track.albumArtURI;
-        cover.imageSource = track.albumArtURI;
+        if(track.albumArtURI) {
+            imageItemSource = track.albumArtURI;
+            cover.imageSource = track.albumArtURI;
+        } else {
+            imageItemSource = "";
+            cover.imageSource = "";
+        }
+
         play();
         var tstate = getTransportState();
         if(tstate === "Playing") {
@@ -118,13 +138,10 @@ Page {
         trackText = track.titleText;
         albumText = track.metaText;
 
-        prevTrackURI = track.uri;
-        //prevTrackDuration = trackduration;
-        //prevTrackTime = tracktime;
-
         // if available set next track
-        if(trackListModel.count > (currentItem+1)) {
+        if(useNextURI && trackListModel.count > (currentItem+1)) {
             track = trackListModel.get(currentItem+1);
+            console.log("loadTrack setNextTrack "+track.uri);
             upnp.setNextTrack(track.uri, track.didl);
         }
     }
@@ -138,8 +155,8 @@ Page {
         currentItem = -1;
         imageItemSource = "";
 
-        cover.imageSource = "";
-        cover.coverProgressBar.label = ""
+        cover.imageSource = "image://theme/icon-l-pause";
+        cover.coverProgressBar.label = "image://theme/icon-l-pause";
     }
 
 
@@ -240,10 +257,13 @@ Page {
                 value: timeSliderValue
                 valueText: timeSliderValueText
 
-                onPressed: timeSliderDown = true;
+                onPressedChanged: {
+                    timeSliderDown = pressed;
+                    console.log("timeSlider onPressedChanged " + pressed);
+                }
                 onReleased: {
-                    timeSliderDown = false;
-                    upnp.seek(sliderValue)
+                    console.log("calling seek with " + sliderValue);
+                    upnp.seek(sliderValue);
                 }
             }
 
@@ -260,7 +280,10 @@ Page {
                     value: volumeSliderValue
                     //valueText:
 
-                    onReleased: upnp.setVolume(sliderValue)
+                    onReleased: {
+                        console.log("setVolume "+sliderValue);
+                        upnp.setVolume(sliderValue);
+                    }
                 }
                 IconButton {
                     id: muteIcon
@@ -359,9 +382,9 @@ Page {
                          index: idx});
         }
         if(currentItem == -1 && trackListModel.count>0) {
-            next();
+            currentItem = 0;
+            loadTrack();
         }
-
 
         rendererPageActive = true;
 
@@ -425,10 +448,12 @@ Page {
 
             // track duration
             timeSliderLabel = formatDuration(trackduration);
+console.log("setting timeSliderLabel to "+timeSliderLabel + " based on " + trackduration);
             //cover.coverProgressBar.label = timeSliderLabel;
 
-            if(timeSliderMaximumValue != trackduration) {
+            if(timeSliderMaximumValue !== trackduration && trackduration > -1) {
                 timeSliderMaximumValue = trackduration;
+console.log("setting timeSliderMaximumValue to "+timeSliderMaximumValue)
                 cover.coverProgressBar.maximumValue = trackduration;
             }
 
@@ -438,8 +463,9 @@ Page {
                 // value
                 timeSliderValue = tracktime;
                 cover.coverProgressBar.value = tracktime;
-
+console.log("setting timeSliderValue to "+tracktime)
                 timeSliderValueText = formatDuration(tracktime);
+console.log("setting timeSliderValueText to "+timeSliderValueText)
                 if(currentItem > -1)
                   cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + timeSliderValueText;
                 else
@@ -447,30 +473,37 @@ Page {
 
             }
 
-            // how to detect track change? uri will mostly work but not when a track appears twice and next to each other.
+            // how to detect track change? uri will mostly work
+            // but not when a track appears twice and next to each other.
             // upplay has a nifty solution but I am too lazy now.
             // (maybe we should start using upplay's avtransport_qo.h etc.)
-            if(prevTrackURI != trackuri) {
-                var trackIndex = getTrackIndexForURI(trackuri);
-                if(trackIndex >=0 )
-                    onChangedTrack(trackIndex);
-            }
+            if(useNextURI) {
 
-            // unfortunately some renderers do not play the next uri automatically
-            // or do not support next uri
-            // so at the end we receive time values with zero
-            else if(tracktime == 0 && prevTrackTime > 0) {
-               if(pinfo["abstime"] == 0) {
-                   // we missed the track change so we have to load
-                   // the next one ourselves
+                if(prevTrackURI !== trackuri) {
+                    console.log("uri changed from ["+prevTrackURI + "] to [" + trackuri + "]");
+                    var trackIndex = getTrackIndexForURI(trackuri);
+                    if(trackIndex >=0 )
+                        onChangedTrack(trackIndex);
+                }
+                //if(tstate["tpstate"] === "Playing" || tstate["tpstate"] === "Transitioning") {
+                       // we have to load the next track ourselves
+                       //if(trackListModel.count > (currentItem+1)) {
+                       //    currentItem++;
+                       //    loadTrack();
+                       //}
+                       //console.log("Missed track change.");
+                //}
+            } else {
+              if(tracktime == 0 && pinfo["abstime"] == 0 && prevTrackTime > 0) {
+
                    var stateJson = upnp.getTransportInfoJson()
                    console.log(stateJson);
                    var tstate = JSON.parse(stateJson);
-                   if(trackListModel.count > (currentItem+1)) {
-                       currentItem++;
-                       loadTrack();
-                   }
-                   console.log("Missed track change.")
+
+                   // still playing?
+                   if(tstate["tpstate"] === "Stopped")
+                      next();
+
                }
             }
 

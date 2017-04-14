@@ -78,8 +78,13 @@ Page {
     function loadTrack(track) {
         //audio.stop();
         audio.source = track.uri;
-        imageItemSource = track.albumArtURI;
-        cover.imageSource = track.albumArtURI;
+        if(track.albumArtURI) {
+            imageItemSource = track.albumArtURI;
+            cover.imageSource = track.albumArtURI;
+        } else {
+            imageItemSource = "";
+            cover.imageSource = "";
+        }
         //audio.play();
         if(audio.playbackState == Audio.PlayingState) {
             playIconSource = "image://theme/icon-l-pause";
@@ -101,7 +106,7 @@ Page {
         imageItemSource = "";
 
         cover.imageSource = "";
-        cover.coverProgressBar.label = ""
+        cover.coverProgressBar.label = "";
     }
 
     SilicaListView {
