@@ -13,6 +13,8 @@ Page {
     property bool metaShown : false
     property string trackText : ""
     property string albumText : ""
+
+    property bool timeSliderDown: false
     property string timeSliderLabel : ""
     property int timeSliderValue : 0
     property int timeSliderMaximumValue : 0
@@ -85,7 +87,9 @@ Page {
         }
     }
 
-    function onChangedTrack(track) {
+    function onChangedTrack(trackIndex) {
+        currentItem = trackIndex;
+        var track = trackListModel.get(currentItem);
         imageItemSource = track.albumArtURI;
         cover.imageSource = track.albumArtURI;
         trackText = track.titleText;
@@ -96,9 +100,10 @@ Page {
             track = trackListModel.get(currentItem+1);
             upnp.setNextTrack(track.uri, track.didl);
         }
+        console.log("onChangedTrack: index="+trackIndex);
     }
 
-    function loadTrack(trackIndex) {
+    function loadTrack() {
         var track = trackListModel.get(currentItem);
         upnp.setTrack(track.uri, track.didl);
         imageItemSource = track.albumArtURI;
@@ -137,7 +142,9 @@ Page {
         cover.coverProgressBar.label = ""
     }
 
+
     SilicaListView {
+
         id: listView
         model: trackListModel
         width: parent.width
@@ -153,7 +160,9 @@ Page {
         }
 
         header: Column {
+
             width: parent.width
+            id: headerColumn
 
             Rectangle {
                 width: parent.width
@@ -181,7 +190,6 @@ Page {
 
                 Column {
                   id: playerButtons
-                  //property int currentPlayerState: Audio.Pl
 
                   anchors.verticalCenter: parent.verticalCenter
                   spacing: Theme.paddingSmall
@@ -232,7 +240,11 @@ Page {
                 value: timeSliderValue
                 valueText: timeSliderValueText
 
-                onReleased: upnp.seek(sliderValue)
+                onPressed: timeSliderDown = true;
+                onReleased: {
+                    timeSliderDown = false;
+                    upnp.seek(sliderValue)
+                }
             }
 
             Row {
@@ -380,17 +392,15 @@ Page {
                 + zeroPad(seconds, 2);
     }
 
-    function getTrackForURI(uri) {
+    function getTrackIndexForURI(uri) {
         var i;
         for(i=0;i<trackListModel.count;i++) {
             var track = trackListModel.get(i);
             if(track.uri === uri)
-                return track;
+                return i;
         }
-        return null;
+        return -1;
     }
-
-
 
     Timer {
         interval: 1000;
@@ -405,6 +415,10 @@ Page {
             console.log(pinfoJson);
             var pinfo = JSON.parse(pinfoJson);
 
+            //var stateJson = upnp.getTransportInfoJson()
+            //var tstate = JSON.parse(stateJson);
+            //console.log(stateJson);
+
             var trackuri = pinfo["trackuri"];
             var trackduration = parseInt(pinfo["trackduration"]);
             var tracktime = parseInt(pinfo["reltime"]);
@@ -418,36 +432,45 @@ Page {
                 cover.coverProgressBar.maximumValue = trackduration;
             }
 
-            // User is using the slider, don't update the value
-            //if(timeSlider.down) {
-            //    return;
-            //}
+            // Check User is using the slider, if so don't update the value
+            if(!timeSliderDown) {
 
-            // value
-            timeSliderValue = tracktime;
-            cover.coverProgressBar.value = tracktime;
+                // value
+                timeSliderValue = tracktime;
+                cover.coverProgressBar.value = tracktime;
 
-            timeSliderValueText = formatDuration(tracktime);
-            if(currentItem > -1)
-              cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + timeSliderValueText;
-            else
-              cover.coverProgressBar.label = ""
+                timeSliderValueText = formatDuration(tracktime);
+                if(currentItem > -1)
+                  cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + timeSliderValueText;
+                else
+                  cover.coverProgressBar.label = ""
+
+            }
 
             // how to detect track change? uri will mostly work but not when a track appears twice and next to each other.
             // upplay has a nifty solution but I am too lazy now.
-            // (should also use upplay's avtransport_qo.h etc.)
+            // (maybe we should start using upplay's avtransport_qo.h etc.)
             if(prevTrackURI != trackuri) {
-                var track = getTrackForURI(trackuri);
-                if(track)
-                    onChangedTrack(track);
+                var trackIndex = getTrackIndexForURI(trackuri);
+                if(trackIndex >=0 )
+                    onChangedTrack(trackIndex);
             }
 
-            // unfortunately I cannot get rygel to play the next uri automatically
+            // unfortunately some renderers do not play the next uri automatically
+            // or do not support next uri
             // so at the end we receive time values with zero
-            if(tracktime == 0 && prevTrackTime > 0) {
+            else if(tracktime == 0 && prevTrackTime > 0) {
                if(pinfo["abstime"] == 0) {
-                   // now what?
-                   //upnp.play(); does not help
+                   // we missed the track change so we have to load
+                   // the next one ourselves
+                   var stateJson = upnp.getTransportInfoJson()
+                   console.log(stateJson);
+                   var tstate = JSON.parse(stateJson);
+                   if(trackListModel.count > (currentItem+1)) {
+                       currentItem++;
+                       loadTrack();
+                   }
+                   console.log("Missed track change.")
                }
             }
 
