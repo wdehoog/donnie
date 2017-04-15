@@ -65,10 +65,19 @@ ApplicationWindow
         id: cover
     }
 
+    function hasCurrentServer() {
+        return app.currentServer ? true : false;
+    }
+
     function setCurrentServer(server) {
         app.currentServer = server;
         return upnp.setCurrentServer(currentServer["friendlyName"], true);
     }
+
+    function hasCurrentRenderer() {
+        return app.currentRenderer ? true : false;
+    }
+
     function setCurrentRenderer(renderer) {
         app.currentRenderer = renderer;
         return upnp.setCurrentRenderer(currentRenderer["friendlyName"], true);

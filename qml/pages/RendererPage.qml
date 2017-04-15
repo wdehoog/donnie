@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtMultimedia 5.5
+import org.nemomobile.configuration 1.0
 
 import "../UPnP.js" as UPnP
 
@@ -27,7 +28,8 @@ Page {
     property int volumeSliderValue
     property string muteIconSource : "image://theme/icon-m-speaker"
 
-    property bool useNextURI : false
+    property bool useNextURI : use_setnexturi.value
+    property bool playing : false
 
     function getTransportState() {
         var stateJson = upnp.getTransportInfoJson()
@@ -66,10 +68,12 @@ Page {
         if(tstate === "Playing" || tstate === "Transitioning" ) {
             playIconSource = "image://theme/icon-l-pause";
             cover.playIconSource = "image://theme/icon-cover-pause";
+            playing = true;
         }
     }
 
     function stop() {
+        playing = false;
         upnp.stop();
         playIconSource =  "image://theme/icon-l-play";
         cover.playIconSource = "image://theme/icon-cover-play";
@@ -168,6 +172,13 @@ Page {
         anchors.fill: parent
 
         PullDownMenu {
+            MenuItem {
+                text: qsTr("Toggle Gapless")
+                onClicked: {
+                    use_setnexturi.value = use_setnexturi.value === "true" ? "false" : "true";
+                    use_setnexturi.sync();
+                }
+            }
             MenuItem {
                 text: qsTr("Empty List")
                 onClicked: {
@@ -494,7 +505,10 @@ console.log("setting timeSliderValueText to "+timeSliderValueText)
                        //console.log("Missed track change.");
                 //}
             } else {
-              if(tracktime == 0 && pinfo["abstime"] == 0 && prevTrackTime > 0) {
+              if(tracktime == 0
+                 && pinfo["abstime"] == 0
+                 && prevTrackTime > 0
+                 && playing) {
 
                    var stateJson = upnp.getTransportInfoJson()
                    console.log(stateJson);
@@ -514,4 +528,9 @@ console.log("setting timeSliderValueText to "+timeSliderValueText)
         }
     }
 
+    ConfigurationValue {
+            id: use_setnexturi
+            key: "/donnie/use_setnexturi"
+            defaultValue: 0
+    }
 }

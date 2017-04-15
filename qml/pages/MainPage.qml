@@ -32,6 +32,7 @@ Page {
             width: parent.width
 
             PageHeader {
+                id: pHeader
                 title: qsTr("Donnie")
                 BusyIndicator {
                     id: busyThingy
@@ -88,7 +89,9 @@ Page {
                             right: parent.right
                         }
 
-                        text: renderer_friendlyname.value
+                        text: "Renderer: " + (renderer_friendlyname.value
+                              ? renderer_friendlyname.value
+                              : "[use Discovery to select one]");
                     }
 
                     Text {
@@ -102,7 +105,9 @@ Page {
                             right: parent.right
                         }
 
-                        text: server_friendlyname.value
+                        text: "Content Server: " + (server_friendlyname.value
+                              ? server_friendlyname.value
+                              : "[use Discovery to select one]");
                     }
 
                     Button {
@@ -113,6 +118,7 @@ Page {
                     Button {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: "Browse"
+                        //enabled: app.hasCurrentServer();
                         onClicked: pageStack.push(browsePage, {cid: "0"});
                     }
                     Button {
@@ -152,6 +158,9 @@ Page {
             console.log(rendererJson);
             var devices = JSON.parse(rendererJson);
 
+            if(devices["renderer"] && devices["renderer"].length>0)
+                app.setCurrentRenderer(devices["renderer"][0]);
+
             showBusy = false; // VISIT both should be done
         }
 
@@ -160,6 +169,10 @@ Page {
 
             console.log(serverJson);
             var devices = JSON.parse(serverJson);
+
+            if(devices["server"] && devices["server"].length>0)
+                app.setCurrentServer(devices["server"][0]);
+
             showBusy = false; // VISIT both should be done
         }
 
@@ -168,6 +181,7 @@ Page {
             showBusy = false; // VISIT only one could fail
         }
     }
+
 
     ConfigurationValue {
             id: renderer_friendlyname

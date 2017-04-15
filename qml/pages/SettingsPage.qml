@@ -14,6 +14,12 @@ Page {
             defaultValue: 10
     }
 
+    ConfigurationValue {
+            id: use_setnexturi
+            key: "/donnie/use_setnexturi"
+            defaultValue: 0
+    }
+
     onStatusChanged: {
         if (status === PageStatus.Activating) {
             swField.text = search_window.value;
@@ -35,11 +41,21 @@ Page {
 
             TextField {
                 id: swField
-                label: "How long to search for UPnp Devices (seconds)"
+                label: "How long to search for UPnp Devices (sec)"
                 inputMethodHints: Qt.ImhDigitsOnly
                 width: parent.width
             }
 
+            TextSwitch {
+                id: useNextURI
+                text: "Gapless"
+                description: "Use setNextAVTransportURI"
+                checked: use_setnexturi.value === "true"
+                onCheckedChanged: {
+                    use_setnexturi.value = checked ? "true" : "false";
+                    use_setnexturi.sync();
+                }
+            }
         }
     }
 

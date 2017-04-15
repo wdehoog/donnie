@@ -171,7 +171,7 @@ Page {
 
                     // update for new choice
                     devicesModel.set(index, { "selected": true })
-                    if(device.type === "Server") {
+                    if(device.type === "Content Server") {
                         app.setCurrentServer(app.discoveredServers[device.discoveryIndex]);
                         storeSelectedServer(device);
                     } else {
