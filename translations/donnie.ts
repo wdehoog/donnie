@@ -41,15 +41,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Browse</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>UPnP Devices</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>MainPage</name>
     <message>
-        <source>About</source>
+        <source>Donnie</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

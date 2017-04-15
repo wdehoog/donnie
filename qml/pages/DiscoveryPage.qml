@@ -30,7 +30,6 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-
 import org.nemomobile.configuration 1.0
 
 Page {
@@ -71,25 +70,17 @@ Page {
         anchors.fill: parent
 
         PullDownMenu {
-            //MenuItem {
-            //    text: qsTr("Settings")
-            //    onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"));
-            //}
-            MenuItem {
-                text: qsTr("About")
-                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"));
-            }
             MenuItem {
                 text: qsTr("Discover UPnP Devices")
                 onClicked: discover();
             }
-            MenuItem {
+            /*MenuItem {
                 text: qsTr("Browse")
                 onClicked: {
                     browsePage.reset();
                     pageStack.push(browsePage, {cid: "0"});
                 }
-            }
+            }*/
         }
 
         header: PageHeader {
@@ -182,10 +173,10 @@ Page {
                     devicesModel.set(index, { "selected": true })
                     if(device.type === "Server") {
                         app.setCurrentServer(app.discoveredServers[device.discoveryIndex]);
-                        storeSelectedServer(device.UDN);
+                        storeSelectedServer(device);
                     } else {
                         app.setCurrentRenderer(app.discoveredRenderers[device.discoveryIndex]);
-                        storeSelectedRenderer(device.UDN);
+                        storeSelectedRenderer(device);
 
                     }
                     // VISIT
@@ -221,35 +212,6 @@ Page {
         discover();
     }
 
-    ConfigurationValue {
-            id: search_window
-            key: "/donnie/search_window"
-            defaultValue: 10
-    }
-    ConfigurationValue {
-            id: renderer_udn
-            key: "/donnie/renderer_udn"
-    }
-    ConfigurationValue {
-            id: server_udn
-            key: "/donnie/server_udn"
-    }
-
-    function storeSearchWindow(searchWindow) {
-        search_window.value = searchWindow;
-        search_window.sync();
-    }
-
-    function storeSelectedRenderer(udn) {
-        renderer_udn.value = udn;
-        renderer_udn.sync();
-    }
-
-    function storeSelectedServer(udn) {
-        server_udn.value = udn;
-        server_udn.sync();
-    }
-
     Connections {
         target: upnp
         onDiscoveryDone: {
@@ -270,6 +232,7 @@ Page {
                 selected = renderer["UDN"] === renderer_udn.value;
                 if(selected) {
                     app.setCurrentRenderer(renderer);
+                    updateSelectedRenderer(renderer["friendlyName"]);
                     hasSelected = true;
                 }
                 devicesModel.append({
@@ -304,7 +267,7 @@ Page {
             if(!hasSelected) {
                 // if no renderer is selected select the first one
                 devicesModel.set(0, { "selected": true });
-                storeSelectedRenderer(devicesModel.get(0).UDN);
+                storeSelectedRenderer(devicesModel.get(0));
                 if(app.discoveredRenderers.length>0)
                     app.setCurrentRenderer(app.discoveredRenderers[0]);
                 else
@@ -317,6 +280,7 @@ Page {
                 selected = server["UDN"] === server_udn.value;
                 if(selected) {
                     app.setCurrentServer(server);
+                    updateSelectedServer(server["friendlyName"]);
                     hasSelected = true;
                 }
                 devicesModel.append({
@@ -336,7 +300,7 @@ Page {
                 app.setCurrentServer(app.discoveredServers[0]);
                 var firstIndex = app.discoveredRenderers?app.discoveredRenderers.length+1:1;
                 devicesModel.set(firstIndex, { "selected": true });
-                storeSelectedServer(devicesModel.get(firstIndex).UDN);
+                storeSelectedServer(devicesModel.get(firstIndex));
             }
 
             showBusy = false;
@@ -347,6 +311,61 @@ Page {
         showBusy = true;
         //search_upnp_devices.sendMessage({search_window: search_window.value});
         upnp.discover(search_window.value);
+    }
+
+    function storeSearchWindow(searchWindow) {
+        search_window.value = searchWindow;
+        search_window.sync();
+    }
+
+    function storeSelectedRenderer(device) {
+        renderer_udn.value = device.udn;
+        renderer_udn.sync();
+        renderer_friendlyname.value = device.friendlyName;
+        renderer_friendlyname.sync();
+    }
+
+    function updateSelectedRenderer(friendlyName) {
+        renderer_friendlyname.value = friendlyName;
+        renderer_friendlyname.sync();
+    }
+
+    function storeSelectedServer(device) {
+        server_udn.value = device.udn;
+        server_udn.sync();
+        server_friendlyname.value = device.friendlyName;
+        server_friendlyname.sync();
+    }
+
+    function updateSelectedServer(friendlyName) {
+        server_friendlyname.value = friendlyName;
+        server_friendlyname.sync();
+    }
+
+    ConfigurationValue {
+            id: search_window
+            key: "/donnie/search_window"
+            defaultValue: 10
+    }
+    ConfigurationValue {
+            id: renderer_udn
+            key: "/donnie/renderer_udn"
+    }
+    ConfigurationValue {
+            id: renderer_friendlyname
+            key: "/donnie/renderer_friendlyname"
+    }
+    ConfigurationValue {
+            id: server_udn
+            key: "/donnie/server_udn"
+    }
+    ConfigurationValue {
+            id: server_friendlyname
+            key: "/donnie/server_friendlyname"
+    }
+    ConfigurationValue {
+            id: server_use_nexturi
+            key: "/donnie/server_use_nexturi"
     }
 }
 

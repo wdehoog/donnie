@@ -30,6 +30,9 @@ public:
     Q_INVOKABLE void discover(int search_window = 10);
     Q_INVOKABLE void browse(QString cid);
 
+    Q_INVOKABLE void getRendererJson(QString friendlyName, int search_window = 10);
+    Q_INVOKABLE void getServerJson(QString friendlyName, int search_window = 10);
+
     //UPnPP::LibUPnP * getLibUPnP();
 
     Q_INVOKABLE bool setCurrentRenderer(QString name, bool isfriendlyname);
@@ -53,11 +56,15 @@ public:
     Q_INVOKABLE int seek(int seconds);
 
 signals:
+    void getRendererDone(QString rendererJson);
+    void getServerDone(QString serverJson);
     void discoveryDone(QString devicesJson);
     void browseDone(QString contentsJson);
     void error(QString msg);
 
 public slots:
+    void onGetRendererDone(QString rendererJson);
+    void onGetServerDone(QString serverJson);
     void onDiscoveryDone(QString devicesJson);
     void onBrowseDone(QString contentsJson);
     void onError(QString msg);

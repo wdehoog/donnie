@@ -5,6 +5,8 @@
 #include "upnp.h"
 #include "upnpdiscoveryworker.h"
 #include "upnpbrowseworker.h"
+#include "upnpgetrendererworker.h"
+#include "upnpgetserverworker.h"
 
 #include <libupnpp/log.hxx>
 #include <libupnpp/upnpputils.hxx>
@@ -185,6 +187,41 @@ void UPNP::browse(QString cid) {
     thread->start();
 }
 
+void UPNP::getRendererJson(QString friendlyName, int search_window) {
+    if(!superdir)
+        init(search_window);
+
+    QThread* thread = new QThread;
+    UPnPGetRendererWorker * worker = new UPnPGetRendererWorker(friendlyName);
+    worker->moveToThread(thread);
+
+    connect(worker, SIGNAL (error(QString)), this, SLOT (onError(QString)));
+    connect(worker, SIGNAL (getRendererDone(QString)), this, SLOT (onGetRendererDone(QString)));
+
+    connect(thread, SIGNAL (started()), worker, SLOT (process()));
+    connect(worker, SIGNAL (finished()), thread, SLOT (quit()));
+    connect(worker, SIGNAL (finished()), worker, SLOT (deleteLater()));
+    connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
+    thread->start();
+}
+
+void UPNP::getServerJson(QString friendlyName, int search_window) {
+    if(!superdir)
+        init(search_window);
+
+    QThread* thread = new QThread;
+    UPnPGetServerWorker * worker = new UPnPGetServerWorker(friendlyName);
+    worker->moveToThread(thread);
+
+    connect(worker, SIGNAL (error(QString)), this, SLOT (onError(QString)));
+    connect(worker, SIGNAL (getServerDone(QString)), this, SLOT (onGetServerDone(QString)));
+
+    connect(thread, SIGNAL (started()), worker, SLOT (process()));
+    connect(worker, SIGNAL (finished()), thread, SLOT (quit()));
+    connect(worker, SIGNAL (finished()), worker, SLOT (deleteLater()));
+    connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
+    thread->start();
+}
 /*UPnPP::LibUPnP *UPNP::getLibUPnP()
 {
     return libUPnP;
@@ -275,6 +312,14 @@ void UPNP::onBrowseDone(QString contentsJson) {
 
 void UPNP::onError(QString msg) {
     emit error(msg);
+}
+
+void UPNP::onGetRendererDone(QString rendererJson) {
+    emit getRendererDone(rendererJson);
+}
+
+void UPNP::onGetServerDone(QString serverJson) {
+    emit getServerDone(serverJson);
 }
 
 void UPNP::play() {

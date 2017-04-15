@@ -17,7 +17,9 @@ CONFIG += sailfishapp
 SOURCES += src/donnie.cpp \
     src/upnp.cpp \
     src/upnpbrowseworker.cpp \
-    src/upnpdiscoveryworker.cpp
+    src/upnpdiscoveryworker.cpp \
+    src/upnpgetrendererworker.cpp \
+    src/upnpgetserverworker.cpp
 
 OTHER_FILES += qml/donnie.qml \
     qml/cover/CoverPage.qml \
@@ -53,10 +55,13 @@ DISTFILES += \
     qml/icons/icon-m-stop.png \
     qml/pages/AboutPage.qml \
     qml/license/License.txt \
-    qml/UPnP.js
+    qml/UPnP.js \
+    qml/pages/MainPage.qml
 
 HEADERS += \
     src/upnp.h \
     src/upnpbrowseworker.h \
     src/upnpdiscoveryworker.h \
-    src/IconProvider.h
+    src/IconProvider.h \
+    src/upnpgetrendererworker.h \
+    src/upnpgetserverworker.h

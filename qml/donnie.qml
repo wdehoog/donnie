@@ -30,6 +30,7 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import org.nemomobile.configuration 1.0
 import "pages"
 import "cover"
 import "UPnP.js" as UPnP
@@ -44,13 +45,9 @@ ApplicationWindow
     property var currentRenderer
     property bool useBuildInPlayer: false;
 
-    initialPage: Component { DiscoveryPage { } }
+    initialPage: Component { MainPage { } }
 
     allowedOrientations: defaultAllowedOrientations
-
-    UPnPDeviceDetails {
-        id: upnpDeviceDetails
-    }
 
     Browse {
         id: browsePage
@@ -70,11 +67,11 @@ ApplicationWindow
 
     function setCurrentServer(server) {
         app.currentServer = server;
-        upnp.setCurrentServer(currentServer["friendlyName"], true);
+        return upnp.setCurrentServer(currentServer["friendlyName"], true);
     }
     function setCurrentRenderer(renderer) {
         app.currentRenderer = renderer;
-        upnp.setCurrentRenderer(currentRenderer["friendlyName"], true);
+        return upnp.setCurrentRenderer(currentRenderer["friendlyName"], true);
     }
 
     function prev() {
