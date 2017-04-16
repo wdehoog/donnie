@@ -46,25 +46,6 @@ Page {
                 width: parent.width
                 height: childrenRect.height
 
-                Image {
-                    id: icon
-
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    asynchronous: true
-                    source: {
-                        var iconSize = Theme.iconSizeExtraLarge
-                        if (iconSize < 108)
-                            iconSize = 86
-                        else if (iconSize < 128)
-                            iconSize = 108
-                        else if (iconSize < 256)
-                            iconSize = 128
-                        else iconSize = 256
-
-                        return "/usr/share/icons/hicolor/" + iconSize + "x" + iconSize + "/apps/donnie.png"
-                    }
-                }
-
                 Column {
                     id: appTitleColumn
                     spacing: Theme.paddingLarge
@@ -74,40 +55,95 @@ Page {
                         leftMargin: Theme.horizontalPageMargin
                         right: parent.right
                         rightMargin: Theme.horizontalPageMargin
-                        top: icon.bottom
                         topMargin: Theme.paddingMedium
                     }
 
-                    Text {
-                        id: rName
-
-                        font.pixelSize: Theme.fontSizeMedium
-                        color: Theme.primaryColor
-                        wrapMode: Text.Wrap
+                    Column {
                         anchors {
                             left: parent.left
                             right: parent.right
                         }
+                        Row {
+                            anchors {
+                                left: parent.left
+                                right: parent.right
+                            }
+                            Text {
+                                id: rLabel
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.pixelSize: Theme.fontSizeSmall
+                                color: Theme.secondaryColor
+                                wrapMode: Text.Wrap
+                                width: parent.width - leftMargin - rendererIcon.width
 
-                        text: "Renderer: " + (renderer_friendlyname.value
-                              ? renderer_friendlyname.value
-                              : "[use Discovery to select one]");
+                                text: "Renderer";
+                            }
+                            IconButton {
+                                id: rendererIcon
+                                anchors.rightMargin: Theme.paddingLarge
+                                anchors.verticalCenter: parent.verticalCenter
+                                icon.source: isRendererOK()
+                                             ? "image://theme/icon-s-installed"
+                                             : "image://donnie-icons/icon-s-failure3"
+                            }
+                        }
+
+                        Text {
+                            id: rName
+
+                            font.pixelSize: Theme.fontSizeMedium
+                            color: Theme.primaryColor
+                            wrapMode: Text.Wrap
+                            width: parent.width
+
+                            text: renderer_friendlyname.value
+                                  ? renderer_friendlyname.value
+                                  : "[use Discovery to select one]"
+                        }
                     }
 
-                    Text {
-                        id: sName
-
-                        font.pixelSize: Theme.fontSizeMedium
-                        color: Theme.primaryColor
-                        wrapMode: Text.Wrap
+                    Column {
                         anchors {
                             left: parent.left
                             right: parent.right
                         }
+                        Row {
+                            anchors {
+                                left: parent.left
+                                right: parent.right
+                            }
+                            Text {
+                                id: sLabel
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.pixelSize: Theme.fontSizeSmall
+                                color: Theme.secondaryColor
+                                wrapMode: Text.Wrap
+                                width: parent.width - leftMargin - serverIcon.width
 
-                        text: "Content Server: " + (server_friendlyname.value
-                              ? server_friendlyname.value
-                              : "[use Discovery to select one]");
+                                text: "Content Server"
+                            }
+                            IconButton {
+                                id: serverIcon
+                                anchors.rightMargin: Theme.paddingLarge
+                                anchors.verticalCenter: parent.verticalCenter
+                                icon.source: isServerOK()
+                                             ? "image://theme/icon-s-installed"
+                                             : "image://donnie-icons/icon-s-failure3"
+                            }
+                        }
+
+                        Text {
+                            id: sName
+
+                            font.pixelSize: Theme.fontSizeMedium
+                            color: Theme.primaryColor
+                            wrapMode: Text.Wrap
+                            width: parent.width
+
+                            text: server_friendlyname.value
+                                     ? server_friendlyname.value
+                                     : "[use Discovery to select one]";
+                        }
                     }
 
                     Button {
@@ -118,7 +154,6 @@ Page {
                     Button {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: "Browse"
-                        //enabled: app.hasCurrentServer();
                         onClicked: pageStack.push(browsePage, {cid: "0"});
                     }
                     Button {
@@ -138,6 +173,16 @@ Page {
         }
 
         VerticalScrollDecorator { }
+    }
+
+    function isRendererOK() {
+        if(renderer_udn === "donnie-player-udn")
+            return true;
+        return app.hasCurrentRenderer() ? true : false
+    }
+
+    function isServerOK() {
+        return app.hasCurrentServer() ? true : false
     }
 
     Component.onCompleted: {

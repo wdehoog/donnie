@@ -249,7 +249,6 @@ Page {
 
                   IconButton {
                       anchors.horizontalCenter: parent.horizontalCenter
-                      //icon.source: "image://theme/icon-m-clear"
                       icon.source: "image://donnie-icons/icon-m-stop"
                       onClicked: stop()
                   }
@@ -488,37 +487,38 @@ console.log("setting timeSliderValueText to "+timeSliderValueText)
             // but not when a track appears twice and next to each other.
             // upplay has a nifty solution but I am too lazy now.
             // (maybe we should start using upplay's avtransport_qo.h etc.)
-            if(useNextURI) {
+            if(playing) {
+                if(useNextURI) {
 
-                if(prevTrackURI !== trackuri) {
-                    console.log("uri changed from ["+prevTrackURI + "] to [" + trackuri + "]");
-                    var trackIndex = getTrackIndexForURI(trackuri);
-                    if(trackIndex >=0 )
-                        onChangedTrack(trackIndex);
+                    if(prevTrackURI !== trackuri) {
+                        console.log("uri changed from ["+prevTrackURI + "] to [" + trackuri + "]");
+                        var trackIndex = getTrackIndexForURI(trackuri);
+                        if(trackIndex >=0 )
+                            onChangedTrack(trackIndex);
+                    }
+                    //if(tstate["tpstate"] === "Playing" || tstate["tpstate"] === "Transitioning") {
+                           // we have to load the next track ourselves
+                           //if(trackListModel.count > (currentItem+1)) {
+                           //    currentItem++;
+                           //    loadTrack();
+                           //}
+                           //console.log("Missed track change.");
+                    //}
+                } else {
+                  if(tracktime == 0
+                     && pinfo["abstime"] == 0
+                     && prevTrackTime > 0) {
+
+                       var stateJson = upnp.getTransportInfoJson()
+                       console.log(stateJson);
+                       var tstate = JSON.parse(stateJson);
+
+                       // still playing?
+                       if(tstate["tpstate"] === "Stopped")
+                          next();
+
+                   }
                 }
-                //if(tstate["tpstate"] === "Playing" || tstate["tpstate"] === "Transitioning") {
-                       // we have to load the next track ourselves
-                       //if(trackListModel.count > (currentItem+1)) {
-                       //    currentItem++;
-                       //    loadTrack();
-                       //}
-                       //console.log("Missed track change.");
-                //}
-            } else {
-              if(tracktime == 0
-                 && pinfo["abstime"] == 0
-                 && prevTrackTime > 0
-                 && playing) {
-
-                   var stateJson = upnp.getTransportInfoJson()
-                   console.log(stateJson);
-                   var tstate = JSON.parse(stateJson);
-
-                   // still playing?
-                   if(tstate["tpstate"] === "Stopped")
-                      next();
-
-               }
             }
 
             //
