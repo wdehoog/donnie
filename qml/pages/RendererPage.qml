@@ -29,6 +29,8 @@ Page {
     property string muteIconSource : "image://theme/icon-m-speaker"
 
     property bool useNextURI : use_setnexturi.value
+
+    // state initiated by the app
     property bool playing : false
 
     function getTransportState() {
@@ -64,12 +66,14 @@ Page {
 
     function play() {
         upnp.play();
-        var tstate = getTransportState();
-        if(tstate === "Playing" || tstate === "Transitioning" ) {
+        playing = true;
+        // VISIT we also get "Stopped" here
+        //var tstate = getTransportState();
+        //if(tstate === "Playing" || tstate === "Transitioning" ) {
             playIconSource = "image://theme/icon-l-pause";
             cover.playIconSource = "image://theme/icon-cover-pause";
-            playing = true;
-        }
+        //} else
+        //    console.log("play() unexpected tstate: "+tstate);
     }
 
     function stop() {
@@ -172,13 +176,13 @@ Page {
         anchors.fill: parent
 
         PullDownMenu {
-            MenuItem {
+            /*MenuItem {
                 text: qsTr("Toggle Gapless")
                 onClicked: {
                     use_setnexturi.value = use_setnexturi.value === "true" ? "false" : "true";
                     use_setnexturi.sync();
                 }
-            }
+            }*/
             MenuItem {
                 text: qsTr("Empty List")
                 onClicked: {
@@ -435,6 +439,16 @@ Page {
         return -1;
     }
 
+    function loadNextTrack() {
+        var stateJson = upnp.getTransportInfoJson()
+        console.log(stateJson);
+        var tstate = JSON.parse(stateJson);
+
+        // still playing? then do not start next track
+        if(tstate["tpstate"] === "Stopped")
+           next();
+    }
+
     Timer {
         interval: 1000;
         running: rendererPageActive;
@@ -488,37 +502,26 @@ console.log("setting timeSliderValueText to "+timeSliderValueText)
             // upplay has a nifty solution but I am too lazy now.
             // (maybe we should start using upplay's avtransport_qo.h etc.)
             if(playing) {
-                if(useNextURI) {
 
-                    if(prevTrackURI !== trackuri) {
-                        console.log("uri changed from ["+prevTrackURI + "] to [" + trackuri + "]");
-                        var trackIndex = getTrackIndexForURI(trackuri);
-                        if(trackIndex >=0 )
-                            onChangedTrack(trackIndex);
-                    }
-                    //if(tstate["tpstate"] === "Playing" || tstate["tpstate"] === "Transitioning") {
-                           // we have to load the next track ourselves
-                           //if(trackListModel.count > (currentItem+1)) {
-                           //    currentItem++;
-                           //    loadTrack();
-                           //}
-                           //console.log("Missed track change.");
-                    //}
-                } else {
-                  if(tracktime == 0
-                     && pinfo["abstime"] == 0
-                     && prevTrackTime > 0) {
+                if(prevTrackURI !== trackuri) {
 
-                       var stateJson = upnp.getTransportInfoJson()
-                       console.log(stateJson);
-                       var tstate = JSON.parse(stateJson);
+                    // track changed
+                    console.log("uri changed from ["+prevTrackURI + "] to [" + trackuri + "]");
+                    var trackIndex = getTrackIndexForURI(trackuri);
+                    if(trackIndex >=0 )
+                        onChangedTrack(trackIndex);
+                    else if(trackuri === "") // no setNextAVTransportURI support?
+                        loadNextTrack();
 
-                       // still playing?
-                       if(tstate["tpstate"] === "Stopped")
-                          next();
+                } else if(tracktime === 0
+                          && pinfo["abstime"] === 0
+                          && prevTrackTime > 0) {
 
-                   }
+                    // stopped playing
+                    loadNextTrack();
+
                 }
+
             }
 
             //
@@ -531,6 +534,6 @@ console.log("setting timeSliderValueText to "+timeSliderValueText)
     ConfigurationValue {
             id: use_setnexturi
             key: "/donnie/use_setnexturi"
-            defaultValue: 0
+            defaultValue: "false"
     }
 }

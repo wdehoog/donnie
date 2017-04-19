@@ -65,9 +65,5 @@
         <source>Empty List</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Toggle Gapless</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 </TS>

@@ -43,7 +43,7 @@ ApplicationWindow
     property var currentBrowseStack : new UPnP.dataStructures.Stack();
     property var currentServer
     property var currentRenderer
-    property bool useBuildInPlayer: false;
+    property bool useBuiltInPlayer: false;
 
     initialPage: Component { MainPage { } }
 
@@ -84,21 +84,21 @@ ApplicationWindow
     }
 
     function prev() {
-        if(useBuildInPlayer)
+        if(useBuiltInPlayer)
             playerPage.prev();
         else
             rendererPage.prev();
     }
 
     function pause() {
-        if(useBuildInPlayer)
+        if(useBuiltInPlayer)
             playerPage.pause();
         else
             rendererPage.pause();
     }
 
     function next() {
-        if(useBuildInPlayer)
+        if(useBuiltInPlayer)
             playerPage.next();
         else
             rendererPage.next();

@@ -17,7 +17,7 @@ Page {
     ConfigurationValue {
             id: use_setnexturi
             key: "/donnie/use_setnexturi"
-            defaultValue: 0
+            defaultValue: "false"
     }
 
     onStatusChanged: {
@@ -46,7 +46,7 @@ Page {
                 width: parent.width
             }
 
-            TextSwitch {
+            /*TextSwitch {
                 id: useNextURI
                 text: "Gapless"
                 description: "Use setNextAVTransportURI"
@@ -55,7 +55,7 @@ Page {
                     use_setnexturi.value = checked ? "true" : "false";
                     use_setnexturi.sync();
                 }
-            }
+            }*/
         }
     }
 

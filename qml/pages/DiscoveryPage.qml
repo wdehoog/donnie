@@ -181,7 +181,7 @@ Page {
                     }
                     // VISIT
                     // app.currentServer =
-                    // app.useBuildInPlayer =
+                    // app.useBuiltInPlayer =
                     // app.currentRenderer =
                 }
             }
@@ -254,7 +254,7 @@ Page {
             devicesModel.append({
                 type: "Renderer",
                 discoveryIndex: i,
-                friendlyName: "Build in Player",
+                friendlyName: "Built-in Player",
                 manufacturer: "donnie",
                 modelName: "Sailfish QTAudio Player",
                 UDN: "donnie-player-udn",
@@ -271,7 +271,7 @@ Page {
                 if(app.discoveredRenderers.length>0)
                     app.setCurrentRenderer(app.discoveredRenderers[0]);
                 else
-                    app.useBuildInPlayer = true;
+                    app.useBuiltInPlayer = true;
             }
 
             hasSelected = false;

@@ -358,7 +358,7 @@ Page {
     }
 
     function getPlayerPage() {
-        if(useBuildInPlayer)
+        if(useBuiltInPlayer)
             return playerPage;
         else
             return rendererPage;

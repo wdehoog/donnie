@@ -74,7 +74,7 @@ Page {
                                 font.pixelSize: Theme.fontSizeSmall
                                 color: Theme.secondaryColor
                                 wrapMode: Text.Wrap
-                                width: parent.width - leftMargin - rendererIcon.width
+                                width: parent.width - anchors.leftMargin - rendererIcon.width
 
                                 text: "Renderer";
                             }
@@ -84,7 +84,7 @@ Page {
                                 anchors.verticalCenter: parent.verticalCenter
                                 icon.source: isRendererOK()
                                              ? "image://theme/icon-s-installed"
-                                             : "image://donnie-icons/icon-s-failure3"
+                                             : "" //"image://donnie-icons/icon-s-failure3"
                             }
                         }
 
@@ -118,7 +118,7 @@ Page {
                                 font.pixelSize: Theme.fontSizeSmall
                                 color: Theme.secondaryColor
                                 wrapMode: Text.Wrap
-                                width: parent.width - leftMargin - serverIcon.width
+                                width: parent.width - anchors.leftMargin - serverIcon.width
 
                                 text: "Content Server"
                             }
@@ -128,7 +128,7 @@ Page {
                                 anchors.verticalCenter: parent.verticalCenter
                                 icon.source: isServerOK()
                                              ? "image://theme/icon-s-installed"
-                                             : "image://donnie-icons/icon-s-failure3"
+                                             : "" //"image://donnie-icons/icon-s-failure3"
                             }
                         }
 
@@ -189,9 +189,9 @@ Page {
         // check if configured renderer and server can be reached
         showBusy = true;
         if(renderer_friendlyname.value && renderer_udn !== "donnie-player-udn")
-            upnp.getRendererJson(renderer_friendlyname.value);
+            upnp.getRendererJson(renderer_friendlyname.value, search_window.value);
         if(server_friendlyname.value)
-            upnp.getServerJson(server_friendlyname.value);
+            upnp.getServerJson(server_friendlyname.value, search_window.value);
     }
 
     Connections {
@@ -227,7 +227,11 @@ Page {
         }
     }
 
-
+    ConfigurationValue {
+            id: search_window
+            key: "/donnie/search_window"
+            defaultValue: 10
+    }
     ConfigurationValue {
             id: renderer_friendlyname
             key: "/donnie/renderer_friendlyname"
