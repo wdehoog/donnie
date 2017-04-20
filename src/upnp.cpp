@@ -322,82 +322,118 @@ void UPNP::onGetServerDone(QString serverJson) {
     emit getServerDone(serverJson);
 }
 
-void UPNP::play() {
+int UPNP::play() {
     if(!currentRenderer)
-        return;
+        return -1;
+
     UPnPClient::AVTH avt = currentRenderer->avt();
     if (!avt) {
         emit error("UPNP::play: Device has no AVTransport service");
-        return;
+        return -1;
     }
 
-    avt->play();
+    int err;
+    if((err = avt->play())) {
+        QString msg = QStringLiteral("UPNP::pause: failed with error %1").arg(err);
+        emit error(msg);
+    }
+
+    return err;
 }
 
-void UPNP::pause() {
+int UPNP::pause() {
     if(!currentRenderer)
-        return;
+        return -1;
 
     UPnPClient::AVTH avt = currentRenderer->avt();
     if (!avt) {
         emit error("UPNP::pause: Device has no AVTransport service");
-        return;
+        return -1;
     }
 
-    avt->pause();
+    int err;
+    if((err = avt->pause())) {
+        QString msg = QStringLiteral("UPNP::pause: failed with error %1").arg(err);
+        emit error(msg);
+    }
+
+    return err;
 }
 
-void UPNP::stop() {
+int UPNP::stop() {
     if(!currentRenderer)
-        return;
+        return -1;
     UPnPClient::AVTH avt = currentRenderer->avt();
     if (!avt) {
         emit error("UPNP::stop: Device has no AVTransport service");
-        return;
+        return -1;
     }
 
-    avt->stop();
+    int err;
+    if((err = avt->stop())) {
+        QString msg = QStringLiteral("UPNP::stop: failed with error %1").arg(err);
+        emit error(msg);
+    }
+
+    return err;
 }
 
-void UPNP::setTrack(QString uri, QString didl) {
+int  UPNP::setTrack(QString uri, QString didl) {
     if(!currentRenderer)
-        return;
+        return -1;
+
     UPnPClient::AVTH avt = currentRenderer->avt();
     if (!avt) {
         emit error("UPNP::setTrack: Device has no AVTransport service");
-        return;
+        return -1;
     }
-    std::cerr << didl.toStdString() <<  std::endl;
-    avt->setAVTransportURI(uri.toStdString(), didl.toStdString());
+    //std::cerr << didl.toStdString() <<  std::endl;
+
+    int err;
+    if((err = avt->setAVTransportURI(uri.toStdString(), didl.toStdString()))) {
+        QString msg = QStringLiteral("UPNP::setTrack: failed with error %1").arg(err);
+        emit error(msg);
+    }
+
+    return err;
 }
 
-void UPNP::setNextTrack(QString uri, QString didl) {
+int UPNP::setNextTrack(QString uri, QString didl) {
     if(!currentRenderer)
-        return;
+        return -1;
     UPnPClient::AVTH avt = currentRenderer->avt();
     if (!avt) {
         emit error("UPNP::setNextTrack: Device has no AVTransport service");
-        return;
+        return -1;
     }
-    std::cerr << didl.toStdString() <<  std::endl;
-    avt->setNextAVTransportURI(uri.toStdString(), didl.toStdString());
+    //std::cerr << didl.toStdString() <<  std::endl;
+
+    int err;
+    if((err = avt->setNextAVTransportURI(uri.toStdString(), didl.toStdString()))) {
+        QString msg = QStringLiteral("UPNP::setNextTrack: failed with error %1").arg(err);
+        emit error(msg);
+    }
+
+    return err;
 }
 
-void UPNP::setVolume(int volume) {
+int UPNP::setVolume(int volume) {
     if(!currentRenderer)
-        return;
+        return -1;
 
     UPnPClient::RDCH rdc = currentRenderer->rdc();
     if (!rdc) {
         emit error("UPNP::setVolume: Device has no RenderingControl service");
-        return;
+        return -1;
     }
 
     int err;
     if((err = rdc->setVolume(volume))) {
         QString msg = QStringLiteral("UPNP::setVolume: failed with error %1").arg(err);
-        emit error("Error setting volume: ");
+        emit error(msg);
     }
+
+    return err;
 }
 
 int UPNP::getVolume() {

@@ -71,6 +71,7 @@ ApplicationWindow
 
     function setCurrentServer(server) {
         app.currentServer = server;
+        console.log("setCurrentServer to: "+ currentServer["friendlyName"]);
         return upnp.setCurrentServer(currentServer["friendlyName"], true);
     }
 
@@ -80,6 +81,7 @@ ApplicationWindow
 
     function setCurrentRenderer(renderer) {
         app.currentRenderer = renderer;
+        console.log("setCurrentRenderer to: "+ currentRenderer["friendlyName"]);
         return upnp.setCurrentRenderer(currentRenderer["friendlyName"], true);
     }
 

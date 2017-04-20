@@ -33,6 +33,13 @@ Page {
     // state initiated by the app
     property bool playing : false
 
+    function getPositionInfo() {
+        // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
+        var pinfoJson = upnp.getPositionInfoJson();
+        console.log(pinfoJson);
+        return JSON.parse(pinfoJson);
+    }
+
     function getTransportState() {
         var stateJson = upnp.getTransportInfoJson()
         var tstate = JSON.parse(stateJson);
@@ -122,7 +129,7 @@ Page {
     function loadTrack() {
         var track = trackListModel.get(currentItem);
 
-        prevTrackURI = track.uri;
+        prevTrackURI = "";
         prevTrackDuration = -1;
         prevTrackTime = -1;
 
@@ -458,13 +465,8 @@ Page {
             // read time to update ui and detect track changes
 
             // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
-            var pinfoJson = upnp.getPositionInfoJson();
-            console.log(pinfoJson);
-            var pinfo = JSON.parse(pinfoJson);
+            var pinfo = getPositionInfo();
 
-            //var stateJson = upnp.getTransportInfoJson()
-            //var tstate = JSON.parse(stateJson);
-            //console.log(stateJson);
 
             var trackuri = pinfo["trackuri"];
             var trackduration = parseInt(pinfo["trackduration"]);
@@ -475,7 +477,7 @@ Page {
 console.log("setting timeSliderLabel to "+timeSliderLabel + " based on " + trackduration);
             //cover.coverProgressBar.label = timeSliderLabel;
 
-            if(timeSliderMaximumValue !== trackduration && trackduration > -1) {
+            if(timeSliderMaximumValue != trackduration && trackduration > -1) {
                 timeSliderMaximumValue = trackduration;
 console.log("setting timeSliderMaximumValue to "+timeSliderMaximumValue)
                 cover.coverProgressBar.maximumValue = trackduration;
@@ -503,7 +505,7 @@ console.log("setting timeSliderValueText to "+timeSliderValueText)
             // (maybe we should start using upplay's avtransport_qo.h etc.)
             if(playing) {
 
-                if(prevTrackURI !== trackuri) {
+                if(prevTrackURI !== "" && prevTrackURI !== trackuri) {
 
                     // track changed
                     console.log("uri changed from ["+prevTrackURI + "] to [" + trackuri + "]");

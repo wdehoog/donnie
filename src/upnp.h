@@ -42,15 +42,15 @@ public:
     UPnPClient::CDSH getServer(QString name, bool isfriendlyname);
 
     // for renderer
-    Q_INVOKABLE void play();
-    Q_INVOKABLE void pause();
-    Q_INVOKABLE void stop();
-    Q_INVOKABLE void setVolume(int volume);
+    Q_INVOKABLE int play();
+    Q_INVOKABLE int pause();
+    Q_INVOKABLE int stop();
+    Q_INVOKABLE int setVolume(int volume);
     Q_INVOKABLE int getVolume();
     Q_INVOKABLE bool getMute();
     Q_INVOKABLE int setMute(bool mute);
-    Q_INVOKABLE void setTrack(QString uri, QString didl);
-    Q_INVOKABLE void setNextTrack(QString uri, QString didl);
+    Q_INVOKABLE int setTrack(QString uri, QString didl);
+    Q_INVOKABLE int setNextTrack(QString uri, QString didl);
     Q_INVOKABLE QString getTransportInfoJson();
     Q_INVOKABLE QString getPositionInfoJson();
     Q_INVOKABLE int seek(int seconds);
