@@ -148,18 +148,24 @@ Page {
 
                     Button {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: "Discover Devices"
+                        text: "Select Devices"
                         onClicked: pageStack.push(Qt.resolvedUrl("DiscoveryPage.qml"));
                     }
                     Button {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: "Browse"
-                        onClicked: pageStack.push(browsePage, {cid: "0"});
+                        onClicked: pageStack.push(browsePage); //, {cid: "0"});
                     }
                     Button {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: "Settings"
                         onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"));
+                    }
+                    Button {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        visible: show_open_logpage.value === "true"
+                        text: "Show Log"
+                        onClicked: showErrorLogPage();
                     }
                     Button {
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -173,6 +179,14 @@ Page {
         }
 
         VerticalScrollDecorator { }
+    }
+
+    function showErrorLogPage() {
+        var i;
+        var logText = "";
+        for(i=0;i<app.errorLog.length();i++)
+            logText += app.errorLog.elements[i];
+        pageStack.push(Qt.resolvedUrl("LogPage.qml"), {logText: logText});
     }
 
     function isRendererOK() {
@@ -223,6 +237,7 @@ Page {
 
         onError: {
             console.log(msg);
+            app.error(msg);
             showBusy = false; // VISIT only one could fail
         }
     }
@@ -243,6 +258,11 @@ Page {
     ConfigurationValue {
             id: server_friendlyname
             key: "/donnie/server_friendlyname"
+    }
+    ConfigurationValue {
+            id: show_open_logpage
+            key: "/donnie/show_open_logpage"
+            defaultValue: "false"
     }
 
 }

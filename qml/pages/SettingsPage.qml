@@ -8,17 +8,6 @@ Page {
 
     allowedOrientations: Orientation.All
 
-    ConfigurationValue {
-            id: search_window
-            key: "/donnie/search_window"
-            defaultValue: 10
-    }
-
-    ConfigurationValue {
-            id: use_setnexturi
-            key: "/donnie/use_setnexturi"
-            defaultValue: "false"
-    }
 
     onStatusChanged: {
         if (status === PageStatus.Activating) {
@@ -56,7 +45,36 @@ Page {
                     use_setnexturi.sync();
                 }
             }*/
+
+            TextSwitch {
+                id: useNextURI
+                text: "Log Page"
+                description: "Show Open Log Page button"
+                checked: show_open_logpage.value === "true"
+                onCheckedChanged: {
+                    show_open_logpage.value = checked ? "true" : "false";
+                    show_open_logpage.sync();
+                }
+            }
         }
+    }
+
+    ConfigurationValue {
+            id: search_window
+            key: "/donnie/search_window"
+            defaultValue: 10
+    }
+
+    ConfigurationValue {
+            id: use_setnexturi
+            key: "/donnie/use_setnexturi"
+            defaultValue: "false"
+    }
+
+    ConfigurationValue {
+            id: show_open_logpage
+            key: "/donnie/show_open_logpage"
+            defaultValue: "false"
     }
 
 }

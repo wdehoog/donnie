@@ -319,7 +319,7 @@ Page {
     }
 
     function storeSelectedRenderer(device) {
-        renderer_udn.value = device.udn;
+        renderer_udn.value = device.UDN;
         renderer_udn.sync();
         renderer_friendlyname.value = device.friendlyName;
         renderer_friendlyname.sync();
@@ -331,7 +331,7 @@ Page {
     }
 
     function storeSelectedServer(device) {
-        server_udn.value = device.udn;
+        server_udn.value = device.UDN;
         server_udn.sync();
         server_friendlyname.value = device.friendlyName;
         server_friendlyname.sync();

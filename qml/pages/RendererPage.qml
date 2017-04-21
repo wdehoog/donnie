@@ -272,6 +272,7 @@ Page {
                 enabled: true
                 anchors.left: parent.left
                 anchors.right: parent.right
+                handleVisible: false;
 
                 label: timeSliderLabel
                 maximumValue: timeSliderMaximumValue
@@ -295,6 +296,7 @@ Page {
                 Slider {
                     id: volumeSlider
                     enabled: true
+                    handleVisible: false;
                     width: parent.width - leftMargin - muteIcon.width
                     //label: "Volume"
                     maximumValue: 100

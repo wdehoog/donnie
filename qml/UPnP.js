@@ -5,13 +5,32 @@ var dataStructures = {
     Stack : function() {
         var elements = [];
         this.push = function(element) {
-            elements.push(element);
+            return elements.push(element);
         }
         this.pop = function() {
             return elements.pop();
         }
         this.peek = function(element) {
             return elements[elements.length - 1];
+        }
+        this.empty = function() {
+            return elements.length === 0;
+        }
+        this.elements = function() {
+            return elements;
+        }
+        this.length = function() {
+            return elements.length;
+        }
+    },
+
+    Fifo : function() {
+        var elements = [];
+        this.push = function(element) {
+            return elements.push(element);
+        }
+        this.shift = function(element) {
+            return elements.shift();
         }
         this.empty = function() {
             return elements.length === 0;

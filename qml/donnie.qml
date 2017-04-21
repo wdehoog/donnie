@@ -45,6 +45,8 @@ ApplicationWindow
     property var currentRenderer
     property bool useBuiltInPlayer: false;
 
+    property var errorLog : new UPnP.dataStructures.Fifo();
+
     initialPage: Component { MainPage { } }
 
     allowedOrientations: defaultAllowedOrientations
@@ -63,6 +65,10 @@ ApplicationWindow
 
     cover: CoverPage {
         id: cover
+    }
+
+    function error(msg) {
+        errorLog.push(msg);
     }
 
     function hasCurrentServer() {

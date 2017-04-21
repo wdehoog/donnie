@@ -100,7 +100,8 @@ Page {
 
         onError: {
             console.log(msg);
-            showBusy = false;
+            app.errorLog.push(msg);
+            showBusy = false;            
         }
     }
 
