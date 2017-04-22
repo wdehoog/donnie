@@ -227,19 +227,14 @@ Page {
                         // slider on this page and progress bar on cover page
                         if(timeSlider.maximumValue != audio.duration) {
                             timeSlider.maximumValue = audio.duration;
+                            timeSlider.label = formatTrackDuration(audio.duration)
                             cover.coverProgressBar.maximumValue = audio.duration;
                         }
 
-                        // Update the value text
-                        var seconds = Math.floor((timeSlider.value / 1000) % 60);
-
-                        if (seconds < 10)
-                            seconds = "0" + seconds;
-                        var minutes = Math.floor((timeSlider.value / 1000) / 60);
-                        timeSlider.valueText = minutes + ":" + seconds;
+                        timeSlider.valueText = formatTrackDuration(timeSlider.value);
 
                         if(currentItem > -1)
-                          cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + minutes + ":" + seconds;
+                          cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + timeSlider.valueText
                         else
                           cover.coverProgressBar.label = ""
 
@@ -255,6 +250,7 @@ Page {
 
             }
 
+// player controls in a row
 //            Row {
 //              id: playerButtons
 //              //property int currentPlayerState: Audio.Pl
@@ -288,7 +284,7 @@ Page {
             id: trackListModel
         }
 
-        delegate: BackgroundItem {
+        delegate: ListItem {
             id: delegate
             width: parent.width
 
@@ -335,6 +331,25 @@ Page {
                 text: durationText
             }
 
+            menu: contextMenu
+
+            Component {
+                id: contextMenu
+                ContextMenu {
+                    MenuItem {
+                        text: "Remove"
+                        onClicked: {
+                            var saveIndex = index;
+                            trackListModel.remove(index);
+                            if(currentItem === saveIndex) {
+                                currentItem--;
+                                next();
+                            } else if(currentItem > saveIndex)
+                                currentItem--;
+                        }
+                    }
+                }
+            }
 
             onClicked: {
                 currentItem = index;
@@ -371,6 +386,14 @@ Page {
         //    return;
     //}
 
+    /*function dumpTracklist() {
+        var i;
+        for(i=0;i<trackListModel.count;i++) {
+            var track = trackListModel.get(i);
+            console.log(""+i+": "+track.uri);
+        }
+    }*/
+
     function addTracks(tracks) {
         var i;
         for(i=0;i<tracks.length;i++) {
@@ -386,8 +409,7 @@ Page {
                          metaText: metaText,
                          durationText: durationText,
                          uri: tracks[i].uri,
-                         albumArtURI: tracks[i].albumArtURI,
-                         index: idx});
+                         albumArtURI: tracks[i].albumArtURI});
         }
         if(currentItem == -1 && trackListModel.count>0) {
             next();

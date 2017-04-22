@@ -335,7 +335,7 @@ Page {
             id: trackListModel
         }
 
-        delegate: BackgroundItem {
+        delegate: ListItem {
             id: delegate
             width: parent.width
 
@@ -382,6 +382,25 @@ Page {
                 text: durationText
             }
 
+            menu: contextMenu
+
+            Component {
+                id: contextMenu
+                ContextMenu {
+                    MenuItem {
+                        text: "Remove"
+                        onClicked: {
+                            var saveIndex = index;
+                            trackListModel.remove(index);
+                            if(currentItem === saveIndex) {
+                                currentItem--;
+                                next();
+                            } else if(currentItem > saveIndex)
+                                currentItem--;
+                        }
+                    }
+                }
+            }
 
             onClicked: {
                 currentItem = index;
@@ -433,8 +452,7 @@ Page {
                          durationText: durationText,
                          uri: tracks[i].uri,
                          didl: tracks[i].didl,
-                         albumArtURI: tracks[i].albumArtURI,
-                         index: idx});
+                         albumArtURI: tracks[i].albumArtURI});
         }
         if(currentItem == -1 && trackListModel.count>0) {
             currentItem = 0;

@@ -144,36 +144,65 @@ Page {
                         }
                     }
 
-                    Button {
+                    Row {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: "Select Devices"
-                        onClicked: pageStack.push(Qt.resolvedUrl("DiscoveryPage.qml"));
-                    }
-                    Button {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: "Browse"
-                        onClicked: {
-                            if(browsePage.cid === "")
-                                pageStack.push(browsePage, {cid: "0"});
-                            else
-                                pageStack.push(browsePage);
+                        IconButton {
+                            icon.source: "image://theme/icon-m-folder"
+                            onClicked: gotoBrowsePage();
+                        }
+                        Button {
+                            text: "Browse"
+                            onClicked: gotoBrowsePage();
                         }
                     }
-                    Button {
+
+                    Row {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: "Settings"
-                        onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"));
+                        IconButton {
+                            icon.source: "image://theme/icon-m-transfer"
+                            onClicked: pageStack.push(Qt.resolvedUrl("DiscoveryPage.qml"));
+                        }
+                        Button {
+                            text: "Select Devices"
+                            onClicked: pageStack.push(Qt.resolvedUrl("DiscoveryPage.qml"));
+                        }
                     }
-                    Button {
+
+                    Row {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        visible: show_open_logpage.value === "true"
-                        text: "Show Log"
-                        onClicked: showErrorLogPage();
+                        IconButton {
+                            icon.source: "image://theme/icon-m-developer-mode"
+                            onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"));
+                        }
+                        Button {
+                            text: "Settings"
+                            onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"));
+                        }
                     }
-                    Button {
+                    Row {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: "About"
-                        onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"));
+                        IconButton {
+                            visible: show_open_logpage.value === "true"
+                            icon.source: "image://theme/icon-m-note"
+                            onClicked: showErrorLogPage();
+                        }
+                        Button {
+                            visible: show_open_logpage.value === "true"
+                            text: "Show Log"
+                            onClicked: showErrorLogPage();
+                        }
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        IconButton {
+                            icon.source: "image://theme/icon-m-about"
+                            onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"));
+                        }
+                        Button {
+                            text: "About"
+                            onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"));
+                        }
                     }
                 }
 
@@ -182,6 +211,13 @@ Page {
         }
 
         VerticalScrollDecorator { }
+    }
+
+    function gotoBrowsePage() {
+        if(browsePage.cid === "")
+            pageStack.push(browsePage, {cid: "0"});
+        else
+            pageStack.push(browsePage);
     }
 
     function showErrorLogPage() {
@@ -193,7 +229,7 @@ Page {
     }
 
     function isRendererOK() {
-        if(renderer_udn === "donnie-player-udn")
+        if(renderer_udn.value === "donnie-player-udn")
             return true;
         return app.hasCurrentRenderer() ? true : false
     }
