@@ -380,6 +380,27 @@ Page {
 
     }
 
+    Connections {
+        target: upnp
+        onMprisControl: {
+            console.log("onMprisControl: " + action);
+            switch(action) {
+            case "Play":
+                pause();
+                break;
+            case "Pause":
+                pause();
+                break;
+            case "Next":
+                next();
+                break;
+            case "Previous":
+                prev();
+                break;
+            }
+        }
+    }
+
     //onStatusChanged: {
         //if(status !== PageStatus.Active)
         //    return;

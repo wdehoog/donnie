@@ -175,14 +175,15 @@ Page {
                         app.setCurrentServer(app.discoveredServers[device.discoveryIndex]);
                         storeSelectedServer(device);
                     } else {
-                        app.setCurrentRenderer(app.discoveredRenderers[device.discoveryIndex]);
+                        if(device.UDN === "donnie-player-udn") {
+                            app.useBuiltInPlayer = true;
+                        } else {
+                            app.useBuiltInPlayer = false;
+                            app.setCurrentRenderer(app.discoveredRenderers[device.discoveryIndex]);
+                        }
                         storeSelectedRenderer(device);
-
                     }
-                    // VISIT
-                    // app.currentServer =
-                    // app.useBuiltInPlayer =
-                    // app.currentRenderer =
+
                 }
             }
 

@@ -1,4 +1,4 @@
-https://www.shareicon.net/media-social-media-social-spotify-network-music-web-880804
+https://github.com/ruedigergad/SkippingStones/blob/master/qml/MainPage.qml
 
 album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg/AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg/Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg
 https://github.com/aadsm/jsmediatags

@@ -29,6 +29,7 @@ PkgConfigBR:
 # Build dependencies without a pkgconfig setup can be listed here
 PkgBR:
   - libupnpp >= 0.15.1
+  - mpris-qt5
 
 # Runtime dependencies which are not automatically detected
 Requires:

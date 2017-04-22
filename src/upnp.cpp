@@ -8,18 +8,30 @@
 #include "upnpgetrendererworker.h"
 #include "upnpgetserverworker.h"
 
+#include <MprisPlayer>
+
 #include <libupnpp/log.hxx>
 #include <libupnpp/upnpputils.hxx>
 #include <libupnpp/control/cdirectory.hxx>
 #include <libupnpp/control/avtransport.hxx>
 
 
-UPNP::UPNP(QObject *parent) : QObject(parent)
+UPNP::UPNP(QObject *parent) :
+    QObject(parent),
+    mprisPlayer(new MprisPlayer(this))
 {
     libUPnP = nullptr;
     superdir = nullptr;
     currentRenderer = nullptr;
     currentServer = nullptr;
+
+    mprisPlayer->setServiceName("donnie");
+    mprisPlayer->setCanControl(true);
+    connect(mprisPlayer, &MprisPlayer::playRequested, this, &UPNP::mprisPlay);
+    connect(mprisPlayer, &MprisPlayer::pauseRequested, this, &UPNP::mprisPause);
+    connect(mprisPlayer, &MprisPlayer::nextRequested, this, &UPNP::mprisNext);
+    connect(mprisPlayer, &MprisPlayer::previousRequested, this, &UPNP::mprisPrevious);
+    mprisSetCanMask(0x0F);
 }
 
 void UPNP::init(int search_window) {
@@ -491,6 +503,29 @@ int UPNP::seek(int seconds) {
     }
 
     return avt->seek(UPnPClient::AVTransport::SEEK_REL_TIME, seconds);
+}
+
+void UPNP::mprisPlay() {
+    emit mprisControl("Play");
+}
+
+void UPNP::mprisPause() {
+    emit mprisControl("Pause");
+}
+
+void UPNP::mprisNext() {
+    emit mprisControl("Next");
+}
+
+void UPNP::mprisPrevious() {
+    emit mprisControl("Previous");
+}
+
+void UPNP::mprisSetCanMask(u_int8_t mask) {
+    mprisPlayer->setCanPlay((mask & 0x01)>0);
+    mprisPlayer->setCanPause((mask & 0x02)>0);
+    mprisPlayer->setCanGoNext((mask & 0x04)>0);
+    mprisPlayer->setCanGoPrevious((mask & 0x08)>0);
 }
 
 QString UPNP::getTransportInfoJson() {

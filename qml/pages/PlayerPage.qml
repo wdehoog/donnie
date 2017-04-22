@@ -185,6 +185,7 @@ Page {
                 id: timeSlider
                 maximumValue: 1
                 enabled: true
+                handleVisible: false
 
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -280,7 +281,7 @@ Page {
                     leftMargin: Theme.horizontalPageMargin
                     right: durationLabel.left
                     rightMargin: Theme.paddingMedium
-                    horizontalCenter: parent.horizontalCenter
+                    //horizontalCenter: parent.horizontalCenter
                 }
 
                 Label {
@@ -325,6 +326,27 @@ Page {
             }
         }
 
+    }
+
+    Connections {
+        target: upnp
+        onMprisControl: {
+            console.log("onMprisControl: " + action);
+            switch(action) {
+            case "Play":
+                pause();
+                break;
+            case "Pause":
+                pause();
+                break;
+            case "Next":
+                next();
+                break;
+            case "Previous":
+                prev();
+                break;
+            }
+        }
     }
 
     //onStatusChanged: {

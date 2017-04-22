@@ -118,7 +118,8 @@ Page {
 
 unplayer for inspiration
 upnpplayer for inspiration
-kimmoli for IconProvider"
+kimmoli for IconProvider
+Morpog for icon shape"
             }
         }
 

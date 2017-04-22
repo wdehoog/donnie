@@ -14,6 +14,7 @@
 #include <libupnpp/control/mediarenderer.hxx>
 #include <libupnpp/control/renderingcontrol.hxx>
 
+class MprisPlayer;
 
 class UPNP : public QObject
 {
@@ -55,12 +56,21 @@ public:
     Q_INVOKABLE QString getPositionInfoJson();
     Q_INVOKABLE int seek(int seconds);
 
+    // for mpris control
+    Q_INVOKABLE void mprisPlay();
+    Q_INVOKABLE void mprisPause();
+    Q_INVOKABLE void mprisNext();
+    Q_INVOKABLE void mprisPrevious();
+    // 0x01: play, 0x02: pause, 0x04: next, 0x08: previous
+    Q_INVOKABLE void mprisSetCanMask(u_int8_t mask);
+
 signals:
     void getRendererDone(QString rendererJson);
     void getServerDone(QString serverJson);
     void discoveryDone(QString devicesJson);
     void browseDone(QString contentsJson);
     void error(QString msg);
+    void mprisControl(QString action);
 
 public slots:
     void onGetRendererDone(QString rendererJson);
@@ -74,6 +84,9 @@ protected:
     UPnPClient::UPnPDeviceDirectory *superdir;
     UPnPClient::MRDH currentRenderer;
     UPnPClient::CDSH currentServer;
+
+    MprisPlayer *mprisPlayer;
+
 };
 
 #endif // P_UPNP_H

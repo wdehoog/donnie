@@ -37,7 +37,7 @@ Page {
     id: page
 
     property bool showBusy: false;
-    property var cid;
+    property string cid : "";
     property var contents;
 
     //property string pathTreeText : "";
