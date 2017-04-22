@@ -25,6 +25,17 @@ Page {
         anchors.fill: parent
         contentHeight: column.height
 
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Settings")
+                onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"));
+            }
+            MenuItem {
+                text: qsTr("About")
+                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"));
+            }
+        }
+
         Column {
             id: column
             width: parent.width
@@ -144,7 +155,14 @@ Page {
                         }
                     }
 
+                    Rectangle {
+                        width: parent.width
+                        height: browseRow.height
+                        opacity: 0
+                    }
+
                     Row {
+                        id: browseRow
                         anchors.horizontalCenter: parent.horizontalCenter
                         IconButton {
                             icon.source: "image://theme/icon-m-folder"
@@ -153,6 +171,20 @@ Page {
                         Button {
                             text: "Browse"
                             onClicked: gotoBrowsePage();
+                        }
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        IconButton {
+                            icon.source: "image://theme/icon-m-music"
+                            enabled: app.getPlayerPage().hasTracks;
+                            onClicked: gotoPlayerPage();
+                        }
+                        Button {
+                            text: "Play"
+                            enabled: app.getPlayerPage().hasTracks;
+                            onClicked: gotoPlayerPage();
                         }
                     }
 
@@ -168,7 +200,7 @@ Page {
                         }
                     }
 
-                    Row {
+                    /*Row {
                         anchors.horizontalCenter: parent.horizontalCenter
                         IconButton {
                             icon.source: "image://theme/icon-m-developer-mode"
@@ -203,7 +235,7 @@ Page {
                             text: "About"
                             onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"));
                         }
-                    }
+                    }*/
                 }
 
             }
@@ -211,6 +243,11 @@ Page {
         }
 
         VerticalScrollDecorator { }
+    }
+
+
+    function gotoPlayerPage() {
+        pageStack.push(getPlayerPage());
     }
 
     function gotoBrowsePage() {

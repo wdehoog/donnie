@@ -289,13 +289,13 @@ Page {
 
     onStatusChanged: {
         // add Player page if not yet done
-        if (status === PageStatus.Active) {
-            var page = pageStack.find(function (page) {
-                return page.id === playerPage || page.id === rendererPage;
-            });
-            if(!page)
-                pageStack.pushAttached(getPlayerPage(), {});
-        }
+//        if (status === PageStatus.Active) {
+//            var page = pageStack.find(function (page) {
+//                return page.id === playerPage || page.id === rendererPage;
+//            });
+//            if(!page)
+//                pageStack.pushAttached(getPlayerPage(), {});
+//        }
     }
 
     function reset() {
@@ -343,13 +343,6 @@ Page {
         track["duration"] = item.resources[0].attributes["duration"];
         track["index"] = item.properties["upnp:originalTrackNumber"];
         return track;
-    }
-
-    function getPlayerPage() {
-        if(useBuiltInPlayer)
-            return playerPage;
-        else
-            return rendererPage;
     }
 
     function addToPlayer(id) {

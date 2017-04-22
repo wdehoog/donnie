@@ -78,6 +78,13 @@ ApplicationWindow
         return upnp.setCurrentRenderer(currentRenderer["friendlyName"], true);
     }
 
+    function getPlayerPage() {
+        if(useBuiltInPlayer)
+            return playerPage;
+        else
+            return rendererPage;
+    }
+
     function prev() {
         if(useBuiltInPlayer)
             playerPage.prev();

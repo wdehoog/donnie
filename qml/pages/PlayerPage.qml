@@ -33,6 +33,8 @@ Page {
     property string trackText
     property string albumText
 
+    property bool hasTracks : listView.model.count > 0
+
     Audio {
         id: audio
 

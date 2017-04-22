@@ -46,6 +46,7 @@ Page {
     property string muteIconSource : "image://theme/icon-m-speaker"
 
     property bool useNextURI : use_setnexturi.value
+    property bool hasTracks : listView.model.count > 0
 
     // state initiated by the app
     property bool playing : false
