@@ -1,3 +1,20 @@
+/**
+ * Donnie. Copyright (C) 2017 Willem-Jan de Hoog
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtMultimedia 5.5
@@ -42,6 +59,7 @@ Page {
 
     function getTransportState() {
         var stateJson = upnp.getTransportInfoJson()
+        console.log(stateJson);
         var tstate = JSON.parse(stateJson);
         return tstate["tpstate"];
     }
@@ -183,13 +201,6 @@ Page {
         anchors.fill: parent
 
         PullDownMenu {
-            /*MenuItem {
-                text: qsTr("Toggle Gapless")
-                onClicked: {
-                    use_setnexturi.value = use_setnexturi.value === "true" ? "false" : "true";
-                    use_setnexturi.sync();
-                }
-            }*/
             MenuItem {
                 text: qsTr("Empty List")
                 onClicked: {
@@ -470,11 +481,8 @@ Page {
     }
 
     function loadNextTrack() {
-        var stateJson = upnp.getTransportInfoJson()
-        console.log(stateJson);
-        var tstate = JSON.parse(stateJson);
-
         // still playing? then do not start next track
+        var tstate = getTransportState();
         if(tstate["tpstate"] === "Stopped")
            next();
     }
@@ -497,12 +505,12 @@ Page {
 
             // track duration
             timeSliderLabel = formatDuration(trackduration);
-console.log("setting timeSliderLabel to "+timeSliderLabel + " based on " + trackduration);
+            //console.log("setting timeSliderLabel to "+timeSliderLabel + " based on " + trackduration);
             //cover.coverProgressBar.label = timeSliderLabel;
 
             if(timeSliderMaximumValue != trackduration && trackduration > -1) {
                 timeSliderMaximumValue = trackduration;
-console.log("setting timeSliderMaximumValue to "+timeSliderMaximumValue)
+                //console.log("setting timeSliderMaximumValue to "+timeSliderMaximumValue)
                 cover.coverProgressBar.maximumValue = trackduration;
             }
 
@@ -512,9 +520,9 @@ console.log("setting timeSliderMaximumValue to "+timeSliderMaximumValue)
                 // value
                 timeSliderValue = tracktime;
                 cover.coverProgressBar.value = tracktime;
-console.log("setting timeSliderValue to "+tracktime)
+                //console.log("setting timeSliderValue to "+tracktime)
                 timeSliderValueText = formatDuration(tracktime);
-console.log("setting timeSliderValueText to "+timeSliderValueText)
+                //console.log("setting timeSliderValueText to "+timeSliderValueText)
                 if(currentItem > -1)
                   cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + timeSliderValueText;
                 else

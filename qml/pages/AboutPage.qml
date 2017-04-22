@@ -1,6 +1,5 @@
-/*
- * Unplayer
- * Copyright (C) 2015 Alexey Rochev <equeim@gmail.com>
+/**
+ * Donnie. Copyright (C) 2017 Willem-Jan de Hoog
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +91,7 @@ Page {
                         horizontalAlignment: implicitWidth > width ? Text.AlignLeft : Text.AlignHCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Theme.fontSizeExtraSmall
-                        text: "Licensed under GPLv2"
+                        text: "Licensed under GPLv3"
                         truncationMode: TruncationMode.Fade
                         width: parent.width
                     }
