@@ -43,7 +43,11 @@ CONFIG += sailfishapp_i18n
 # modify the localized app name in the the .desktop file.
 # TRANSLATIONS += translations/donnie-de.ts
 
+INCLUDEPATH += /usr/include/qt5/MprisQt
+INCLUDEPATH += /usr/include/qt5/QtDBus
+
 LIBS += -lupnpp
+LIBS += -lmpris-qt5
 
 DISTFILES += \
     qml/pages/Browse.qml \
@@ -56,7 +60,8 @@ DISTFILES += \
     qml/pages/AboutPage.qml \
     qml/license/License.txt \
     qml/UPnP.js \
-    qml/pages/MainPage.qml
+    qml/pages/MainPage.qml \
+    qml/pages/LogPage.qml
 
 HEADERS += \
     src/upnp.h \
