@@ -34,6 +34,10 @@ Page {
     property string albumText
 
     property bool hasTracks : listView.model.count > 0
+    property bool canNext: hasTracks && (currentItem < (listView.model.count - 1))
+    property bool canPrevious: hasTracks && (currentItem > 0)
+    property bool canPlay: hasTracks && (audio.playbackState != audio.PlayingState)
+    property bool canPause: audio.playbackState == audio.PlayingState
 
     Audio {
         id: audio

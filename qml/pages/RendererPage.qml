@@ -48,8 +48,24 @@ Page {
     property bool useNextURI : use_setnexturi.value
     property bool hasTracks : listView.model.count > 0
 
-    // state initiated by the app
+    property bool canNext: hasTracks && (currentItem < (listView.model.count - 1))
+    property bool canPrevious: hasTracks && (currentItem > 0)
+    property bool canPlay: hasTracks && transportState != 1
+    property bool canPause: transportState == 1
+    property int transportState : -1
+
+    // state initiated by the app. not the actual state
     property bool playing : false
+
+    function refreshTransportState() {
+        var tstate = getTransportState();
+        if(tstate === "Playing")
+            transportState = 1;
+        else if(tstate === "PausedPlayback")
+            transportState = 2;
+        else
+            transportState = -1;
+    }
 
     function getPositionInfo() {
         // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
@@ -514,9 +530,10 @@ Page {
 
             // read time to update ui and detect track changes
 
+            refreshTransportState();
+
             // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
             var pinfo = getPositionInfo();
-
 
             var trackuri = pinfo["trackuri"];
             var trackduration = parseInt(pinfo["trackduration"]);
