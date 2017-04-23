@@ -30,9 +30,12 @@ ApplicationWindow
     property var currentBrowseStack : new UPnP.dataStructures.Stack();
     property var currentServer
     property var currentRenderer
+
     property bool useBuiltInPlayer: false;
 
     property var errorLog : new UPnP.dataStructures.Fifo();
+
+    property int playerState: -1
 
     initialPage: Component { MainPage { } }
 
@@ -104,6 +107,49 @@ ApplicationWindow
             playerPage.next();
         else
             rendererPage.next();
+    }
+
+    function notifyTransportState(newState) {
+        // 1 playing, 2 paused, the rest inactive
+        switch(newState) {
+        case 1:
+            if(playerState !== 1) {
+                playerState = 1;
+                updateMprisState();
+            }
+            break;
+        case 2:
+            if(playerState !== 2) {
+                playerState = 2;
+                updateMprisState();
+            }
+            break;
+        default:
+            if(playerState !== -1) {
+                playerState = -1;
+                updateMprisState();
+            }
+            break;
+        }
+    }
+
+    function updateMprisState() {
+        var mask = 0;
+        var player = getPlayerPage();
+        /*if(player.canPlay)
+            mask |= 0x01;
+        if(player.canPause)
+            mask |= 0x02;*/
+        if(player.canNext)
+            mask |= 0x04;
+        if(player.canPrevious)
+            mask |= 0x08;
+        if(playerState == 1)
+            mask |= 0x0103;
+        else if(playerState == 2)
+            mask |= 0x0203;
+        //console.log("updateMprisState: 0x"+mask.toString(16));
+        upnp.mprisSetStateMask(mask);
     }
 }
 
