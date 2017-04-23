@@ -48,7 +48,6 @@ UPNP::UPNP(QObject *parent) :
     connect(mprisPlayer, &MprisPlayer::pauseRequested, this, &UPNP::mprisPause);
     connect(mprisPlayer, &MprisPlayer::nextRequested, this, &UPNP::mprisNext);
     connect(mprisPlayer, &MprisPlayer::previousRequested, this, &UPNP::mprisPrevious);
-    mprisSetCanMask(0x0F);
 }
 
 void UPNP::init(int search_window) {
@@ -538,11 +537,17 @@ void UPNP::mprisPrevious() {
     emit mprisControl("Previous");
 }
 
-void UPNP::mprisSetCanMask(u_int8_t mask) {
-    mprisPlayer->setCanPlay((mask & 0x01)>0);
-    mprisPlayer->setCanPause((mask & 0x02)>0);
-    mprisPlayer->setCanGoNext((mask & 0x04)>0);
-    mprisPlayer->setCanGoPrevious((mask & 0x08)>0);
+void UPNP::mprisSetStateMask(unsigned int mask) {
+    mprisPlayer->setCanPlay(mask & 0x01);
+    mprisPlayer->setCanPause(mask & 0x02);
+    mprisPlayer->setCanGoNext(mask & 0x04);
+    mprisPlayer->setCanGoPrevious(mask & 0x08);
+    if(mask & 0x0100)
+        mprisPlayer->setPlaybackStatus(Mpris::Playing);
+    else if(mask & 0x0200)
+        mprisPlayer->setPlaybackStatus(Mpris::Paused);
+    else
+        mprisPlayer->setPlaybackStatus(Mpris::Stopped);
 }
 
 QString UPNP::getTransportInfoJson() {

@@ -39,6 +39,23 @@ Page {
     property bool canPlay: hasTracks && (audio.playbackState != audio.PlayingState)
     property bool canPause: audio.playbackState == audio.PlayingState
 
+    // 1 playing, 2 paused, the rest inactive
+    property int transportState : -1
+
+    function refreshTransportState() {
+        var newState;
+        if(audio.playbackState == Audio.PlayingState)
+            newState = 1;
+        else if(audio.playbackState == Audio.PausedState)
+            newState = 2;
+        else
+            newState = -1;
+        if(transportState !== newState) {
+            transportState = newState;
+            app.notifyTransportState(transportState);
+        }
+    }
+
     Audio {
         id: audio
 
@@ -52,8 +69,11 @@ Page {
             if(audio.status == Audio.EndOfMedia) {
                 next();
             }
+
         }
 
+        onPlaybackStateChanged: refreshTransportState()
+        onSourceChanged: refreshTransportState()
     }
 
     //Playlist { only available in 5.8
@@ -186,6 +206,7 @@ Page {
                   IconButton {
                       anchors.horizontalCenter: parent.horizontalCenter
                       icon.source: "image://theme/icon-m-previous"
+                      enabled: canPrevious
                       onClicked: prev()
                   }
 
@@ -199,6 +220,7 @@ Page {
                   IconButton {
                       anchors.horizontalCenter: parent.horizontalCenter
                       icon.source: "image://theme/icon-m-next"
+                      enabled: canNext
                       onClicked: next()
                   }
                 }

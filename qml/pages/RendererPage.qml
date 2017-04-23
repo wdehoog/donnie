@@ -52,19 +52,26 @@ Page {
     property bool canPrevious: hasTracks && (currentItem > 0)
     property bool canPlay: hasTracks && transportState != 1
     property bool canPause: transportState == 1
+
+    // 1 playing, 2 paused, the rest inactive
     property int transportState : -1
 
     // state initiated by the app. not the actual state
     property bool playing : false
 
     function refreshTransportState() {
+        var newState;
         var tstate = getTransportState();
         if(tstate === "Playing")
-            transportState = 1;
+            newState = 1;
         else if(tstate === "PausedPlayback")
-            transportState = 2;
+            newState = 2;
         else
-            transportState = -1;
+            newState = -1;
+        if(transportState !== newState) {
+            transportState = newState;
+            app.notifyTransportState(transportState);
+        }
     }
 
     function getPositionInfo() {
@@ -276,12 +283,14 @@ Page {
                       IconButton {
                           //anchors.horizontalCenter: parent.horizontalCenter
                           icon.source: "image://theme/icon-m-previous"
+                          enabled: canPrevious
                           onClicked: prev()
                       }
 
                       IconButton {
                           //anchors.horizontalCenter: parent.horizontalCenter
                           icon.source: "image://theme/icon-m-next"
+                          enabled: canNext
                           onClicked: next()
                       }
                   }
