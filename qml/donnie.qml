@@ -36,6 +36,7 @@ ApplicationWindow
     property var errorLog : new UPnP.dataStructures.Fifo();
 
     property int playerState: -1
+    property int mprisStateMask: 0
 
     initialPage: Component { MainPage { } }
 
@@ -109,28 +110,18 @@ ApplicationWindow
             rendererPage.next();
     }
 
-    function notifyTransportState(newState) {
+    function notifyTransportState(transportState) {
         // 1 playing, 2 paused, the rest inactive
-        switch(newState) {
+        switch(transportState) {
         case 1:
-            if(playerState !== 1) {
-                playerState = 1;
-                updateMprisState();
-            }
-            break;
         case 2:
-            if(playerState !== 2) {
-                playerState = 2;
-                updateMprisState();
-            }
+            playerState = transportState;
             break;
         default:
-            if(playerState !== -1) {
-                playerState = -1;
-                updateMprisState();
-            }
+            playerState = -1;
             break;
         }
+        updateMprisState();
     }
 
     function updateMprisState() {
@@ -148,8 +139,9 @@ ApplicationWindow
             mask |= 0x0103;
         else if(playerState == 2)
             mask |= 0x0203;
-        //console.log("updateMprisState: 0x"+mask.toString(16));
+        console.log("updateMprisState: 0x"+mask.toString(16));
         upnp.mprisSetStateMask(mask);
+        mprisStateMask = mask;
     }
 }
 

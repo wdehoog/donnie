@@ -166,10 +166,12 @@ Page {
                         anchors.horizontalCenter: parent.horizontalCenter
                         IconButton {
                             icon.source: "image://theme/icon-m-folder"
+                            enabled: !showBusy
                             onClicked: gotoBrowsePage();
                         }
                         Button {
                             text: "Browse"
+                            enabled: !showBusy
                             onClicked: gotoBrowsePage();
                         }
                     }
@@ -192,10 +194,12 @@ Page {
                         anchors.horizontalCenter: parent.horizontalCenter
                         IconButton {
                             icon.source: "image://theme/icon-m-transfer"
+                            enabled: !showBusy
                             onClicked: pageStack.push(Qt.resolvedUrl("DiscoveryPage.qml"));
                         }
                         Button {
                             text: "Select Devices"
+                            enabled: !showBusy
                             onClicked: pageStack.push(Qt.resolvedUrl("DiscoveryPage.qml"));
                         }
                     }

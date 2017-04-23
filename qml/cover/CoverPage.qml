@@ -80,7 +80,7 @@ CoverBackground {
             id: coverAction
 
             CoverAction {
-                iconSource: "image://theme/icon-cover-previous"
+                iconSource: "image://theme/icon-cover-previous"              
                 onTriggered: app.prev()
             }
 

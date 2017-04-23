@@ -50,10 +50,9 @@ Page {
             newState = 2;
         else
             newState = -1;
-        if(transportState !== newState) {
-            transportState = newState;
-            app.notifyTransportState(transportState);
-        }
+        transportState = newState;
+        console.log("RTS: count:" + listView.model.count+", currentItem"+currentItem+", hasTracks: "+hasTracks+", canNext: "+canNext)
+        app.notifyTransportState(transportState);
     }
 
     Audio {
@@ -310,6 +309,7 @@ Page {
 
         ListModel {
             id: trackListModel
+            onCountChanged: refreshTransportState()
         }
 
         delegate: ListItem {
