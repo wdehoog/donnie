@@ -170,7 +170,7 @@ Page {
                             onClicked: gotoBrowsePage();
                         }
                         Button {
-                            text: "Browse"
+                            text: "Browser"
                             enabled: !showBusy
                             onClicked: gotoBrowsePage();
                         }
@@ -184,7 +184,7 @@ Page {
                             onClicked: gotoPlayerPage();
                         }
                         Button {
-                            text: "Play"
+                            text: "Player"
                             enabled: app.getPlayerPage().hasTracks;
                             onClicked: gotoPlayerPage();
                         }
@@ -198,7 +198,7 @@ Page {
                             onClicked: pageStack.push(Qt.resolvedUrl("DiscoveryPage.qml"));
                         }
                         Button {
-                            text: "Select Devices"
+                            text: "Selector"
                             enabled: !showBusy
                             onClicked: pageStack.push(Qt.resolvedUrl("DiscoveryPage.qml"));
                         }

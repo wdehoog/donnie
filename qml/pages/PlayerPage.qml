@@ -135,6 +135,16 @@ Page {
 
         trackText = track.titleText;
         albumText = track.metaText;
+
+        // mpris
+        var meta = new Object();
+        meta.Title = track.title;
+        meta.Artist = track.artist;
+        meta.Album = track.album;
+        meta.Length = track.duration * 1000; // ms -> us
+        meta.ArtUrl = track.albumArtURI;
+        meta.TrackNumber = currentItem;
+        app.updateMprisMetaData(meta);
     }
 
     function clearList(){
@@ -437,7 +447,11 @@ Page {
                          metaText: metaText,
                          durationText: durationText,
                          uri: tracks[i].uri,
-                         albumArtURI: tracks[i].albumArtURI});
+                         albumArtURI: tracks[i].albumArtURI,
+                         title: tracks[i].title,
+                         artist: tracks[i].artist,
+                         duration: tracks[i].duration,
+                         album: tracks[i].album});
         }
         if(currentItem == -1 && trackListModel.count>0) {
             next();

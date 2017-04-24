@@ -140,8 +140,15 @@ ApplicationWindow
         else if(playerState == 2)
             mask |= 0x0203;
         console.log("updateMprisState: 0x"+mask.toString(16));
-        upnp.mprisSetStateMask(mask);
-        mprisStateMask = mask;
+        if(mask != mprisStateMask) {
+            upnp.mprisSetStateMask(mask);
+            mprisStateMask = mask;
+        }
+    }
+
+    function updateMprisMetaData(track) {
+        var jsonString= JSON.stringify(track);
+        upnp.mprisSetMetaData(jsonString);
     }
 }
 

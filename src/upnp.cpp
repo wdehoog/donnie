@@ -550,6 +550,42 @@ void UPNP::mprisSetStateMask(unsigned int mask) {
         mprisPlayer->setPlaybackStatus(Mpris::Stopped);
 }
 
+void UPNP::mprisSetMetaData(QString metaDataJson) {
+    QJsonDocument doc = QJsonDocument::fromJson(metaDataJson.toUtf8());
+    if(doc.isNull())
+        return;
+    if(!doc.isObject())
+        return;
+    QJsonObject obj = doc.object();
+    QVariantMap map;
+
+    QString s = obj["Artist"].toString();
+    if(s.length()>0)
+        map["xesam:artist"] = s ;
+
+    s = obj["Title"].toString();
+    if(s.length()>0)
+        map["xesam:title"] = s;
+
+    obj["Album"].toString();
+    if(s.length()>0)
+        map["xesam:album"] = s;
+
+    s = obj["Length"].toString();
+    if(s.length()>0)
+        map["mpris:length"] = s;
+
+    s = obj["ArtUrl"].toString();
+    if(s.length()>0)
+        map["mpris:artUrl"] = s;
+
+    s = obj["TrackNumber"].toString();
+    if(s.length()>0)
+        map["xesam:trackNumber"] = s;
+
+    mprisPlayer->setMetadata(map);
+}
+
 QString UPNP::getTransportInfoJson() {
     if(!currentRenderer) {
         emit error("UPNP::getTransportInfoJson: No Current Renderer");

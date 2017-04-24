@@ -81,6 +81,7 @@ public:
     // 0x01: play, 0x02: pause, 0x04: next, 0x08: previous
     // 0x0100: playing, 0x0200: paused
     Q_INVOKABLE void mprisSetStateMask(unsigned int mask);
+    Q_INVOKABLE void mprisSetMetaData(QString metaDataJson);
 
 signals:
     void getRendererDone(QString rendererJson);

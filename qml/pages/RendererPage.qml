@@ -68,10 +68,9 @@ Page {
             newState = 2;
         else
             newState = -1;
-        if(transportState !== newState) {
-            transportState = newState;
-            app.notifyTransportState(transportState);
-        }
+        transportState = newState;
+        console.log("RTS: count:" + trackListModel.count+", currentItem"+currentItem+", hasTracks: "+hasTracks+", canNext: "+canNext)
+        app.notifyTransportState(transportState);
     }
 
     function getPositionInfo() {
@@ -194,6 +193,16 @@ Page {
 
         trackText = track.titleText;
         albumText = track.metaText;
+
+        // mpris
+        var meta = new Object();
+        meta.Title = track.title;
+        meta.Artist = track.artist;
+        meta.Album = track.album;
+        meta.Length = track.duration * 1000000; // s -> us
+        meta.ArtUrl = track.albumArtURI;
+        //meta.TrackNumber = track.???;
+        app.updateMprisMetaData(meta);
 
         // if available set next track
         if(useNextURI && trackListModel.count > (currentItem+1)) {
@@ -478,7 +487,11 @@ Page {
                          durationText: durationText,
                          uri: tracks[i].uri,
                          didl: tracks[i].didl,
-                         albumArtURI: tracks[i].albumArtURI});
+                         albumArtURI: tracks[i].albumArtURI,
+                         title: tracks[i].title,
+                         artist: tracks[i].artist,
+                         duration: tracks[i].duration,
+                         album: tracks[i].album});
         }
         if(currentItem == -1 && trackListModel.count>0) {
             currentItem = 0;
