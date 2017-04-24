@@ -59,6 +59,7 @@ ApplicationWindow
     }
 
     function error(msg) {
+        console.log("error: " + msg);
         errorLog.push(msg);
     }
 
@@ -69,7 +70,10 @@ ApplicationWindow
     function setCurrentServer(server) {
         app.currentServer = server;
         console.log("setCurrentServer to: "+ currentServer["friendlyName"]);
-        return upnp.setCurrentServer(currentServer["friendlyName"], true);
+        var res = upnp.setCurrentServer(currentServer["friendlyName"], true);
+        if(!res)
+            error("Failed to set Current Server to: "+ currentServer["friendlyName"]);
+        return res;
     }
 
     function hasCurrentRenderer() {
@@ -79,7 +83,10 @@ ApplicationWindow
     function setCurrentRenderer(renderer) {
         app.currentRenderer = renderer;
         console.log("setCurrentRenderer to: "+ currentRenderer["friendlyName"]);
-        return upnp.setCurrentRenderer(currentRenderer["friendlyName"], true);
+        var res = upnp.setCurrentRenderer(currentRenderer["friendlyName"], true);
+        if(!res)
+            error("Failed to set Current Renderer to: "+ currentRenderer["friendlyName"]);
+        return res;
     }
 
     function getPlayerPage() {

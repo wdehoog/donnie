@@ -225,6 +225,7 @@ Page {
                 }
                 devicesModel.append({
                     type: "Renderer",
+                    discoveryIndex: i,
                     friendlyName: renderer["friendlyName"],
                     manufacturer: renderer["manufacturer"],
                     modelName: renderer["modelName"],
@@ -241,7 +242,7 @@ Page {
                 hasSelected = true;
             devicesModel.append({
                 type: "Renderer",
-                discoveryIndex: i,
+                discoveryIndex: app.discoveredRenderers.length,
                 friendlyName: "Built-in Player",
                 manufacturer: "donnie",
                 modelName: "Sailfish QTAudio Player",

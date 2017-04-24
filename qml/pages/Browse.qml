@@ -86,7 +86,7 @@ Page {
         }
 
         onError: {
-            console.log(msg);
+            console.log("Browse::onError: " + msg);
             app.errorLog.push(msg);
             showBusy = false;            
         }
