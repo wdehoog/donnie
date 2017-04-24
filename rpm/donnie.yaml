@@ -29,12 +29,13 @@ PkgConfigBR:
 # Build dependencies without a pkgconfig setup can be listed here
 PkgBR:
   - libupnpp >= 0.15.1
-  - mpris-qt5
+  - mpris-qt5-devel
 
 # Runtime dependencies which are not automatically detected
 Requires:
   - sailfishsilica-qt5 >= 0.10.9 
   - libupnpp >= 0.15.1
+  - mpris-qt5
 
 # All installed files
 Files:

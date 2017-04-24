@@ -22,12 +22,13 @@ Source0:    %{name}-%{version}.tar.gz
 Source100:  donnie.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
 Requires:   libupnpp >= 0.15.1
+Requires:   mpris-qt5
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  libupnpp >= 0.15.1
-BuildRequires:  mpris-qt5
+BuildRequires:  mpris-qt5-devel
 BuildRequires:  desktop-file-utils
 
 %description
