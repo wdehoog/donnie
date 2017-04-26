@@ -51,7 +51,7 @@ Page {
         else
             newState = -1;
         transportState = newState;
-        console.log("RTS: count:" + listView.model.count+", currentItem"+currentItem+", hasTracks: "+hasTracks+", canNext: "+canNext)
+        //console.log("RTS: count:" + listView.model.count+", currentItem"+currentItem+", hasTracks: "+hasTracks+", canNext: "+canNext)
         app.notifyTransportState(transportState);
     }
 
@@ -459,27 +459,9 @@ Page {
         playerPageActive = true;
     }
 
-    // Adds leading zeros to number
-    function zeroPad(number, digits) {
-        var num = number + "";
-        while(num.length < digits) {
-            num= '0' + num;
-        }
-        return num;
-    }
-
     // Format track duration to format like HH:mm:ss / m:ss / 0:ss
     function formatTrackDuration(trackDuration /* track duration in milliseconds */) {
-        trackDuration = Math.round(parseInt(trackDuration) / 1000);
-
-        var seconds = trackDuration % 60;
-        var totalMinutes = (trackDuration - seconds) / 60;
-        var minutes = totalMinutes % 60;
-        var hours = (totalMinutes - minutes) / 60;
-
-        return (hours > 0 ? hours + ":" : "")
-                + (minutes > 0 ? (hours > 0 ? zeroPad(minutes, 2) : minutes) + ":" : "0:")
-                + zeroPad(seconds, 2);
+        return UPnP.formatDuration(Math.round(parseInt(trackDuration) / 1000));
     }
 
 }

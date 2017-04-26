@@ -41,6 +41,7 @@ Page {
     property string prevTrackURI: ""
     property int prevTrackDuration: -1
     property int prevTrackTime: -1
+    property int prevAbsTime: -1
 
     property int volumeSliderValue
     property string muteIconSource : "image://theme/icon-m-speaker"
@@ -509,29 +510,6 @@ Page {
         volumeSliderValue = upnp.getVolume();
     }
 
-    // Adds leading zeros to number
-    function zeroPad(number, digits) {
-        var num = number + "";
-        while(num.length < digits) {
-            num= '0' + num;
-        }
-        return num;
-    }
-
-    // Formatduration like HH:mm:ss / m:ss / 0:ss
-    function formatDuration(duration /* track duration in seconds */) {
-        duration = Math.round(duration);
-
-        var seconds = duration % 60;
-        var totalMinutes = (duration - seconds) / 60;
-        var minutes = totalMinutes % 60;
-        var hours = (totalMinutes - minutes) / 60;
-
-        return (hours > 0 ? hours + ":" : "")
-                + (minutes > 0 ? (hours > 0 ? zeroPad(minutes, 2) : minutes) + ":" : "0:")
-                + zeroPad(seconds, 2);
-    }
-
     function getTrackIndexForURI(uri) {
         var i;
         for(i=0;i<trackListModel.count;i++) {
@@ -577,9 +555,10 @@ Page {
             var trackuri = pinfo["trackuri"];
             var trackduration = parseInt(pinfo["trackduration"]);
             var tracktime = parseInt(pinfo["reltime"]);
+            var abstime = parseInt(pinfo["abstime"]);
 
             // track duration
-            timeSliderLabel = formatDuration(trackduration);
+            timeSliderLabel = UPnP.formatDuration(trackduration);
             //console.log("setting timeSliderLabel to "+timeSliderLabel + " based on " + trackduration);
             //cover.coverProgressBar.label = timeSliderLabel;
 
@@ -596,7 +575,7 @@ Page {
                 timeSliderValue = tracktime;
                 cover.coverProgressBar.value = tracktime;
                 //console.log("setting timeSliderValue to "+tracktime)
-                timeSliderValueText = formatDuration(tracktime);
+                timeSliderValueText = UPnP.formatDuration(tracktime);
                 //console.log("setting timeSliderValueText to "+timeSliderValueText)
                 if(currentItem > -1)
                   cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + timeSliderValueText;
@@ -622,10 +601,10 @@ Page {
                         loadNextTrack();
 
                 } else if(tracktime === 0
-                          && pinfo["abstime"] === 0
+                          && abstime === prevAbsTime
                           && prevTrackTime > 0) {
 
-                    // stopped playing
+                    // stopped playing so load next track
                     loadNextTrack();
 
                 }
@@ -636,6 +615,7 @@ Page {
             prevTrackURI = trackuri;
             prevTrackDuration = trackduration;
             prevTrackTime = tracktime;
+            prevAbsTime = abstime;
         }
     }
 

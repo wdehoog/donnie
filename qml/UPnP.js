@@ -135,3 +135,26 @@ function getCurrentPathTreeString(browseStack) {
     }
     return pathTreeString;
 }
+
+// Adds leading zeros to number
+function zeroPad(number, digits) {
+    var num = number + "";
+    while(num.length < digits) {
+        num= '0' + num;
+    }
+    return num;
+}
+
+// Formatduration like HH:mm:ss / m:ss / 0:ss
+function formatDuration(duration /* track duration in seconds */) {
+    duration = Math.round(duration);
+
+    var seconds = duration % 60;
+    var totalMinutes = (duration - seconds) / 60;
+    var minutes = totalMinutes % 60;
+    var hours = (totalMinutes - minutes) / 60;
+
+    return (hours > 0 ? hours + ":" : "")
+            + (minutes > 0 ? (hours > 0 ? zeroPad(minutes, 2) : minutes) + ":" : "0:")
+            + zeroPad(seconds, 2);
+}
