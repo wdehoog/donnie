@@ -38,49 +38,53 @@ Page {
         onBrowseDone: {
             var i;
 
-            //console.log(contentsJson);
-            contents = JSON.parse(contentsJson);
+            try {
+                contents = JSON.parse(contentsJson);
 
-            browseModel.clear();
+                browseModel.clear();
 
-            if(cid !== "0") // no ".." for the root
-                browseModel.append({
-                    type: "Container",
-                    id: app.currentBrowseStack.peek().pid,
-                    pid: "-2",
-                    title: "..",
-                    artist: "", album: "", duration: ""
-                });
-
-            for(i=0;i<contents.containers.length;i++) {
-                var container = contents.containers[i];
-                browseModel.append({
-                    type: "Container",
-                    id: container["id"],
-                    pid: container["pid"],
-                    title: container["title"],
-                    artist: "", album: "", duration: ""
-                });
-            }
-
-            for(i=0;i<contents.items.length;i++) {
-                var item = contents.items[i];
-                if(item.properties["upnp:class"] === "object.item.audioItem.musicTrack")
+                if(cid !== "0") // no ".." for the root
                     browseModel.append({
-                        type: "Item",
-                        id: item["id"],
-                        pid: item["pid"],
-                        title: item["title"],
-                        artist: item.properties["dc:creator"],
-                        album: item.properties["upnp:album"],
-                        duration: item.resources[0].attributes["duration"]
+                        type: "Container",
+                        id: app.currentBrowseStack.peek().pid,
+                        pid: "-2",
+                        title: "..",
+                        artist: "", album: "", duration: ""
                     });
-                else
-                    console.log("onBrowseDone: skipped loading of an object of class " + item.properties["upnp:class"]);
-            }
 
-            pathText = UPnP.getCurrentPathString(app.currentBrowseStack);
-            //pathTreeText = UPnP.getCurrentPathTreeString(app.currentBrowseStack);
+                for(i=0;i<contents.containers.length;i++) {
+                    var container = contents.containers[i];
+                    browseModel.append({
+                        type: "Container",
+                        id: container["id"],
+                        pid: container["pid"],
+                        title: container["title"],
+                        artist: "", album: "", duration: ""
+                    });
+                }
+
+                for(i=0;i<contents.items.length;i++) {
+                    var item = contents.items[i];
+                    if(item.properties["upnp:class"] === "object.item.audioItem.musicTrack")
+                        browseModel.append({
+                            type: "Item",
+                            id: item["id"],
+                            pid: item["pid"],
+                            title: item["title"],
+                            artist: item.properties["dc:creator"],
+                            album: item.properties["upnp:album"],
+                            duration: item.resources[0].attributes["duration"]
+                        });
+                    else
+                        console.log("onBrowseDone: skipped loading of an object of class " + item.properties["upnp:class"]);
+                }
+
+                pathText = UPnP.getCurrentPathString(app.currentBrowseStack);
+                //pathTreeText = UPnP.getCurrentPathTreeString(app.currentBrowseStack);
+            } catch( err ) {
+                app.error("Exception in onBrowseDone: " + err);
+                app.error("json: " + contentsJson);
+            }
 
             showBusy = false;
         }

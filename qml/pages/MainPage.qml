@@ -296,11 +296,16 @@ Page {
         onGetRendererDone: {
             var i;
 
-            console.log(rendererJson);
-            var devices = JSON.parse(rendererJson);
+            try {
+                var devices = JSON.parse(rendererJson);
 
-            if(devices["renderer"] && devices["renderer"].length>0)
-                app.setCurrentRenderer(devices["renderer"][0]);
+                if(devices["renderer"] && devices["renderer"].length>0)
+                    app.setCurrentRenderer(devices["renderer"][0]);
+            } catch(err) {
+                app.error("Exception in onGetRendererDone: "+err);
+                app.error("json: " + rendererJson);
+
+            }
 
             showBusy = false; // VISIT both should be done
         }
@@ -308,11 +313,16 @@ Page {
         onGetServerDone: {
             var i;
 
-            console.log(serverJson);
-            var devices = JSON.parse(serverJson);
+            try {
+                var devices = JSON.parse(serverJson);
 
-            if(devices["server"] && devices["server"].length>0)
-                app.setCurrentServer(devices["server"][0]);
+                if(devices["server"] && devices["server"].length>0)
+                    app.setCurrentServer(devices["server"][0]);
+            } catch(err) {
+                app.error("Exception in onGetServerDone: "+err);
+                app.error("json: " + serverJson);
+
+            }
 
             showBusy = false; // VISIT both should be done
         }

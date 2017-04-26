@@ -137,7 +137,7 @@ Page {
         albumText = track.metaText;
 
         // mpris
-        var meta = new Object();
+        var meta = {};
         meta.Title = track.title;
         meta.Artist = track.artist;
         meta.Album = track.album;

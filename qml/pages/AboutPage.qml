@@ -115,7 +115,7 @@ Page {
                 text:
 "upplay + libupnpp for amazing UPnP support (https://github.com/medoc92/libupnpp)
 
-unplayer for inspiration
+unplayer for inspiration & code
 upnpplayer for inspiration
 kimmoli for IconProvider
 Morpog for icon shape"

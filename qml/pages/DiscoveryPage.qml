@@ -205,93 +205,96 @@ Page {
         onDiscoveryDone: {
             var i;
 
-            console.log(devicesJson);
-            var devices = JSON.parse(devicesJson);
+            try {
+                var devices = JSON.parse(devicesJson);
 
-            app.discoveredRenderers = devices["renderers"];
-            app.discoveredServers = devices["servers"];
+                app.discoveredRenderers = devices["renderers"];
+                app.discoveredServers = devices["servers"];
 
-            devicesModel.clear();
-            var selected;
-            var hasSelected = false;
+                devicesModel.clear();
+                var selected;
+                var hasSelected = false;
 
-            for(i=0;i<app.discoveredRenderers.length;i++) {
-                var renderer = app.discoveredRenderers[i];
-                selected = renderer["UDN"] === renderer_udn.value;
-                if(selected) {
-                    app.setCurrentRenderer(renderer);
-                    updateSelectedRenderer(renderer["friendlyName"]);
-                    hasSelected = true;
+                for(i=0;i<app.discoveredRenderers.length;i++) {
+                    var renderer = app.discoveredRenderers[i];
+                    selected = renderer["UDN"] === renderer_udn.value;
+                    if(selected) {
+                        app.setCurrentRenderer(renderer);
+                        updateSelectedRenderer(renderer["friendlyName"]);
+                        hasSelected = true;
+                    }
+                    devicesModel.append({
+                        type: "Renderer",
+                        discoveryIndex: i,
+                        friendlyName: renderer["friendlyName"],
+                        manufacturer: renderer["manufacturer"],
+                        modelName: renderer["modelName"],
+                        UDN: renderer["UDN"],
+                        URLBase: renderer["URLBase"],
+                        deviceType: renderer["deviceType"],
+                        selected: selected
+                    });
                 }
+
+                // add local player
+                selected = "donnie-player-udn" === renderer_udn.value;
+                if(selected)
+                    hasSelected = true;
                 devicesModel.append({
                     type: "Renderer",
-                    discoveryIndex: i,
-                    friendlyName: renderer["friendlyName"],
-                    manufacturer: renderer["manufacturer"],
-                    modelName: renderer["modelName"],
-                    UDN: renderer["UDN"],
-                    URLBase: renderer["URLBase"],
-                    deviceType: renderer["deviceType"],
+                    discoveryIndex: app.discoveredRenderers.length,
+                    friendlyName: "Built-in Player",
+                    manufacturer: "donnie",
+                    modelName: "Sailfish QTAudio Player",
+                    UDN: "donnie-player-udn",
+                    URLBase: "",
+                    deviceType: "a page with audio player controls and list of tracks",
                     selected: selected
                 });
-            }
 
-            // add local player
-            selected = "donnie-player-udn" === renderer_udn.value;
-            if(selected)
-                hasSelected = true;
-            devicesModel.append({
-                type: "Renderer",
-                discoveryIndex: app.discoveredRenderers.length,
-                friendlyName: "Built-in Player",
-                manufacturer: "donnie",
-                modelName: "Sailfish QTAudio Player",
-                UDN: "donnie-player-udn",
-                URLBase: "",
-                deviceType: "a page with audio player controls and list of tracks",
-                selected: selected
-            });
-
-            // make sure one player is selected
-            if(!hasSelected) {
-                // if no renderer is selected select the first one
-                devicesModel.set(0, { "selected": true });
-                storeSelectedRenderer(devicesModel.get(0));
-                if(app.discoveredRenderers.length>0)
-                    app.setCurrentRenderer(app.discoveredRenderers[0]);
-                else
-                    app.useBuiltInPlayer = true;
-            }
-
-            hasSelected = false;
-            for(i=0;i<app.discoveredServers.length;i++) {
-                var server = app.discoveredServers[i];
-                selected = server["UDN"] === server_udn.value;
-                if(selected) {
-                    app.setCurrentServer(server);
-                    updateSelectedServer(server["friendlyName"]);
-                    hasSelected = true;
+                // make sure one player is selected
+                if(!hasSelected) {
+                    // if no renderer is selected select the first one
+                    devicesModel.set(0, { "selected": true });
+                    storeSelectedRenderer(devicesModel.get(0));
+                    if(app.discoveredRenderers.length>0)
+                        app.setCurrentRenderer(app.discoveredRenderers[0]);
+                    else
+                        app.useBuiltInPlayer = true;
                 }
-                devicesModel.append({
-                    type: "Content Server",
-                    discoveryIndex: i,
-                    friendlyName: server["friendlyName"],
-                    manufacturer: server["manufacturer"],
-                    modelName: server["modelName"],
-                    UDN: server["UDN"],
-                    URLBase: server["URLBase"],
-                    deviceType: server["deviceType"],
-                    selected: selected
-                });
-            }
-            if(!hasSelected && app.discoveredServers.length>0) {
-                // if no server is selected select the first one
-                app.setCurrentServer(app.discoveredServers[0]);
-                var firstIndex = app.discoveredRenderers?app.discoveredRenderers.length+1:1;
-                devicesModel.set(firstIndex, { "selected": true });
-                storeSelectedServer(devicesModel.get(firstIndex));
-            }
 
+                hasSelected = false;
+                for(i=0;i<app.discoveredServers.length;i++) {
+                    var server = app.discoveredServers[i];
+                    selected = server["UDN"] === server_udn.value;
+                    if(selected) {
+                        app.setCurrentServer(server);
+                        updateSelectedServer(server["friendlyName"]);
+                        hasSelected = true;
+                    }
+                    devicesModel.append({
+                        type: "Content Server",
+                        discoveryIndex: i,
+                        friendlyName: server["friendlyName"],
+                        manufacturer: server["manufacturer"],
+                        modelName: server["modelName"],
+                        UDN: server["UDN"],
+                        URLBase: server["URLBase"],
+                        deviceType: server["deviceType"],
+                        selected: selected
+                    });
+                }
+                if(!hasSelected && app.discoveredServers.length>0) {
+                    // if no server is selected select the first one
+                    app.setCurrentServer(app.discoveredServers[0]);
+                    var firstIndex = app.discoveredRenderers?app.discoveredRenderers.length+1:1;
+                    devicesModel.set(firstIndex, { "selected": true });
+                    storeSelectedServer(devicesModel.get(firstIndex));
+                }
+            } catch(err) {
+                app.error("Exception in Discovery: "+err);
+                app.error("json: " + devicesJson);
+            }
             showBusy = false;
         }
     }

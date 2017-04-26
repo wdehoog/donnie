@@ -69,22 +69,32 @@ Page {
         else
             newState = -1;
         transportState = newState;
-        console.log("RTS: count:" + trackListModel.count+", currentItem"+currentItem+", hasTracks: "+hasTracks+", canNext: "+canNext)
+        //console.log("RTS: count:" + trackListModel.count+", currentItem"+currentItem+", hasTracks: "+hasTracks+", canNext: "+canNext)
         app.notifyTransportState(transportState);
     }
 
     function getPositionInfo() {
         // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
         var pinfoJson = upnp.getPositionInfoJson();
-        console.log(pinfoJson);
-        return JSON.parse(pinfoJson);
+        //console.log(pinfoJson);
+        try {
+            return JSON.parse(pinfoJson);
+        } catch(err) {
+            app.error("Exception in getPositionInfo: "+err);
+            app.error("json: " + stateJson);
+        }
     }
 
     function getTransportState() {
+        // {"curspeed":"1","tpstate":"Playing","tpstatus":"OK"}
         var stateJson = upnp.getTransportInfoJson()
-        console.log(stateJson);
-        var tstate = JSON.parse(stateJson);
-        return tstate["tpstate"];
+        try {
+            var tstate = JSON.parse(stateJson);
+            return tstate["tpstate"];
+        } catch(err) {
+            app.error("Exception in getTransportState: "+err);
+            app.error("json: " + stateJson);
+        }
     }
 
     function next() {
@@ -145,9 +155,7 @@ Page {
         }
     }
 
-    function onChangedTrack(trackIndex) {
-        currentItem = trackIndex;
-        var track = trackListModel.get(currentItem);
+    function updateUIForTrack(track) {
         if(track.albumArtURI) {
             imageItemSource = track.albumArtURI;
             cover.imageSource = track.albumArtURI;
@@ -157,6 +165,25 @@ Page {
         }
         trackText = track.titleText;
         albumText = track.metaText;
+    }
+
+    function updateMprisForTrack(track) {
+        // mpris
+        var meta = {};
+        meta.Title = track.title;
+        meta.Artist = track.artist;
+        meta.Album = track.album;
+        meta.Length = track.duration * 1000000; // s -> us
+        meta.ArtUrl = track.albumArtURI;
+        //meta.TrackNumber = track.???;
+        app.updateMprisMetaData(meta);
+    }
+
+    function onChangedTrack(trackIndex) {
+        currentItem = trackIndex;
+        var track = trackListModel.get(currentItem);
+        updateUIForTrack(track);
+        updateMprisForTrack(track);
 
         // if available set next track
         if(useNextURI && trackListModel.count > (currentItem+1)) {
@@ -176,33 +203,11 @@ Page {
 
         console.log("loadTrack " + currentItem + ", "+track.uri);
         upnp.setTrack(track.uri, track.didl);
-        if(track.albumArtURI) {
-            imageItemSource = track.albumArtURI;
-            cover.imageSource = track.albumArtURI;
-        } else {
-            imageItemSource = "";
-            cover.imageSource = "";
-        }
+
+        updateUIForTrack(track);
+        updateMprisForTrack(track);
 
         play();
-        var tstate = getTransportState();
-        if(tstate === "Playing") {
-            playIconSource = "image://theme/icon-l-pause";
-            cover.playIconSource = "image://theme/icon-cover-pause";
-        }
-
-        trackText = track.titleText;
-        albumText = track.metaText;
-
-        // mpris
-        var meta = new Object();
-        meta.Title = track.title;
-        meta.Artist = track.artist;
-        meta.Album = track.album;
-        meta.Length = track.duration * 1000000; // s -> us
-        meta.ArtUrl = track.albumArtURI;
-        //meta.TrackNumber = track.???;
-        app.updateMprisMetaData(meta);
 
         // if available set next track
         if(useNextURI && trackListModel.count > (currentItem+1)) {
@@ -540,9 +545,11 @@ Page {
     function loadNextTrack() {
         // still playing? then do not start next track
         var tstate = getTransportState();
-        if(tstate["tpstate"] === "Stopped")
+        if(tstate === "Stopped")
            next();
     }
+
+    property int failedAttempts: 0
 
     Timer {
         interval: 1000;
@@ -556,6 +563,16 @@ Page {
 
             // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
             var pinfo = getPositionInfo();
+            if(pinfo === undefined) {
+                failedAttempts++;
+                app.error("Error: getPositionInfo() failed")
+                if(failedAttempts > 3) {
+                    stop();
+                    app.error("Error: STOP due to too many failed attempts");
+                }
+                return;
+            } else
+                failedAttempts = 0;
 
             var trackuri = pinfo["trackuri"];
             var trackduration = parseInt(pinfo["trackduration"]);
@@ -599,7 +616,7 @@ Page {
                     // track changed
                     console.log("uri changed from ["+prevTrackURI + "] to [" + trackuri + "]");
                     var trackIndex = getTrackIndexForURI(trackuri);
-                    if(trackIndex >=0 )
+                    if(trackIndex >= 0)
                         onChangedTrack(trackIndex);
                     else if(trackuri === "") // no setNextAVTransportURI support?
                         loadNextTrack();

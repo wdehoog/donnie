@@ -146,7 +146,7 @@ ApplicationWindow
             mask |= 0x0103;
         else if(playerState == 2)
             mask |= 0x0203;
-        console.log("updateMprisState: 0x"+mask.toString(16));
+        //console.log("updateMprisState: 0x"+mask.toString(16));
         if(mask != mprisStateMask) {
             upnp.mprisSetStateMask(mask);
             mprisStateMask = mask;
