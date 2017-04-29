@@ -82,7 +82,7 @@ Page {
             return JSON.parse(pinfoJson);
         } catch(err) {
             app.error("Exception in getPositionInfo: "+err);
-            app.error("json: " + stateJson);
+            app.error("json: " + pinfoJson);
         }
     }
 
