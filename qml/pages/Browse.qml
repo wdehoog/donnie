@@ -349,22 +349,34 @@ Page {
         return track;
     }
 
-    function addToPlayer(id) {
+    function getTrack(id) {
         var i;
 
         for(i=0;i<contents.items.length;i++) {
             if(contents.items[i].id === id) {
                 var track = createTrack(id, contents.items[i]);
-                getPlayerPage().addTracks([track]);
-                break;
+                return track;
             }
         }
+        return undefined;
+    }
+
+    function addToPlayer(id) {
+        var track = getTrack(id);
+        if(track !== undefined)
+            getPlayerPage().addTracks([track]);
     }
 
     function addAllToPlayer() {
+        var tracks = [];
+
         for(var i=0;i<listView.model.count;i++) {
             var item = listView.model.get(i);
-            addToPlayer(item.id);
+            var track = getTrack(item.id);
+            if(track !== undefined)
+                tracks.push(track);
         }
+
+        getPlayerPage().addTracks(tracks);
     }
 }
