@@ -19,7 +19,8 @@ SOURCES += src/donnie.cpp \
     src/upnpbrowseworker.cpp \
     src/upnpdiscoveryworker.cpp \
     src/upnpgetrendererworker.cpp \
-    src/upnpgetserverworker.cpp
+    src/upnpgetserverworker.cpp \
+    src/upnpsearchworker.cpp
 
 OTHER_FILES += qml/donnie.qml \
     qml/cover/CoverPage.qml \
@@ -69,4 +70,5 @@ HEADERS += \
     src/upnpdiscoveryworker.h \
     src/IconProvider.h \
     src/upnpgetrendererworker.h \
-    src/upnpgetserverworker.h
+    src/upnpgetserverworker.h \
+    src/upnpsearchworker.h

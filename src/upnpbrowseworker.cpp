@@ -29,7 +29,7 @@ UPnPBrowseWorker::UPnPBrowseWorker(UPnPClient::CDSH server, QString cid) {
     this->cid = cid;
 }
 
-static void load(UPnPClient::UPnPDirObject obj, QJsonObject& parent) {
+void UPnPBrowseWorker::load(UPnPClient::UPnPDirObject obj, QJsonObject& parent) {
 
     parent["id"] = QString::fromStdString(obj.m_id);
     parent["pid"] = QString::fromStdString(obj.m_pid);

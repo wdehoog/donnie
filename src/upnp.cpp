@@ -22,6 +22,7 @@
 #include "upnp.h"
 #include "upnpdiscoveryworker.h"
 #include "upnpbrowseworker.h"
+#include "upnpsearchworker.h"
 #include "upnpgetrendererworker.h"
 #include "upnpgetserverworker.h"
 
@@ -215,6 +216,24 @@ void UPNP::browse(QString cid) {
     thread->start();
 }
 
+void UPNP::search(QString searchString, int startIndex, int count) {
+    if(currentServer == nullptr)
+        return;
+
+    QThread* thread = new QThread;
+    UPnPSearchWorker * worker = new UPnPSearchWorker(currentServer, searchString, startIndex, count);
+    worker->moveToThread(thread);
+
+    connect(worker, SIGNAL (error(QString)), this, SLOT (onError(QString)));
+    connect(worker, SIGNAL (searchDone(QString)), this, SLOT (onSearchDone(QString)));
+
+    connect(thread, SIGNAL (started()), worker, SLOT (process()));
+    connect(worker, SIGNAL (finished()), thread, SLOT (quit()));
+    connect(worker, SIGNAL (finished()), worker, SLOT (deleteLater()));
+    connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
+    thread->start();
+}
+
 void UPNP::getRendererJson(QString friendlyName, int search_window) {
     if(!superdir)
         init(search_window);
@@ -336,6 +355,10 @@ void UPNP::onDiscoveryDone(QString devicesJson) {
 
 void UPNP::onBrowseDone(QString contentsJson) {
     emit browseDone(contentsJson);
+}
+
+void UPNP::onSearchDone(QString searchResultsJson) {
+    emit searchDone(searchResultsJson);
 }
 
 void UPNP::onError(QString msg) {

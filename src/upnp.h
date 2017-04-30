@@ -47,6 +47,7 @@ public:
 
     Q_INVOKABLE void discover(int search_window = 10);
     Q_INVOKABLE void browse(QString cid);
+    Q_INVOKABLE void search(QString searchString, int startIndex, int count);
 
     Q_INVOKABLE void getRendererJson(QString friendlyName, int search_window = 10);
     Q_INVOKABLE void getServerJson(QString friendlyName, int search_window = 10);
@@ -88,6 +89,7 @@ signals:
     void getServerDone(QString serverJson);
     void discoveryDone(QString devicesJson);
     void browseDone(QString contentsJson);
+    void searchDone(QString searchResultsJson);
     void error(QString msg);
     void mprisControl(QString action);
 
@@ -96,6 +98,7 @@ public slots:
     void onGetServerDone(QString serverJson);
     void onDiscoveryDone(QString devicesJson);
     void onBrowseDone(QString contentsJson);
+    void onSearchDone(QString searchResultsJson);
     void onError(QString msg);
 
 protected:

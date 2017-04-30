@@ -36,6 +36,7 @@ class UPnPBrowseWorker : public QObject
     Q_OBJECT
 public:
     UPnPBrowseWorker(UPnPClient::CDSH server, QString cid);
+    static void load(UPnPClient::UPnPDirObject obj, QJsonObject& parent);
 
 public slots:
     void process();
@@ -50,4 +51,4 @@ protected:
   QString cid;
 };
 
-#endif // UPNPDISCOVERYWORKER_H
+#endif // UPNPBROWSEWORKER_H
