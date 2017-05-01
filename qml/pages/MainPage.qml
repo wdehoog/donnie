@@ -177,6 +177,21 @@ Page {
                     }
 
                     Row {
+                        id: searchRow
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        IconButton {
+                            icon.source: "image://theme/icon-m-search"
+                            enabled: !showBusy
+                            onClicked: gotoSearchPage();
+                        }
+                        Button {
+                            text: "Search"
+                            enabled: !showBusy
+                            onClicked: gotoSearchPage();
+                        }
+                    }
+
+                    Row {
                         anchors.horizontalCenter: parent.horizontalCenter
                         IconButton {
                             icon.source: "image://theme/icon-m-music"
@@ -259,6 +274,10 @@ Page {
             pageStack.push(browsePage, {cid: "0"});
         else
             pageStack.push(browsePage);
+    }
+
+    function gotoSearchPage() {
+        pageStack.push(searchPage);
     }
 
     function showErrorLogPage() {

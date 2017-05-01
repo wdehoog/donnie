@@ -62,7 +62,8 @@ DISTFILES += \
     qml/license/License.txt \
     qml/UPnP.js \
     qml/pages/MainPage.qml \
-    qml/pages/LogPage.qml
+    qml/pages/LogPage.qml \
+    qml/pages/Search.qml
 
 HEADERS += \
     src/upnp.h \

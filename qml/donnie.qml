@@ -46,6 +46,10 @@ ApplicationWindow
         id: browsePage
     }
 
+    Search {
+        id: searchPage
+    }
+
     PlayerPage {
         id: playerPage
     }
