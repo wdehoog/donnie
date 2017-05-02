@@ -30,6 +30,7 @@ ApplicationWindow
     property var currentBrowseStack : new UPnP.dataStructures.Stack();
     property var currentServer
     property var currentRenderer
+    property var currentServerSearchCapabilities
 
     property bool useBuiltInPlayer: false;
 
@@ -75,8 +76,19 @@ ApplicationWindow
         app.currentServer = server;
         console.log("setCurrentServer to: "+ currentServer["friendlyName"]);
         var res = upnp.setCurrentServer(currentServer["friendlyName"], true);
-        if(!res)
+        if(res) {
+            try {
+                var scapJson = upnp.getSearchCapabilitiesJson();
+                console.log(scapJson);
+                currentServerSearchCapabilities = JSON.parse(scapJson);
+            } catch( err ) {
+                app.error("Exception while getting Search Capabilities: " + err);
+                app.error("json: " + scapJson);
+            }
+        } else {
+            currentServerSearchCapabilities = {};
             error("Failed to set Current Server to: "+ currentServer["friendlyName"]);
+        }
         return res;
     }
 

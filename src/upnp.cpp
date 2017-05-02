@@ -18,6 +18,7 @@
 #include <QThread>
 
 #include <vector>
+#include <set>
 
 #include "upnp.h"
 #include "upnpdiscoveryworker.h"
@@ -232,6 +233,31 @@ void UPNP::search(QString searchString, int startIndex, int count) {
     connect(worker, SIGNAL (finished()), worker, SLOT (deleteLater()));
     connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
     thread->start();
+}
+
+QString UPNP::getSearchCapabilitiesJson() {
+    if(!currentServer)
+        return "[]";
+
+    std::set<std::string> searchCapabilities;
+    int code = currentServer->getSearchCapabilities(searchCapabilities);
+    if (code) {
+        std::cerr << UPnPP::LibUPnP::errAsString("UPNP::getSearchCapabilitiesJson", code) << std::endl;
+        return "[]";
+    }
+
+    if(searchCapabilities.empty())
+        return "[]";
+
+    QJsonArray items;
+    for(std::set<std::string>::const_iterator it = searchCapabilities.begin();
+        it != searchCapabilities.end();
+        it++) {
+        items.append(QString::fromStdString(*it));
+    }
+
+    QJsonDocument doc(items);
+    return doc.toJson(QJsonDocument::Compact);
 }
 
 void UPNP::getRendererJson(QString friendlyName, int search_window) {

@@ -1,3 +1,14 @@
+upnp:class derivedfrom "object.item.audioItem" and ( [<upnp tag> <op> "<query string>"]+ )
+where
+<upnp tag> := dc:title | upnp:genre | upnp:album | upnp:artist | dc:creator | dc:publisher | dc:description | upnp:userAnnotation | upnp:longDescription
+
+<op> := = | contains
+Example of request entered in the UPnp browser search field mapped to UPnP search query
+artist HAS foo => upnp:class derivedfrom "object.item.audioItem" and (upnp:artist contains "foo" or dc:creator contains "foo")
+album IS foo => upnp:class derivedfrom "object.item.audioItem" and (upnp:album = "foo")
+
+minidlna: ["@id","@parentID","@refID","dc:creator","dc:date","dc:title","upnp:actor","upnp:album","upnp:artist","upnp:class","upnp:genre"]
+
 https://github.com/ruedigergad/SkippingStones/blob/master/qml/MainPage.qml
 
 album_art_names=Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg/AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg/Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg
