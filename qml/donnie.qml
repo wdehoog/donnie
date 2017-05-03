@@ -47,9 +47,9 @@ ApplicationWindow
         id: browsePage
     }
 
-    Search {
-        id: searchPage
-    }
+    //Search {
+    //    id: searchPage
+    //}
 
     PlayerPage {
         id: playerPage

@@ -14,6 +14,10 @@ Page {
     property int startIndex: 0
     property int maxCount: 50
     property var searchResults
+    property var searchCapabilities: []
+    property var selectedSearchCapabilities: []
+    property int selectedSearchCapabilitiesMap;
+    property var scMap: []
 
     onSearchStringChanged: {
         if(searchString.length>=3) {
@@ -48,7 +52,8 @@ Page {
 
                 for(i=0;i<searchResults.items.length;i++) {
                     var item = searchResults.items[i];
-                    if(item.properties["upnp:class"] === "object.item.audioItem.musicTrack") {
+                    if(item.properties["upnp:class"]
+                       && item.properties["upnp:class"].startsWith("object.item.audioItem")) {
                         var durationText = "";
                         if(item.resources[0].attributes["duration"])
                           durationText = UPnP.getDurationString(item.resources[0].attributes["duration"]);
@@ -124,6 +129,68 @@ Page {
                     property: "searchString"
                     value: searchField.text.toLowerCase().trim()
                 }
+            }
+
+            ValueButton {
+                property var indexes: []
+                width: parent.width
+
+                label: "Search In"
+
+                ListModel {
+                    id: items
+                }
+
+                Component.onCompleted: {
+                    var c = 0;
+                    value = "None"
+                    indexes = []
+                    items.clear()
+
+                    // load capabilities
+                    for (var u=0;u<searchCapabilities.length;u++) {
+                        var scapLabel = UPnP.geSearchCapabilityDisplayString(searchCapabilities[u]);
+                        if(scapLabel === undefined)
+                            continue;
+
+                        items.append( {id: c, name: scapLabel });
+                        indexes.push(c);
+                        scMap[c] = u;
+
+                        c++;
+                    }
+
+                    //if (indexes.length > 0) {
+                    //    value = "";
+                    //    for (var i=0;i<indexes.length;i++)
+                    //        value = value + ((i>0) ? ", " : "") + items.get(indexes[i]).name;
+                    //}
+                }
+
+                onClicked: {
+                    var ms = pageStack.push(Qt.resolvedUrl("../components/MultiItemPicker.qml"), { items: items, label: label, indexes: indexes } );
+                    ms.accepted.connect(function() {
+                        indexes = ms.indexes.sort(function (a, b) { return a - b });
+                        if (indexes.length == 0) {
+                            value = "None";
+                            delete selectedSearchCapabilities;
+                        } else {
+                            value = "";
+                            var tmp = [];
+                            selectedSearchCapabilitiesMap = 0;
+                            for (var i=0 ; i<indexes.length ; i++) {
+                                value = value + ((i>0) ? ", " : "") + items.get(indexes[i]).name;
+                                var tmpitem = {};
+                                tmpitem["label"] = items.get(indexes[i]).name;
+                                tmpitem.id = items.get(indexes[i]).id;
+                                tmp.push(tmpitem);
+                                selectedSearchCapabilities |= 0x01 << scMap[indexes[i]];
+                            }
+                            selectedSearchCapabilities = tmp;
+                        }
+                    })
+                }
+
             }
         }
 

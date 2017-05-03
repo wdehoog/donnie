@@ -277,7 +277,9 @@ Page {
     }
 
     function gotoSearchPage() {
-        pageStack.push(searchPage);
+        //pageStack.push(searchPage);
+        pageStack.push(Qt.resolvedUrl("Search.qml"),
+                       {searchCapabilities: app.currentServerSearchCapabilities});
     }
 
     function showErrorLogPage() {

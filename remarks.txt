@@ -7,6 +7,20 @@ Example of request entered in the UPnp browser search field mapped to UPnP searc
 artist HAS foo => upnp:class derivedfrom "object.item.audioItem" and (upnp:artist contains "foo" or dc:creator contains "foo")
 album IS foo => upnp:class derivedfrom "object.item.audioItem" and (upnp:album = "foo")
 
+zie
+UPnP-av-ContentDirectory-v1-Service.pdf 2.5
+
+string escaping:
+a. Backslash (‘\’) is represented as ‘\\’ in both contexts.
+b. Comma (‘,’) is
+  1. represented as ‘\,’ in individual substring entries in CSV lists
+  2. not escaped in search strings
+c. Double quote (‘"’) is
+  1. not escaped in CSV lists
+  2. not escaped in search strings when it appears as the start or end delimiter of a property value
+  3. represented as ‘\"’ in search strings when it appears as a character that is part of the property value
+
+
 minidlna: ["@id","@parentID","@refID","dc:creator","dc:date","dc:title","upnp:actor","upnp:album","upnp:artist","upnp:class","upnp:genre"]
 
 https://github.com/ruedigergad/SkippingStones/blob/master/qml/MainPage.qml

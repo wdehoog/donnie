@@ -158,3 +158,81 @@ function formatDuration(duration /* track duration in seconds */) {
             + (minutes > 0 ? (hours > 0 ? zeroPad(minutes, 2) : minutes) + ":" : "0:")
             + zeroPad(seconds, 2);
 }
+
+function escapeUPNPString(str) {
+    // \ -> \\
+    str = str.replace(/\\/g,'\\\\');
+
+    // " -> \"
+    str = str.replace(/\"/g,'\\"');
+
+    return str;
+}
+
+function createUPnPQuery(searchString, fieldMask) {
+    var query = "";
+
+    var escapedSearchString = escapeUPNPString(searchString);
+
+    if(fieldMask & 0x01) {
+        query += "upnp:artist contains \"" + escapedSearchString + "\"";
+    }
+    if(fieldMask & 0x02) {
+        if(query.length > 0)
+            query += " or ";
+        query += "dc:title contains \"" + escapedSearchString + "\"";
+    }
+    if(fieldMask & 0x04) {
+        if(query.length > 0)
+            query += " or ";
+        query += "upnp:album contains \"" + escapedSearchString + "\"";
+    }
+    if(fieldMask & 0x08) {
+        if(query.length > 0)
+            query += " or ";
+        query += "upnp:genre contains \"" + escapedSearchString + "\"";
+    }
+
+    return query;
+}
+
+function createUPnPQuery2(searchString, searchCapabilities, capabilitiesMask) {
+    var query = "";
+    var i, mask;
+
+    var escapedSearchString = escapeUPNPString(searchString);
+
+    for(i=0;i<searchCapabilities.length;i++) {
+        mask = 1 << i;
+        if(mask & capabilitiesMask) {
+            if(query.length > 0)
+                query += " or ";
+            query += searchCapabilities[i] + " contains \"" + escapedSearchString + "\"";
+        }
+    }
+
+    return "upnp:class derivedfrom \"object.item.audioItem\" and (" + query +")";
+}
+
+function geSearchCapabilityDisplayString(searchCapability) {
+    if(searchCapability === "upnp:artist")
+        return "Artist";
+    if(searchCapability === "dc:title")
+        return "Title";
+    if(searchCapability === "upnp:album")
+        return "Album";
+    if(searchCapability === "upnp:genre")
+        return "Genre";
+    if(searchCapability === "dc:creator")
+        return "Creator";
+    if(searchCapability === "dc:publisher")
+        return "Publisher";
+    if(searchCapability === "dc:description")
+        return "Description";
+    if(searchCapability === "upnp:userAnnotation")
+        return "User Annotation";
+    if(searchCapability === "upnp:longDescription")
+        return "Long Description";
+
+    return undefined;
+}

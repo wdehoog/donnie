@@ -63,7 +63,8 @@ DISTFILES += \
     qml/UPnP.js \
     qml/pages/MainPage.qml \
     qml/pages/LogPage.qml \
-    qml/pages/Search.qml
+    qml/pages/Search.qml \
+    qml/components/MultiItemPicker.qml
 
 HEADERS += \
     src/upnp.h \
