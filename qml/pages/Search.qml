@@ -18,6 +18,7 @@ Page {
     //property var selectedSearchCapabilities: []
     property int selectedSearchCapabilitiesMask
     property var scMap: []
+    property string groupByField: "album"
 
     onSearchStringChanged: {
         typeDelay.restart()
@@ -209,6 +210,28 @@ Page {
                 }
 
             }
+
+            /* Group by */
+            ComboBox {
+                id: groupBy
+                width: parent.width
+                label: "Group By"
+                currentIndex: 0
+                menu: ContextMenu {
+                    MenuItem {
+                        text: "Album"
+                        onClicked: groupByField = "album"
+                    }
+                    MenuItem {
+                        text: "Artist"
+                        onClicked: groupByField = "artist"
+                    }
+                    MenuItem {
+                        text: "Title"
+                        onClicked: groupByField = "title"
+                    }
+                }
+            }
         }
 
         PullDownMenu {
@@ -218,7 +241,7 @@ Page {
             }
         }
 
-        section.property : "album"
+        section.property : groupByField
         section.delegate : Component {
             id: sectionHeading
             Item {
