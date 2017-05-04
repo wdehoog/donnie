@@ -169,34 +169,7 @@ function escapeUPNPString(str) {
     return str;
 }
 
-function createUPnPQuery(searchString, fieldMask) {
-    var query = "";
-
-    var escapedSearchString = escapeUPNPString(searchString);
-
-    if(fieldMask & 0x01) {
-        query += "upnp:artist contains \"" + escapedSearchString + "\"";
-    }
-    if(fieldMask & 0x02) {
-        if(query.length > 0)
-            query += " or ";
-        query += "dc:title contains \"" + escapedSearchString + "\"";
-    }
-    if(fieldMask & 0x04) {
-        if(query.length > 0)
-            query += " or ";
-        query += "upnp:album contains \"" + escapedSearchString + "\"";
-    }
-    if(fieldMask & 0x08) {
-        if(query.length > 0)
-            query += " or ";
-        query += "upnp:genre contains \"" + escapedSearchString + "\"";
-    }
-
-    return query;
-}
-
-function createUPnPQuery2(searchString, searchCapabilities, capabilitiesMask) {
+function createUPnPQuery(searchString, searchCapabilities, capabilitiesMask) {
     var query = "";
     var i, mask;
 

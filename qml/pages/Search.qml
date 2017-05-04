@@ -15,17 +15,26 @@ Page {
     property int maxCount: 50
     property var searchResults
     property var searchCapabilities: []
-    property var selectedSearchCapabilities: []
-    property int selectedSearchCapabilitiesMap;
+    //property var selectedSearchCapabilities: []
+    property int selectedSearchCapabilitiesMask
     property var scMap: []
 
     onSearchStringChanged: {
-        if(searchString.length>=3) {
-            var query;
-            query  = "upnp:artist contains \"" + searchString + "\"";
-            query += "or dc:creator contains \"" + searchString + "\"";
-            showBusy = true;
-            upnp.search(query, 0, maxCount);
+        typeDelay.restart()
+    }
+
+    Timer {
+        id: typeDelay
+        interval: 1000
+        running: false
+        repeat: false
+        onTriggered: {
+            if(searchString.length >= 1 && selectedSearchCapabilitiesMask > 0) {
+                var query = UPnP.createUPnPQuery(searchString, searchCapabilities, selectedSearchCapabilitiesMask);
+                showBusy = true;
+                upnp.search(query, 0, maxCount);
+            } else
+                searchModel.clear();
         }
     }
 
@@ -39,7 +48,8 @@ Page {
 
                 searchModel.clear();
 
-                /*for(i=0;i<searchResults.containers.length;i++) {
+                /* for now containers are skipped (query is also filtering them out?)
+                   for(i=0;i<searchResults.containers.length;i++) {
                     var container = searchResults.containers[i];
                     searchModel.append({
                         type: "Container",
@@ -52,8 +62,10 @@ Page {
 
                 for(i=0;i<searchResults.items.length;i++) {
                     var item = searchResults.items[i];
-                    if(item.properties["upnp:class"]
-                       && item.properties["upnp:class"].startsWith("object.item.audioItem")) {
+                    // query already takes care of this and .startsWith( throws an error
+                    // Property 'startsWith( of object ... is not a function
+                    //if(item.properties["upnp:class"]
+                    //   && item.properties["upnp:class"].startsWith("object.item.audioItem")) {
                         var durationText = "";
                         if(item.resources[0].attributes["duration"])
                           durationText = UPnP.getDurationString(item.resources[0].attributes["duration"]);
@@ -71,8 +83,8 @@ Page {
                             album: item.properties["upnp:album"],
                             duration: item.resources[0].attributes["duration"]
                         });
-                    } else
-                        console.log("onSearchDone: skipped loading of an object of class " + item.properties["upnp:class"]);
+                    //} else
+                    //    console.log("onSearchDone: skipped loading of an object of class " + item.properties["upnp:class"]);
                 }
 
             } catch( err ) {
@@ -131,6 +143,7 @@ Page {
                 }
             }
 
+            /* Which fields to search in */
             ValueButton {
                 property var indexes: []
                 width: parent.width
@@ -160,33 +173,37 @@ Page {
                         c++;
                     }
 
-                    //if (indexes.length > 0) {
-                    //    value = "";
-                    //    for (var i=0;i<indexes.length;i++)
-                    //        value = value + ((i>0) ? ", " : "") + items.get(indexes[i]).name;
-                    //}
+                    // initially all are selected
+                    if (indexes.length > 0) {
+                        value = "";
+                        for(var i=0;i<indexes.length;i++) {
+                            value = value + ((i>0) ? ", " : "") + items.get(indexes[i]).name;
+                            selectedSearchCapabilitiesMask |= 0x01 << scMap[indexes[i]];
+                        }
+                    }
                 }
 
                 onClicked: {
                     var ms = pageStack.push(Qt.resolvedUrl("../components/MultiItemPicker.qml"), { items: items, label: label, indexes: indexes } );
                     ms.accepted.connect(function() {
                         indexes = ms.indexes.sort(function (a, b) { return a - b });
+                        selectedSearchCapabilitiesMask = 0;
                         if (indexes.length == 0) {
                             value = "None";
-                            delete selectedSearchCapabilities;
+                            //delete selectedSearchCapabilities;
                         } else {
                             value = "";
                             var tmp = [];
                             selectedSearchCapabilitiesMap = 0;
                             for (var i=0 ; i<indexes.length ; i++) {
                                 value = value + ((i>0) ? ", " : "") + items.get(indexes[i]).name;
-                                var tmpitem = {};
-                                tmpitem["label"] = items.get(indexes[i]).name;
-                                tmpitem.id = items.get(indexes[i]).id;
-                                tmp.push(tmpitem);
-                                selectedSearchCapabilities |= 0x01 << scMap[indexes[i]];
+                                //var tmpitem = {};
+                                //tmpitem.label = items.get(indexes[i]).name;
+                                //tmpitem.id = items.get(indexes[i]).id;
+                                //tmp.push(tmpitem);
+                                selectedSearchCapabilitiesMask |= 0x01 << scMap[indexes[i]];
                             }
-                            selectedSearchCapabilities = tmp;
+                            //selectedSearchCapabilities = tmp;
                         }
                     })
                 }
@@ -201,27 +218,28 @@ Page {
             }
         }
 
+        section.property : "album"
+        section.delegate : Component {
+            id: sectionHeading
+            Item {
+                width: container.width
+                height: childrenRect.height
+
+                Text {
+                    text: section
+                    font.bold: true
+                    font.pixelSize: Theme.fontSizeMedium
+                    color: Theme.highlightColor
+                }
+            }
+        }
+
         delegate: ListItem {
             id: delegate
             //height: Math.max(imageItem.height, label.height) makes it too small
             Row {
                 spacing: Theme.paddingMedium
                 width: parent.width
-
-                /*Image {
-                  id: imageItem
-                  fillMode: Image.PreserveAspectFit
-                  anchors.verticalCenter: parent.verticalCenter
-                  source: {
-                      if(pid === "-2") // the ".." item
-                          return "image://theme/icon-m-back";
-                      if(type === "Container")
-                          return "image://theme/icon-m-folder";
-                      //if() currently non music files are filtered out
-                        return "image://theme/icon-m-music";
-                      //return "image://theme/icon-m-other";
-                  }
-                }*/
 
                 Column {
                     width: parent.width
@@ -234,7 +252,7 @@ Page {
                             id: tt
                             color: Theme.primaryColor
                             textFormat: Text.StyledText
-                            //truncationMode: TruncationMode.Fade
+                            truncationMode: TruncationMode.Fade
                             width: parent.width - dt.width
                             //anchors.right: dt.left
                             text: titleText
@@ -253,31 +271,10 @@ Page {
                         font.pixelSize: Theme.fontSizeExtraSmall
                         text: metaText
                         textFormat: Text.StyledText
-                        //truncationMode: TruncationMode.Fade
+                        truncationMode: TruncationMode.Fade
                         width: parent.width
                     }
                 }
-
-//                Label {
-//                    id: titleLabel
-//                    //anchors.leftMargin: Theme.paddingLarge
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
-//                    text: title;
-//                }
-
-//                Label {
-//                    id: metaLabel
-//                    font.pixelSize: Theme.fontSizeExtraSmall
-//                    anchors.baseline: titleLabel.baseline
-//                    //anchors {
-//                    //    right: parent.right
-//                    //    rightMargin: Theme.horizontalPageMargin
-//                        //bottom: parent.bottom
-//                        //bottomMargin: Theme.paddingSmall
-//                    //}
-//                    text: duration ? UPnP.getDurationString(model.duration) : "";
-//                }
 
             }
             menu: contextMenu
