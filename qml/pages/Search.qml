@@ -29,14 +29,18 @@ Page {
         interval: 1000
         running: false
         repeat: false
-        onTriggered: {
-            if(searchString.length >= 1 && selectedSearchCapabilitiesMask > 0) {
-                var query = UPnP.createUPnPQuery(searchString, searchCapabilities, selectedSearchCapabilitiesMask);
-                showBusy = true;
-                upnp.search(query, 0, maxCount);
-            } else
-                searchModel.clear();
-        }
+        onTriggered: refresh()
+    }
+
+    onSelectedSearchCapabilitiesMaskChanged: refresh()
+
+    function refresh() {
+        if(searchString.length >= 1 && selectedSearchCapabilitiesMask > 0) {
+            var query = UPnP.createUPnPQuery(searchString, searchCapabilities, selectedSearchCapabilitiesMask);
+            showBusy = true;
+            upnp.search(query, 0, maxCount);
+        } else
+            searchModel.clear();
     }
 
     Connections {
@@ -50,16 +54,7 @@ Page {
                 searchModel.clear();
 
                 /* for now containers are skipped (query is also filtering them out?)
-                   for(i=0;i<searchResults.containers.length;i++) {
-                    var container = searchResults.containers[i];
-                    searchModel.append({
-                        type: "Container",
-                        id: container["id"],
-                        pid: container["pid"],
-                        title: container["title"],
-                        artist: "", album: "", duration: ""
-                    });
-                }*/
+                 */
 
                 for(i=0;i<searchResults.items.length;i++) {
                     var item = searchResults.items[i];
@@ -245,7 +240,7 @@ Page {
         section.delegate : Component {
             id: sectionHeading
             Item {
-                width: container.width
+                width: parent.width
                 height: childrenRect.height
 
                 Text {
@@ -314,6 +309,10 @@ Page {
                         text: "Add All To Player"
                         onClicked: addAllToPlayer();
                     }
+                    MenuItem {
+                        text: "Browse"
+                        onClicked: openBrowseOn(listView.model.get(index).pid);
+                    }
                 }
             }
             onClicked: {
@@ -374,5 +373,10 @@ Page {
         }
 
         getPlayerPage().addTracks(tracks);
+    }
+
+    function openBrowseOn(id) {
+        pageStack.pop();
+        mainPage.openBrowsePage(id);
     }
 }

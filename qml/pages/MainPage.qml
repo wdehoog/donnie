@@ -276,6 +276,30 @@ Page {
             pageStack.push(browsePage);
     }
 
+    // to wait for pagestack to be available
+    property string openBrowseId: ""
+    Timer {
+        id: openBrowseTimer
+        interval: 100
+        running: false
+        repeat: true
+        onTriggered: {
+            if(!pageStack.busy) {
+                running = false;
+                pageStack.push(browsePage, {cid: openBrowseId});
+            }
+        }
+    }
+
+    function openBrowsePage(id) {
+        browsePage.reset();
+        if(pageStack.busy) {
+            openBrowseId = id;
+            openBrowseTimer.start();
+        } else
+            pageStack.push(browsePage, {cid: id});
+    }
+
     function gotoSearchPage() {
         //pageStack.push(searchPage);
         pageStack.push(Qt.resolvedUrl("Search.qml"),

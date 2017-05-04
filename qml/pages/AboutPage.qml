@@ -113,11 +113,10 @@ Page {
                 font.pixelSize: Theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 text:
-"upplay + libupnpp for amazing UPnP support (https://github.com/medoc92/libupnpp)
-
-unplayer for inspiration & code
-upnpplayer for inspiration
-kimmoli for IconProvider
+"J.F.Dockes for upplay + libupnpp, amazing UPnP support (inspiration & code)
+equeim for unplayer (inspiration & code)
+jabbounet for upnpplayer (inspiration)
+kimmoli for IconProvider and MultiItemPicker (code)
 Morpog for icon shape"
             }
         }

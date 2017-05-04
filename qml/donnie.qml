@@ -39,7 +39,7 @@ ApplicationWindow
     property int playerState: -1
     property int mprisStateMask: 0
 
-    initialPage: Component { MainPage { } }
+    initialPage: mainPage
 
     allowedOrientations: defaultAllowedOrientations
 
@@ -50,6 +50,10 @@ ApplicationWindow
     //Search {
     //    id: searchPage
     //}
+
+    MainPage {
+        id: mainPage
+    }
 
     PlayerPage {
         id: playerPage

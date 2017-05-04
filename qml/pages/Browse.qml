@@ -65,8 +65,8 @@ Page {
 
                 for(i=0;i<contents.items.length;i++) {
                     var item = contents.items[i];
-                    if(item.properties["upnp:class"]
-                       && item.properties["upnp:class"].startsWith("object.item.audioItem"))
+                    var upnpClass = item.properties["upnp:class"];
+                    if(upnpClass && UPnP.startsWith(upnpClass, "object.item.audioItem"))
                         browseModel.append({
                             type: "Item",
                             id: item["id"],

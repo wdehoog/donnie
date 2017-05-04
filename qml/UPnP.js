@@ -209,3 +209,7 @@ function geSearchCapabilityDisplayString(searchCapability) {
 
     return undefined;
 }
+
+function startsWith(str, start) {
+    return str.match("^"+start) !== null;
+}
