@@ -29,8 +29,7 @@ Page {
     onStatusChanged: {
         if (status === PageStatus.Activating) {
             swField.text = search_window.value;
-        } else if (status === PageStatus.Deactivating) {
-            search_window.value = swField.text;
+            msrField.text = max_search_results.value
         }
     }
 
@@ -50,6 +49,21 @@ Page {
                 label: "How long to search for UPnp Devices (sec)"
                 inputMethodHints: Qt.ImhDigitsOnly
                 width: parent.width
+                onTextChanged: {
+                    search_window.value = text;
+                    search_window.sync();
+                }
+            }
+
+            TextField {
+                id: msrField
+                label: "Maximum number of search results"
+                inputMethodHints: Qt.ImhDigitsOnly
+                width: parent.width
+                onTextChanged: {
+                    max_search_results.value = text;
+                    max_search_results.sync();
+                }
             }
 
             /*TextSwitch {
@@ -80,6 +94,12 @@ Page {
             id: search_window
             key: "/donnie/search_window"
             defaultValue: 10
+    }
+
+    ConfigurationValue {
+            id: max_search_results
+            key: "/donnie/max_search_results"
+            defaultValue: 100
     }
 
     ConfigurationValue {

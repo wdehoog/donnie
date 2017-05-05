@@ -3,6 +3,8 @@ import QtQuick 2.0
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
+import org.nemomobile.configuration 1.0
+
 import "../UPnP.js" as UPnP
 
 Page {
@@ -12,7 +14,8 @@ Page {
     property bool showBusy: false;
     property string searchString: ""
     property int startIndex: 0
-    property int maxCount: 50
+    property int maxCount: max_search_results.value
+    property int totalCount
     property var searchResults
     property var searchCapabilities: []
     //property var selectedSearchCapabilities: []
@@ -36,11 +39,22 @@ Page {
 
     function refresh() {
         if(searchString.length >= 1 && selectedSearchCapabilitiesMask > 0) {
-            var query = UPnP.createUPnPQuery(searchString, searchCapabilities, selectedSearchCapabilitiesMask);
+            var searchQuery = UPnP.createUPnPQuery(searchString, searchCapabilities, selectedSearchCapabilitiesMask);
             showBusy = true;
-            upnp.search(query, 0, maxCount);
+            upnp.search(searchQuery, 0, maxCount);
+            console.log("search start="+startIndex);
         } else
             searchModel.clear();
+    }
+
+    function searchMore(start) {
+        if(searchString.length < 1 || selectedSearchCapabilitiesMask == 0)
+            return;
+        var searchQuery = UPnP.createUPnPQuery(searchString, searchCapabilities, selectedSearchCapabilitiesMask);
+        showBusy = true;
+        startIndex = start;
+        upnp.search(searchQuery, start, maxCount);
+        console.log("search start="+startIndex);
     }
 
     Connections {
@@ -51,7 +65,7 @@ Page {
             try {
                 searchResults = JSON.parse(searchResultsJson);
 
-                searchModel.clear();
+                //searchModel.clear();
 
                 /* for now containers are skipped (query is also filtering them out?)
                  */
@@ -83,6 +97,8 @@ Page {
                     //    console.log("onSearchDone: skipped loading of an object of class " + item.properties["upnp:class"]);
                 }
 
+                totalCount = searchResults["totalCount"];
+                console.log("result totalCount="+totalCount+" model.count="+searchModel.count+", results.length="+searchResults.items.length);
             } catch( err ) {
                 app.error("Exception in onSearchDone: " + err);
                 app.error("json: " + searchResultsJson);
@@ -126,6 +142,40 @@ Page {
                     running: showBusy;
                 }
                 anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            PullDownMenu {
+                /*MenuItem {
+                    text: qsTr("Add All To Player")
+                    onClicked: addAllToPlayer()
+                }*/
+                MenuItem {
+                    text: qsTr("Load More")
+                    enabled: searchString.length >= 1
+                             && selectedSearchCapabilitiesMask > 0
+                             && searchModel.count < totalCount
+                    onClicked: searchMore(startIndex+maxCount);
+                }
+                MenuItem {
+                    text: qsTr("Load Next Set")
+                    enabled: searchString.length >= 1
+                             && selectedSearchCapabilitiesMask > 0
+                             && (startIndex + searchModel.count) < totalCount
+                    onClicked: {
+                        searchModel.clear();
+                        searchMore(startIndex+maxCount);
+                    }
+                }
+                MenuItem {
+                    text: qsTr("Load Previous Set")
+                    enabled: searchString.length >= 1
+                             && selectedSearchCapabilitiesMask > 0
+                             && startIndex >= maxCount
+                    onClicked: {
+                        searchModel.clear();
+                        searchMore(startIndex-maxCount);
+                    }
+                }
             }
 
             SearchField {
@@ -226,13 +276,6 @@ Page {
                         onClicked: groupByField = "title"
                     }
                 }
-            }
-        }
-
-        PullDownMenu {
-            MenuItem {
-                text: qsTr("Add All To Player")
-                onClicked: addAllToPlayer()
             }
         }
 
@@ -395,4 +438,11 @@ Page {
         pageStack.pop();
         mainPage.openBrowsePage(id);
     }
+
+    ConfigurationValue {
+            id: max_search_results
+            key: "/donnie/max_search_results"
+            defaultValue: 100
+    }
+
 }

@@ -77,11 +77,19 @@
 <context>
     <name>Search</name>
     <message>
-        <source>Add All To Player</source>
+        <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Search</source>
+        <source>Load More</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load Next Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load Previous Set</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -25,11 +25,11 @@
 #include <libupnpp/control/cdirectory.hxx>
 
 
-UPnPSearchWorker::UPnPSearchWorker(UPnPClient::CDSH server, QString searchString, int startIndex, int count) {
+UPnPSearchWorker::UPnPSearchWorker(UPnPClient::CDSH server, QString searchString, int startIndex, int maxCount) {
     this->server = server;
     this->searchString = searchString;
     this->startIndex = startIndex;
-    this->count = count;
+    this->maxCount = maxCount;
 }
 
 
@@ -41,7 +41,7 @@ void UPnPSearchWorker::process() {
     UPnPClient::UPnPDirContent dirbuf;
     std::string cid("0");
     //int code = server->search(cid, searchString.toUtf8().constData(), dirbuf);
-    int code = server->searchSlice(cid, searchString.toUtf8().constData(), startIndex, count, dirbuf, &actualCount, &total);
+    int code = server->searchSlice(cid, searchString.toUtf8().constData(), startIndex, maxCount, dirbuf, &actualCount, &total);
     if (code) {
         std::cerr << UPnPP::LibUPnP::errAsString("UPnPSearchWorker", code) << std::endl;
         return;

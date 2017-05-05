@@ -35,7 +35,7 @@ class UPnPSearchWorker : public QObject
 {
     Q_OBJECT
 public:
-    UPnPSearchWorker(UPnPClient::CDSH server, QString searchString, int startIndex, int count);
+    UPnPSearchWorker(UPnPClient::CDSH server, QString searchString, int startIndex, int maxCount);
 
 public slots:
     void process();
@@ -49,7 +49,7 @@ protected:
   UPnPClient::CDSH server;
   QString searchString;
   int startIndex;
-  int count;
+  int maxCount;
 };
 
 #endif // UPNPSEARCHWORKER_H
