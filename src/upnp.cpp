@@ -235,6 +235,103 @@ void UPNP::search(QString searchString, int startIndex, int count) {
     thread->start();
 }
 
+QString UPNP::getPathJson(QString id) {
+    UPnPClient::UPnPDirContent dirbuf;
+    QString parentID;
+    QString title;
+    QJsonArray pathObject;
+    QString searchString;
+
+    if(currentServer == nullptr)
+        return "";
+
+    while(id.compare("-1") != 0) {
+
+        // get item so we also get it's parent id
+        dirbuf.clear();
+        searchString = QString("@id = \"%1\"").arg(id);
+        int code = currentServer->search("0", searchString.toUtf8().constData(), dirbuf);
+        if (code) {
+            std::cerr << UPnPP::LibUPnP::errAsString("getPathJson", code) << std::endl;
+            break;
+        }
+        if(dirbuf.m_containers.size() > 0) {
+            parentID = QString::fromStdString(dirbuf.m_containers[0].m_pid);
+            title = QString::fromStdString(dirbuf.m_containers[0].m_title);
+        } else if(dirbuf.m_items.size() > 0) {
+            parentID = QString::fromStdString(dirbuf.m_items[0].m_pid);
+            title = QString::fromStdString(dirbuf.m_items[0].m_title);
+        } else {
+            //std::cerr << "getPathJson found nothing for " << id << std::endl;
+            break;
+        }
+
+        QJsonObject part;
+        part["id"] = id;
+        part["pid"] = parentID;
+        part["title"] = title;
+        pathObject.append(part);
+
+        id = parentID;
+    }
+
+    QJsonDocument doc(pathObject);
+    return doc.toJson(QJsonDocument::Compact);
+}
+
+QString UPNP::getParentID(QString id) {
+    UPnPClient::UPnPDirContent dirbuf;
+    QString parentID;
+
+    if(currentServer == nullptr)
+        return "";
+
+    // get item so we also get it's parent id
+    QString searchString = QString("@id = \"%1\"").arg(id);
+    int code = currentServer->search("0", searchString.toUtf8().constData(), dirbuf);
+    if (code) {
+        std::cerr << UPnPP::LibUPnP::errAsString("getParentID", code) << std::endl;
+        return "";
+    }
+
+    std::cout << "getParentID 1: got " << dirbuf.m_containers.size() <<
+        " containers and " << dirbuf.m_items.size() << " items " << std::endl;
+
+    if(dirbuf.m_containers.size() > 0) {
+        std::cout << "getParentID: C for " << id.toStdString() << " is "
+                  << dirbuf.m_containers[0].m_pid << std::endl;
+        parentID = QString::fromStdString(dirbuf.m_containers[0].m_pid);
+    } else if(dirbuf.m_items.size() > 0) {
+        std::cout << "getParentID: I for " << id.toStdString() << " is "
+                  << dirbuf.m_containers[0].m_pid << std::endl;
+        parentID = QString::fromStdString(dirbuf.m_items[0].m_pid);
+    } else
+        parentID =  ""; // no idea
+
+    // now get the parent item so we can get the title
+    // get item so we also get it's parent id
+    searchString = QString("@id = \"%1\"").arg(parentID);
+    code = currentServer->search("0", searchString.toUtf8().constData(), dirbuf);
+    if (code) {
+        std::cerr << UPnPP::LibUPnP::errAsString("getParentID", code) << std::endl;
+        return parentID;
+    }
+
+    std::cout << "getParentID 2: got " << dirbuf.m_containers.size() <<
+        " containers and " << dirbuf.m_items.size() << " items " << std::endl;
+
+    // it must be a container
+    QString title = "";
+    for (unsigned int i = 0; i < dirbuf.m_containers.size(); i++) {
+        if(id.compare(QString::fromStdString(dirbuf.m_containers[i].m_pid)) == 0) {
+            title = QString::fromStdString(dirbuf.m_containers[i].m_title);
+            break;
+        }
+    }
+    // VISIT return Json
+    return QString("%1,%2").arg(parentID, title);
+}
+
 QString UPNP::getSearchCapabilitiesJson() {
     if(!currentServer)
         return "[]";

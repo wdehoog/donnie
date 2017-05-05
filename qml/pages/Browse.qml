@@ -23,9 +23,9 @@ import "../UPnP.js" as UPnP
 Page {
     id: page
 
-    property bool showBusy: false;
-    property string cid : "";
-    property var contents;
+    property bool showBusy: false
+    property string cid : ""
+    property var contents
 
     //property string pathTreeText : "";
     property string pathText: "";
@@ -43,14 +43,16 @@ Page {
 
                 browseModel.clear();
 
-                if(cid !== "0") // no ".." for the root
+                if(cid !== "0") { // no ".." for the root
+                    var pid = getParentID();
                     browseModel.append({
                         type: "Container",
-                        id: app.currentBrowseStack.peek().pid,
+                        id: pid,
                         pid: "-2",
                         title: "..",
                         artist: "", album: "", duration: ""
                     });
+                }
 
                 for(i=0;i<contents.containers.length;i++) {
                     var container = contents.containers[i];
@@ -287,9 +289,29 @@ Page {
     }
 
     onCidChanged: {
+        if(cid === "")
+            return;
+
         showBusy = true;
-        if(app.currentBrowseStack.empty())
-            pushOnBrowseStack(cid, "-1", "[Top Level]");
+
+        if(app.currentBrowseStack.empty()) {
+            if(cid === "0") // root
+                pushOnBrowseStack(cid, "-1", "[Top Level]");
+            else {
+                // probably arrived here from search page
+                // so we have to query for the parent to create
+                // a .. item
+                var pathJson = upnp.getPathJson(cid);
+                var pid = upnp.getParentID(cid);
+                if(pid !== "") {
+                    var arr = pid.split(",");
+                    pushOnBrowseStack(arr[0], "-2", arr[1].length>0?arr[1]:"");
+                } else
+                    // no parent, add root again
+                    pushOnBrowseStack("0", "-1", "[Top Level]");
+            }
+        }
+
         upnp.browse(cid);
     }
 
@@ -307,6 +329,22 @@ Page {
     function reset() {
         pathListModel.clear();
         app.currentBrowseStack.empty();
+        cid = "";
+    }
+
+    function getParentID() {
+        // use browse stack if possible
+        if(app.currentBrowseStack.length() > 0)
+            return app.currentBrowseStack.peek().id;
+
+        // look in contents VISIT is this ever used?
+        if(contents.containers.length > 0)
+            return upnp.getParentID(contents.containers[0]["pid"]);
+        if(contents.items.length > 0)
+            return upnp.getParentID(contents.items[0]["pid"]);
+
+        // no idea, give root
+        return "0";
     }
 
     function popFromBrowseStackUntil(id) {
