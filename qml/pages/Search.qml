@@ -306,11 +306,15 @@ Page {
                         onClicked: addToPlayer(listView.model.get(index).id);
                     }
                     MenuItem {
+                        text: "Add Group To Player"
+                        onClicked: addGroupToPlayer(groupByField, listView.model.get(index)[groupByField]);
+                    }
+                    MenuItem {
                         text: "Add All To Player"
                         onClicked: addAllToPlayer();
                     }
                     MenuItem {
-                        text: "Browse"
+                        text: "Browse (experimental)"
                         onClicked: openBrowseOn(listView.model.get(index).pid);
                     }
                 }
@@ -347,9 +351,9 @@ Page {
     function getTrack(id) {
         var i;
 
-        for(i=0;i<contents.items.length;i++) {
-            if(contents.items[i].id === id) {
-                var track = createTrack(id, contents.items[i]);
+        for(i=0;i<searchResults.items.length;i++) {
+            if(searchResults.items[i].id === id) {
+                var track = createTrack(id, searchResults.items[i]);
                 return track;
             }
         }
@@ -362,12 +366,24 @@ Page {
             getPlayerPage().addTracks([track]);
     }
 
+    function addGroupToPlayer(field, value) {
+        var tracks = [];
+
+        for(var i=0;i<listView.model.count;i++) {
+            var track = getTrack(listView.model.get(i).id);
+            if(track !== undefined
+               && track[field] === value)
+                tracks.push(track);
+        }
+
+        getPlayerPage().addTracks(tracks);
+    }
+
     function addAllToPlayer() {
         var tracks = [];
 
         for(var i=0;i<listView.model.count;i++) {
-            var item = listView.model.get(i);
-            var track = getTrack(item.id);
+            var track = getTrack(listView.model.get(i).id);
             if(track !== undefined)
                 tracks.push(track);
         }

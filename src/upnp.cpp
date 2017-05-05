@@ -245,9 +245,8 @@ QString UPNP::getPathJson(QString id) {
     if(currentServer == nullptr)
         return "";
 
-    while(id.compare("-1") != 0) {
+    while(id.compare("-1") != 0) { // stop at root
 
-        // get item so we also get it's parent id
         dirbuf.clear();
         searchString = QString("@id = \"%1\"").arg(id);
         int code = currentServer->search("0", searchString.toUtf8().constData(), dirbuf);
