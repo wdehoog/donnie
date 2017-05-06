@@ -169,7 +169,7 @@ function escapeUPNPString(str) {
     return str;
 }
 
-function createUPnPQuery(searchString, searchCapabilities, capabilitiesMask) {
+function createUPnPQuery(searchString, searchCapabilities, capabilitiesMask, allowContainers) {
     var query = "";
     var i, mask;
 
@@ -184,7 +184,10 @@ function createUPnPQuery(searchString, searchCapabilities, capabilitiesMask) {
         }
     }
 
-    return "upnp:class derivedfrom \"object.item.audioItem\" and (" + query +")";
+    if(allowContainers)
+        return query;
+    else
+        return "upnp:class derivedfrom \"object.item.audioItem\" and (" + query +")";
 }
 
 function geSearchCapabilityDisplayString(searchCapability) {

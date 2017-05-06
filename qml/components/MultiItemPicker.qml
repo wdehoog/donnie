@@ -31,7 +31,7 @@ Dialog
 
         header: DialogHeader
         {
-            acceptText: "Submit"
+            acceptText: "OK"
             cancelText: "Cancel"
         }
 

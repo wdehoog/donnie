@@ -30,6 +30,7 @@ Page {
         if (status === PageStatus.Activating) {
             swField.text = search_window.value;
             msrField.text = max_search_results.value
+            allowContainers.checked = search_allow_containers.value
         }
     }
 
@@ -63,6 +64,17 @@ Page {
                 onTextChanged: {
                     max_search_results.value = text;
                     max_search_results.sync();
+                }
+            }
+
+            TextSwitch {
+                id: allowContainers
+                text: "Allow Containers"
+                description: "Also show Containers in search results"
+                checked: search_allow_containers.value
+                onCheckedChanged: {
+                    search_allow_containers.value = checked;
+                    search_allow_containers.sync();
                 }
             }
 
@@ -114,5 +126,10 @@ Page {
             defaultValue: "false"
     }
 
+    ConfigurationValue {
+            id: search_allow_containers
+            key: "/donnie/search_allow_containers"
+            defaultValue: false
+    }
 }
 

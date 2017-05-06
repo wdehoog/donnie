@@ -16,12 +16,12 @@ Page {
     property int startIndex: 0
     property int maxCount: max_search_results.value
     property int totalCount
+    property bool allowContainers : search_allow_containers.value
     property var searchResults
     property var searchCapabilities: []
-    //property var selectedSearchCapabilities: []
-    property int selectedSearchCapabilitiesMask
+    property int selectedSearchCapabilitiesMask: selected_search_capabilities.value
     property var scMap: []
-    property string groupByField: "album"
+    property string groupByField: groupby_search_results.value
 
     onSearchStringChanged: {
         typeDelay.restart()
@@ -39,7 +39,7 @@ Page {
 
     function refresh() {
         if(searchString.length >= 1 && selectedSearchCapabilitiesMask > 0) {
-            var searchQuery = UPnP.createUPnPQuery(searchString, searchCapabilities, selectedSearchCapabilitiesMask);
+            var searchQuery = UPnP.createUPnPQuery(searchString, searchCapabilities, selectedSearchCapabilitiesMask, allowContainers);
             showBusy = true;
             upnp.search(searchQuery, 0, maxCount);
             console.log("search start="+startIndex);
@@ -50,7 +50,7 @@ Page {
     function searchMore(start) {
         if(searchString.length < 1 || selectedSearchCapabilitiesMask == 0)
             return;
-        var searchQuery = UPnP.createUPnPQuery(searchString, searchCapabilities, selectedSearchCapabilitiesMask);
+        var searchQuery = UPnP.createUPnPQuery(searchString, searchCapabilities, selectedSearchCapabilitiesMask, allowContainers);
         showBusy = true;
         startIndex = start;
         upnp.search(searchQuery, start, maxCount);
@@ -65,17 +65,23 @@ Page {
             try {
                 searchResults = JSON.parse(searchResultsJson);
 
-                //searchModel.clear();
+                // containers
+                for(i=0;i<searchResults.containers.length;i++) {
+                    var container = searchResults.containers[i];
+                    searchModel.append({
+                        type: "Container",
+                        id: container["id"],
+                        pid: container["pid"],
+                        title: container["title"],
+                        artist: "", album: "", duration: "",
+                        titleText: container["title"], metaText: "", durationText: ""
+                    });
+                }
 
-                /* for now containers are skipped (query is also filtering them out?)
-                 */
-
+                // items
                 for(i=0;i<searchResults.items.length;i++) {
                     var item = searchResults.items[i];
-                    // query already takes care of this and .startsWith( throws an error
-                    // Property 'startsWith( of object ... is not a function
-                    //if(item.properties["upnp:class"]
-                    //   && item.properties["upnp:class"].startsWith("object.item.audioItem")) {
+                    if(UPnP.startsWith(item.properties["upnp:class"], "object.item.audioItem")) {
                         var durationText = "";
                         if(item.resources[0].attributes["duration"])
                           durationText = UPnP.getDurationString(item.resources[0].attributes["duration"]);
@@ -93,8 +99,8 @@ Page {
                             album: item.properties["upnp:album"],
                             duration: item.resources[0].attributes["duration"]
                         });
-                    //} else
-                    //    console.log("onSearchDone: skipped loading of an object of class " + item.properties["upnp:class"]);
+                    } else
+                        console.log("onSearchDone: skipped loading of an object of class " + item.properties["upnp:class"]);
                 }
 
                 totalCount = searchResults["totalCount"];
@@ -213,18 +219,18 @@ Page {
                             continue;
 
                         items.append( {id: c, name: scapLabel });
-                        indexes.push(c);
                         scMap[c] = u;
 
                         c++;
                     }
 
-                    // initially all are selected
-                    if (indexes.length > 0) {
-                        value = "";
-                        for(var i=0;i<indexes.length;i++) {
-                            value = value + ((i>0) ? ", " : "") + items.get(indexes[i]).name;
-                            selectedSearchCapabilitiesMask |= 0x01 << scMap[indexes[i]];
+                    // the selected
+                    value = "";
+                    for(var i=0;i<scMap.length;i++) {
+                        if(selectedSearchCapabilitiesMask & (0x01 << scMap[i])) {
+                            var first = value.length == 0;
+                            value = value + (first ? "" : ", ") + items.get(i).name;
+                            indexes.push(i);
                         }
                     }
                 }
@@ -236,21 +242,17 @@ Page {
                         selectedSearchCapabilitiesMask = 0;
                         if (indexes.length == 0) {
                             value = "None";
-                            //delete selectedSearchCapabilities;
                         } else {
                             value = "";
                             var tmp = [];
-                            selectedSearchCapabilitiesMap = 0;
-                            for (var i=0 ; i<indexes.length ; i++) {
+                            selectedSearchCapabilitiesMask = 0;
+                            for(var i=0;i<indexes.length;i++) {
                                 value = value + ((i>0) ? ", " : "") + items.get(indexes[i]).name;
-                                //var tmpitem = {};
-                                //tmpitem.label = items.get(indexes[i]).name;
-                                //tmpitem.id = items.get(indexes[i]).id;
-                                //tmp.push(tmpitem);
-                                selectedSearchCapabilitiesMask |= 0x01 << scMap[indexes[i]];
+                                selectedSearchCapabilitiesMask |= (0x01 << scMap[indexes[i]]);
                             }
-                            //selectedSearchCapabilities = tmp;
                         }
+                        selected_search_capabilities.value = selectedSearchCapabilitiesMask;
+                        selected_search_capabilities.sync();
                     })
                 }
 
@@ -261,19 +263,36 @@ Page {
                 id: groupBy
                 width: parent.width
                 label: "Group By"
-                currentIndex: 0
+                currentIndex: {
+                    if(groupby_search_results.value === "album")
+                        return 0;
+                    if(groupby_search_results.value === "artist")
+                        return 1;
+                    if(groupby_search_results.value === "title")
+                        return 2;
+                    return -1;
+                }
                 menu: ContextMenu {
                     MenuItem {
                         text: "Album"
-                        onClicked: groupByField = "album"
+                        onClicked: {
+                            groupby_search_results.value = "album";
+                            groupby_search_results.sync();
+                        }
                     }
                     MenuItem {
                         text: "Artist"
-                        onClicked: groupByField = "artist"
+                        onClicked: {
+                            groupby_search_results.value = "artist";
+                            groupby_search_results.sync();
+                        }
                     }
                     MenuItem {
                         text: "Title"
-                        onClicked: groupByField = "title"
+                        onClicked: {
+                            groupby_search_results.value = "title";
+                            groupby_search_results.sync();
+                        }
                     }
                 }
             }
@@ -345,15 +364,17 @@ Page {
                 ContextMenu {
                     MenuItem {
                         text: "Add To Player"
-                        //enabled: listView.model.get(index).type === "Item"
+                        visible: listView.model.get(index).type === "Item"
                         onClicked: addToPlayer(listView.model.get(index).id);
                     }
                     MenuItem {
                         text: "Add Group To Player"
+                        visible: listView.model.get(index).type === "Item"
                         onClicked: addGroupToPlayer(groupByField, listView.model.get(index)[groupByField]);
                     }
                     MenuItem {
                         text: "Add All To Player"
+                        visible: listView.model.get(index).type === "Item"
                         onClicked: addAllToPlayer();
                     }
                     MenuItem {
@@ -362,16 +383,6 @@ Page {
                     }
                 }
             }
-            onClicked: {
-//                var item = listView.model.get(index);
-//                if(item.pid === "-2") // the ".." item
-//                    popFromBrowseStack();
-//                else if(item.type === "Container")
-//                    pushOnBrowseStack(item.id, item.pid, item.title);
-//                if(item.type !== "Item")
-//                  cid = item.id;
-            }
-
         }
 
         VerticalScrollDecorator {}
@@ -445,4 +456,19 @@ Page {
             defaultValue: 100
     }
 
+    ConfigurationValue {
+            id: search_allow_containers
+            key: "/donnie/search_allow_containers"
+            defaultValue: false
+    }
+    ConfigurationValue {
+            id: selected_search_capabilities
+            key: "/donnie/selected_search_capabilities"
+            defaultValue: 0xFFF
+    }
+    ConfigurationValue {
+            id: groupby_search_results
+            key: "/donnie/groupby_search_results"
+            defaultValue: "album"
+    }
 }
