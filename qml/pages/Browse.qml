@@ -49,7 +49,8 @@ Page {
                         id: app.currentBrowseStack.peek().pid,
                         pid: "-2",
                         title: "..",
-                        artist: "", album: "", duration: ""
+                        artist: "", album: "", duration: "",
+                        titleText: "..", metaText: "", durationText: ""
                     });
                 }
 
@@ -60,24 +61,33 @@ Page {
                         id: container["id"],
                         pid: container["pid"],
                         title: container["title"],
-                        artist: "", album: "", duration: ""
+                        artist: "", album: "", duration: "",
+                        titleText: container["title"], metaText: "", durationText: ""
                     });
                 }
 
                 for(i=0;i<contents.items.length;i++) {
                     var item = contents.items[i];
                     var upnpClass = item.properties["upnp:class"];
-                    if(upnpClass && UPnP.startsWith(upnpClass, "object.item.audioItem"))
+                    if(upnpClass && UPnP.startsWith(upnpClass, "object.item.audioItem")) {
+                        var durationText = "";
+                        if(item.resources[0].attributes["duration"])
+                          durationText = UPnP.getDurationString(item.resources[0].attributes["duration"]);
+                        var titleText = item["title"];
+                        var metaText  = item.properties["dc:creator"] + " - " + item.properties["upnp:album"];
                         browseModel.append({
                             type: "Item",
                             id: item["id"],
                             pid: item["pid"],
+                            titleText: titleText,
+                            metaText: metaText,
+                            durationText: durationText,
                             title: item["title"],
                             artist: item.properties["dc:creator"],
                             album: item.properties["upnp:album"],
                             duration: item.resources[0].attributes["duration"]
                         });
-                    else
+                    } else
                         console.log("onBrowseDone: skipped loading of an object of class " + item.properties["upnp:class"]);
                 }
 
@@ -159,9 +169,11 @@ Page {
 
         delegate: ListItem {
             id: delegate
-            //height: Math.max(imageItem.height, label.height) makes it too small
+
             Row {
                 spacing: Theme.paddingMedium
+                width: parent.width
+
                 Image {
                   id: imageItem
                   fillMode: Image.PreserveAspectFit
@@ -171,31 +183,46 @@ Page {
                           return "image://theme/icon-m-back";
                       if(type === "Container")
                           return "image://theme/icon-m-folder";
+                      return "";
                       //if() currently non music files are filtered out
-                        return "image://theme/icon-m-music";
+                      //  return "image://theme/icon-m-music";
                       //return "image://theme/icon-m-other";
                   }
                 }
 
-                Label {
-                    id: titleLabel
-                    //anchors.leftMargin: Theme.paddingLarge
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
-                    text: title;
-                }
+                Column {
+                    width: parent.width - imageItem.width
+                    anchors.verticalCenter: imageItem.verticalCenter
 
-                Label {
-                    id: metaLabel
-                    font.pixelSize: Theme.fontSizeExtraSmall
-                    anchors.baseline: titleLabel.baseline
-                    //anchors {
-                    //    right: parent.right
-                    //    rightMargin: Theme.horizontalPageMargin
-                        //bottom: parent.bottom
-                        //bottomMargin: Theme.paddingSmall
-                    //}
-                    text: duration ? UPnP.getDurationString(model.duration) : "";
+                    Item {
+                        width: parent.width
+                        height: tt.height
+
+                        Label {
+                            id: tt
+                            color: Theme.primaryColor
+                            textFormat: Text.StyledText
+                            truncationMode: TruncationMode.Fade
+                            width: parent.width - dt.width
+                            text: titleText
+                        }
+                        Label {
+                            id: dt
+                            anchors.right: parent.right
+                            color: Theme.secondaryColor
+                            text: durationText
+                        }
+                    }
+
+                    Label {
+                        color: Theme.secondaryColor
+                        font.pixelSize: Theme.fontSizeExtraSmall
+                        visible: metaText.length > 0
+                        text: metaText
+                        textFormat: Text.StyledText
+                        truncationMode: TruncationMode.Fade
+                        width: parent.width
+                    }
                 }
 
             }

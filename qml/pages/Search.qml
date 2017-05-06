@@ -150,11 +150,14 @@ Page {
                     onClicked: addAllToPlayer()
                 }*/
                 MenuItem {
-                    text: qsTr("Load More")
+                    text: qsTr("Load Previous Set")
                     enabled: searchString.length >= 1
                              && selectedSearchCapabilitiesMask > 0
-                             && searchModel.count < totalCount
-                    onClicked: searchMore(startIndex+maxCount);
+                             && startIndex >= maxCount
+                    onClicked: {
+                        searchModel.clear();
+                        searchMore(startIndex-maxCount);
+                    }
                 }
                 MenuItem {
                     text: qsTr("Load Next Set")
@@ -167,14 +170,11 @@ Page {
                     }
                 }
                 MenuItem {
-                    text: qsTr("Load Previous Set")
+                    text: qsTr("Load More")
                     enabled: searchString.length >= 1
                              && selectedSearchCapabilitiesMask > 0
-                             && startIndex >= maxCount
-                    onClicked: {
-                        searchModel.clear();
-                        searchMore(startIndex-maxCount);
-                    }
+                             && searchModel.count < totalCount
+                    onClicked: searchMore(startIndex+maxCount);
                 }
             }
 
@@ -297,7 +297,7 @@ Page {
 
         delegate: ListItem {
             id: delegate
-            //height: Math.max(imageItem.height, label.height) makes it too small
+
             Row {
                 spacing: Theme.paddingMedium
                 width: parent.width

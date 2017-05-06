@@ -57,7 +57,7 @@ Page {
 
             TextField {
                 id: msrField
-                label: "Maximum number of search results"
+                label: "Maximum number of search results per request"
                 inputMethodHints: Qt.ImhDigitsOnly
                 width: parent.width
                 onTextChanged: {
