@@ -232,9 +232,6 @@ Page {
                       if(type === "Container")
                           return "image://theme/icon-m-folder";
                       return "";
-                      //if() currently non music files are filtered out
-                      //  return "image://theme/icon-m-music";
-                      //return "image://theme/icon-m-other";
                   }
                 }
 
@@ -288,8 +285,13 @@ Page {
                         text: "Add All To Player"
                         onClicked: addAllToPlayer();
                     }
+                    MenuItem {
+                        text: "Replace All in Player"
+                        onClicked: replaceAllInPlayer();
+                    }
                 }
             }
+
             onClicked: {
                 var item = listView.model.get(index);
                 if(item.pid === "-2") // the ".." item
@@ -454,16 +456,25 @@ Page {
             getPlayerPage().addTracks([track]);
     }
 
-    function addAllToPlayer() {
+    function getAllTracks() {
         var tracks = [];
-
         for(var i=0;i<listView.model.count;i++) {
             var item = listView.model.get(i);
             var track = getTrack(item.id);
             if(track !== undefined)
                 tracks.push(track);
         }
+        return tracks;
+    }
 
+    function addAllToPlayer() {
+        var tracks = getAllTracks();
+        getPlayerPage().addTracks(tracks);
+    }
+
+    function replaceAllInPlayer() {
+        var tracks = getAllTracks();
+        getPlayerPage().clearList();
         getPlayerPage().addTracks(tracks);
     }
 

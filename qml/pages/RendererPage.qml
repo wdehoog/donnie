@@ -218,7 +218,7 @@ Page {
         }
     }
 
-    function clearList(){
+    function clearList() {
         rendererPageActive = false;
         stop();
         listView.model.clear();

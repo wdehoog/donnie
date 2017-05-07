@@ -147,7 +147,7 @@ Page {
         app.updateMprisMetaData(meta);
     }
 
-    function clearList(){
+    function clearList() {
         playerPageActive = false;
         stop();
         audio.source = "";
