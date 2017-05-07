@@ -217,6 +217,24 @@ void UPNP::browse(QString cid) {
     thread->start();
 }
 
+void UPNP::browse(QString cid, int startIndex, int maxCount) {
+    if(currentServer == nullptr)
+        return;
+
+    QThread* thread = new QThread;
+    UPnPBrowseWorker * worker = new UPnPBrowseWorker(currentServer, cid, startIndex, maxCount);
+    worker->moveToThread(thread);
+
+    connect(worker, SIGNAL (error(QString)), this, SLOT (onError(QString)));
+    connect(worker, SIGNAL (browseDone(QString)), this, SLOT (onBrowseDone(QString)));
+
+    connect(thread, SIGNAL (started()), worker, SLOT (process()));
+    connect(worker, SIGNAL (finished()), thread, SLOT (quit()));
+    connect(worker, SIGNAL (finished()), worker, SLOT (deleteLater()));
+    connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
+    thread->start();
+}
+
 void UPNP::search(QString searchString, int startIndex, int count) {
     if(currentServer == nullptr)
         return;

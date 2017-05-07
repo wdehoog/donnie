@@ -18,6 +18,8 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
+import org.nemomobile.configuration 1.0
+
 import "../UPnP.js" as UPnP
 
 Page {
@@ -26,6 +28,10 @@ Page {
     property bool showBusy: false
     property string cid : ""
     property var contents
+
+    property int startIndex: 0
+    property int maxCount: max_number_of_results.value
+    property int totalCount
 
     //property string pathTreeText : "";
     property string pathText: "";
@@ -40,8 +46,6 @@ Page {
 
             try {
                 contents = JSON.parse(contentsJson);
-
-                browseModel.clear();
 
                 if(cid !== "0") { // no ".." for the root
                     browseModel.append({
@@ -93,6 +97,9 @@ Page {
 
                 pathText = UPnP.getCurrentPathString(app.currentBrowseStack);
                 //pathTreeText = UPnP.getCurrentPathTreeString(app.currentBrowseStack);
+
+                totalCount = contents["totalCount"];
+
             } catch( err ) {
                 app.error("Exception in onBrowseDone: " + err);
                 app.error("json: " + contentsJson);
@@ -161,9 +168,50 @@ Page {
         }
 
         PullDownMenu {
+           MenuItem {
+                text: qsTr("Load Previous Set")
+                enabled: startIndex >= maxCount
+                onClicked: {
+                    browseModel.clear();
+                    browse(startIndex-maxCount);
+                }
+            }
             MenuItem {
-                text: qsTr("Add All To Player")
-                onClicked: addAllToPlayer()
+                text: qsTr("Load Next Set")
+                enabled: (startIndex + browseModel.count) < totalCount
+                onClicked: {
+                    browseModel.clear();
+                    browse(startIndex+maxCount);
+                }
+            }
+            MenuItem {
+                text: qsTr("Load More")
+                enabled: browseModel.count < totalCount
+                onClicked: browse(startIndex+maxCount);
+            }
+        }
+
+        PushUpMenu {
+            MenuItem {
+                text: qsTr("Load More")
+                enabled: browseModel.count < totalCount
+                onClicked: browse(startIndex+maxCount);
+            }
+            MenuItem {
+                text: qsTr("Load Next Set")
+                enabled: (startIndex + browseModel.count) < totalCount
+                onClicked: {
+                    browseModel.clear();
+                    browse(startIndex+maxCount);
+                }
+            }
+            MenuItem {
+                 text: qsTr("Load Previous Set")
+                 enabled: startIndex >= maxCount
+                 onClicked: {
+                     browseModel.clear();
+                     browse(startIndex-maxCount);
+                 }
             }
         }
 
@@ -331,7 +379,13 @@ Page {
             }
         }
 
-        upnp.browse(cid);
+        browseModel.clear();
+        browse(0);
+    }
+
+    function browse(start) {
+        startIndex = start;
+        upnp.browse(cid, start, maxCount);
     }
 
     function reset() {
@@ -427,4 +481,11 @@ Page {
             app.error("json: " + pathJson);
         }
     }
+
+    ConfigurationValue {
+            id: max_number_of_results
+            key: "/donnie/max_number_of_results"
+            defaultValue: 200
+    }
+
 }

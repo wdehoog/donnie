@@ -29,7 +29,7 @@ Page {
     onStatusChanged: {
         if (status === PageStatus.Activating) {
             swField.text = search_window.value;
-            msrField.text = max_search_results.value
+            msrField.text = max_number_of_results.value
             allowContainers.checked = search_allow_containers.value
         }
     }
@@ -58,12 +58,12 @@ Page {
 
             TextField {
                 id: msrField
-                label: "Maximum number of search results per request"
+                label: "Maximum number of results per request"
                 inputMethodHints: Qt.ImhDigitsOnly
                 width: parent.width
                 onTextChanged: {
-                    max_search_results.value = text;
-                    max_search_results.sync();
+                    max_number_of_results.value = text;
+                    max_number_of_results.sync();
                 }
             }
 
@@ -109,9 +109,9 @@ Page {
     }
 
     ConfigurationValue {
-            id: max_search_results
-            key: "/donnie/max_search_results"
-            defaultValue: 100
+            id: max_number_of_results
+            key: "/donnie/max_number_of_results"
+            defaultValue: 200
     }
 
     ConfigurationValue {

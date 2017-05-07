@@ -27,6 +27,14 @@
 UPnPBrowseWorker::UPnPBrowseWorker(UPnPClient::CDSH server, QString cid) {
     this->server = server;
     this->cid = cid;
+    this->startIndex = -1;
+}
+
+UPnPBrowseWorker::UPnPBrowseWorker(UPnPClient::CDSH server, QString cid, int startIndex, int maxCount) {
+    this->server = server;
+    this->cid = cid;
+    this->startIndex = startIndex;
+    this->maxCount = maxCount;
 }
 
 void UPnPBrowseWorker::load(UPnPClient::UPnPDirObject obj, QJsonObject& parent) {
@@ -64,9 +72,15 @@ void UPnPBrowseWorker::load(UPnPClient::UPnPDirObject obj, QJsonObject& parent) 
 
 void UPnPBrowseWorker::process() {
     QJsonObject cdObject;
+    int code;
+    int total;
+    int actualCount;
 
     UPnPClient::UPnPDirContent dirbuf;
-    int code = server->readDir(cid.toUtf8().constData(), dirbuf);
+    if(startIndex < 0)
+        code = server->readDir(cid.toUtf8().constData(), dirbuf);
+    else
+        code = server->readDirSlice(cid.toUtf8().constData(), startIndex, maxCount, dirbuf, &actualCount, &total);
     if (code) {
         std::cerr << UPnPP::LibUPnP::errAsString("UPnPBrowseWorker", code) << std::endl;
         return;
@@ -90,6 +104,10 @@ void UPnPBrowseWorker::process() {
         items.append(item);
     }
     cdObject["items"] = items;
+
+    if(startIndex<0)
+        total = dirbuf.m_containers.size() + dirbuf.m_items.size();
+    cdObject["totalCount"] = QString::number(total);
 
     QJsonDocument doc(cdObject);
     emit browseDone(doc.toJson(QJsonDocument::Compact));

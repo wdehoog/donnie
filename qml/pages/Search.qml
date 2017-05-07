@@ -14,7 +14,7 @@ Page {
     property bool showBusy: false;
     property string searchString: ""
     property int startIndex: 0
-    property int maxCount: max_search_results.value
+    property int maxCount: max_number_of_results.value
     property int totalCount
     property bool allowContainers : search_allow_containers.value
     property var searchResults
@@ -42,7 +42,7 @@ Page {
             var searchQuery = UPnP.createUPnPQuery(searchString, searchCapabilities, selectedSearchCapabilitiesMask, allowContainers);
             showBusy = true;
             upnp.search(searchQuery, 0, maxCount);
-            console.log("search start="+startIndex);
+            //console.log("search start="+startIndex);
         } else
             searchModel.clear();
     }
@@ -54,7 +54,7 @@ Page {
         showBusy = true;
         startIndex = start;
         upnp.search(searchQuery, start, maxCount);
-        console.log("search start="+startIndex);
+        //console.log("search start="+startIndex);
     }
 
     Connections {
@@ -104,7 +104,7 @@ Page {
                 }
 
                 totalCount = searchResults["totalCount"];
-                console.log("result totalCount="+totalCount+" model.count="+searchModel.count+", results.length="+searchResults.items.length);
+
             } catch( err ) {
                 app.error("Exception in onSearchDone: " + err);
                 app.error("json: " + searchResultsJson);
@@ -151,11 +151,7 @@ Page {
             }
 
             PullDownMenu {
-                /*MenuItem {
-                    text: qsTr("Add All To Player")
-                    onClicked: addAllToPlayer()
-                }*/
-                MenuItem {
+               MenuItem {
                     text: qsTr("Load Previous Set")
                     enabled: searchString.length >= 1
                              && selectedSearchCapabilitiesMask > 0
@@ -182,6 +178,36 @@ Page {
                              && searchModel.count < totalCount
                     onClicked: searchMore(startIndex+maxCount);
                 }
+            }
+
+            PushUpMenu {
+                MenuItem {
+                    text: qsTr("Load More")
+                    enabled: searchString.length >= 1
+                             && selectedSearchCapabilitiesMask > 0
+                             && searchModel.count < totalCount
+                    onClicked: searchMore(startIndex+maxCount);
+                }
+                MenuItem {
+                    text: qsTr("Load Next Set")
+                    enabled: searchString.length >= 1
+                             && selectedSearchCapabilitiesMask > 0
+                             && (startIndex + searchModel.count) < totalCount
+                    onClicked: {
+                        searchModel.clear();
+                        searchMore(startIndex+maxCount);
+                    }
+                }
+                MenuItem {
+                     text: qsTr("Load Previous Set")
+                     enabled: searchString.length >= 1
+                              && selectedSearchCapabilitiesMask > 0
+                              && startIndex >= maxCount
+                     onClicked: {
+                         searchModel.clear();
+                         searchMore(startIndex-maxCount);
+                     }
+                 }
             }
 
             SearchField {
@@ -451,11 +477,10 @@ Page {
     }
 
     ConfigurationValue {
-            id: max_search_results
-            key: "/donnie/max_search_results"
-            defaultValue: 100
+            id: max_number_of_results
+            key: "/donnie/max_number_of_results"
+            defaultValue: 200
     }
-
     ConfigurationValue {
             id: search_allow_containers
             key: "/donnie/search_allow_containers"

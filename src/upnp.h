@@ -47,6 +47,7 @@ public:
 
     Q_INVOKABLE void discover(int search_window = 10);
     Q_INVOKABLE void browse(QString cid);
+    Q_INVOKABLE void browse(QString cid, int startIndex, int maxCount);
     Q_INVOKABLE void search(QString searchString, int startIndex, int maxCount);
     Q_INVOKABLE QString getSearchCapabilitiesJson();
     Q_INVOKABLE QString getParentID(QString id);

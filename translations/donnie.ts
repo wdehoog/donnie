@@ -23,7 +23,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add All To Player</source>
+        <source>Load Previous Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load Next Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load More</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
