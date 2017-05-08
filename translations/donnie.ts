@@ -43,17 +43,6 @@
     </message>
 </context>
 <context>
-    <name>DiscoveryPage</name>
-    <message>
-        <source>Discover UPnP Devices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UPnP Devices</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MainPage</name>
     <message>
         <source>Donnie</source>

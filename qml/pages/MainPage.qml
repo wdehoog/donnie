@@ -166,12 +166,12 @@ Page {
                         anchors.horizontalCenter: parent.horizontalCenter
                         IconButton {
                             icon.source: "image://theme/icon-m-folder"
-                            enabled: !showBusy
+                            enabled: !showBusy && isServerOK()
                             onClicked: gotoBrowsePage();
                         }
                         Button {
                             text: "Browser"
-                            enabled: !showBusy
+                            enabled: !showBusy && isServerOK()
                             onClicked: gotoBrowsePage();
                         }
                     }
@@ -181,12 +181,12 @@ Page {
                         anchors.horizontalCenter: parent.horizontalCenter
                         IconButton {
                             icon.source: "image://theme/icon-m-search"
-                            enabled: !showBusy
+                            enabled: !showBusy && isServerOK()
                             onClicked: gotoSearchPage();
                         }
                         Button {
                             text: "Search"
-                            enabled: !showBusy
+                            enabled: !showBusy && isServerOK()
                             onClicked: gotoSearchPage();
                         }
                     }
@@ -195,12 +195,12 @@ Page {
                         anchors.horizontalCenter: parent.horizontalCenter
                         IconButton {
                             icon.source: "image://theme/icon-m-music"
-                            enabled: app.getPlayerPage().hasTracks;
+                            enabled: isRendererOK()
                             onClicked: gotoPlayerPage();
                         }
                         Button {
                             text: "Player"
-                            enabled: app.getPlayerPage().hasTracks;
+                            enabled: isRendererOK()
                             onClicked: gotoPlayerPage();
                         }
                     }
@@ -317,7 +317,7 @@ Page {
     function isRendererOK() {
         if(renderer_udn.value === "donnie-player-udn")
             return true;
-        return app.hasCurrentRenderer() ? true : false
+        return app.hasCurrentRenderer();
     }
 
     function isServerOK() {

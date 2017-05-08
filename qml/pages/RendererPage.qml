@@ -17,14 +17,16 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Sailfish.Media 1.0               // for MediaKey
 import QtMultimedia 5.5
-import org.nemomobile.configuration 1.0
+import org.nemomobile.policy 1.0        // for Permissions
+import org.nemomobile.configuration 1.0 // for ConfigurationValue
 
 import "../UPnP.js" as UPnP
 
 Page {
     id: rendererPage
-    property bool rendererPageActive: false
+    //property bool rendererPageActive: false
     property string imageItemSource : ""
     property string playIconSource : "image://theme/icon-l-play"
     property int currentItem: -1
@@ -219,7 +221,7 @@ Page {
     }
 
     function clearList() {
-        rendererPageActive = false;
+        //rendererPageActive = false;
         stop();
         listView.model.clear();
         trackText = "";
@@ -472,6 +474,49 @@ Page {
         }
     }
 
+    function increaseVolume() {
+        // max is 100
+        if(volumeSliderValue <= 90)
+            volumeSliderValue = volumeSliderValue + 10;
+        else
+            volumeSliderValue = 100;
+        upnp.setVolume(volumeSliderValue);
+    }
+
+    function decreaseVolume() {
+        // max is 100
+        if(volumeSliderValue >= 10)
+            volumeSliderValue = volumeSliderValue - 10;
+        else
+            volumeSliderValue = 0;
+        upnp.setVolume(volumeSliderValue);
+    }
+
+    MediaKey {
+        enabled: volumeKeysResource.acquired
+        key: Qt.Key_VolumeUp
+        onPressed: increaseVolume()
+    }
+
+    MediaKey {
+        enabled: volumeKeysResource.acquired
+        key: Qt.Key_VolumeDown
+        onPressed: decreaseVolume()
+    }
+
+    // needed for Volume Keys
+    Permissions {
+        enabled: true
+        autoRelease: true
+        applicationClass: "player"
+
+        Resource {
+            id: volumeKeysResource
+            type: Resource.ScaleButton
+            optional: true
+        }
+    }
+
     //onStatusChanged: {
         //if(status !== PageStatus.Active)
         //    return;
@@ -504,10 +549,14 @@ Page {
             loadTrack();
         }
 
-        rendererPageActive = true;
+        //rendererPageActive = true;
+    }
 
-        // hacked in here
-        volumeSliderValue = upnp.getVolume();
+    onStatusChanged: {
+        if(status == PageStatus.Active) {
+            if(app.hasCurrentRenderer())
+                volumeSliderValue = upnp.getVolume();
+        }
     }
 
     function getTrackIndexForURI(uri) {
@@ -531,7 +580,8 @@ Page {
 
     Timer {
         interval: 1000;
-        running: rendererPageActive;
+        //running: rendererPageActive;
+        running: app.hasCurrentRenderer()
         repeat: true
         onTriggered: {
 
