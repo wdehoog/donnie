@@ -414,26 +414,13 @@ Page {
         VerticalScrollDecorator {}
 
     }
-    function createTrack(id, item) {
-        var track = new Object();
-        track["id"] = id;
-        track["title"] = item["title"];
-        track["didl"] = item["didl"];
-        track["artist"] = item.properties["dc:creator"];
-        track["album"] = item.properties["upnp:album"];
-        track["albumArtURI"] = item.properties["upnp:albumArtURI"];
-        track["uri"] = item.resources[0]["Uri"];
-        track["duration"] = item.resources[0].attributes["duration"];
-        track["index"] = item.properties["upnp:originalTrackNumber"];
-        return track;
-    }
 
     function getTrack(id) {
         var i;
 
         for(i=0;i<searchResults.items.length;i++) {
             if(searchResults.items[i].id === id) {
-                var track = createTrack(id, searchResults.items[i]);
+                var track = UPnP.createTrack(searchResults.items[i]);
                 return track;
             }
         }

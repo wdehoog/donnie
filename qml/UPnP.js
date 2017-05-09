@@ -216,3 +216,17 @@ function geSearchCapabilityDisplayString(searchCapability) {
 function startsWith(str, start) {
     return str.match("^"+start) !== null;
 }
+
+function createTrack(item) {
+    var track = {};
+    track["id"] = item.id;
+    track["title"] = item["title"];
+    track["didl"] = item["didl"];
+    track["artist"] = item.properties["dc:creator"];
+    track["album"] = item.properties["upnp:album"];
+    track["albumArtURI"] = item.properties["upnp:albumArtURI"];
+    track["uri"] = item.resources[0]["Uri"];
+    track["duration"] = item.resources[0].attributes["duration"];
+    track["index"] = item.properties["upnp:originalTrackNumber"];
+    return track;
+}

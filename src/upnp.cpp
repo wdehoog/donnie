@@ -853,4 +853,45 @@ QString UPNP::getPositionInfoJson() {
     return doc.toJson(QJsonDocument::Compact);
 }
 
+QString UPNP::getMediaInfoJson() {
+    if(!currentRenderer) {
+        emit error("UPNP::getMediaInfoJson: No Current Renderer");
+        return "";
+    }
+
+    UPnPClient::AVTH avt = currentRenderer->avt();
+    if (!avt) {
+        emit error("UPNP::getMediaInfoJson: Device has no AVTransport service");
+        return "";
+    }
+
+    UPnPClient::AVTransport::MediaInfo info;
+    int err;
+    if((err = avt->getMediaInfo(info)) != 0) {
+        QString msg = QStringLiteral("getMediaInfo failed with error  %1").arg(err);
+        emit error(msg);
+        //if (m_errcnt++ > 4) {
+        //    emit connectionLost();
+        //}
+        return "";
+    }
+    //m_errcnt = 0;
+
+    QJsonObject mediaInfo;
+    QJsonObject dirObj0, dirObj1;
+
+    mediaInfo["nrtracks"] = QString::number(info.nrtracks);
+    mediaInfo["mduration"] = QString::number(info.mduration);
+    mediaInfo["cururi"] = QString::fromStdString(info.cururi);
+    UPnPBrowseWorker::load(info.curmeta, dirObj0);
+    mediaInfo["curmeta"] = dirObj0;
+    mediaInfo["nexturi"] = QString::fromStdString(info.nexturi);
+    UPnPBrowseWorker::load(info.nextmeta, dirObj1);
+    mediaInfo["nextmeta"] = dirObj1;
+
+    QJsonDocument doc(mediaInfo);
+    return doc.toJson(QJsonDocument::Compact);
+}
+
+
 

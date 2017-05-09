@@ -100,6 +100,16 @@ Page {
         }
     }
 
+    function getMediaInfo() {
+        var mediaInfoJson = upnp.getMediaInfoJson();
+        try {
+            return JSON.parse(mediaInfoJson);
+        } catch(err) {
+            app.error("Exception in getMediaInfo: "+err);
+            app.error("json: " + mediaInfoJson);
+        }
+    }
+
     function next() {
         if(currentItem >= (trackListModel.count-1))
             return;
@@ -476,8 +486,8 @@ Page {
 
     function increaseVolume() {
         // max is 100
-        if(volumeSliderValue <= 90)
-            volumeSliderValue = volumeSliderValue + 10;
+        if(volumeSliderValue <= 95)
+            volumeSliderValue = volumeSliderValue + 5;
         else
             volumeSliderValue = 100;
         upnp.setVolume(volumeSliderValue);
@@ -485,8 +495,8 @@ Page {
 
     function decreaseVolume() {
         // max is 100
-        if(volumeSliderValue >= 10)
-            volumeSliderValue = volumeSliderValue - 10;
+        if(volumeSliderValue >= 5)
+            volumeSliderValue = volumeSliderValue - 5;
         else
             volumeSliderValue = 0;
         upnp.setVolume(volumeSliderValue);
@@ -512,7 +522,8 @@ Page {
 
         Resource {
             id: volumeKeysResource
-            type: Resource.ScaleButton
+            //type: Resource.ScaleButton
+            type: Resource.HeadsetButtons
             optional: true
         }
     }
@@ -522,7 +533,7 @@ Page {
         //    return;
     //}
 
-    function addTracks(tracks) {
+    function addTracksNoStart(tracks) {
         var i;
         for(i=0;i<tracks.length;i++) {
             var idx = trackListModel.count;
@@ -544,7 +555,11 @@ Page {
                          duration: tracks[i].duration,
                          album: tracks[i].album});
         }
-        if(currentItem == -1 && trackListModel.count>0) {
+    }
+
+    function addTracks(tracks) {
+        addTracksNoStart(tracks);
+        if(currentItem == -1 && trackListModel.count > 0) {
             currentItem = 0;
             loadTrack();
         }
@@ -556,6 +571,25 @@ Page {
         if(status == PageStatus.Active) {
             if(app.hasCurrentRenderer())
                 volumeSliderValue = upnp.getVolume();
+
+            if(!hasTracks) {
+                var minfo = getMediaInfo();
+                if(minfo !== undefined) {
+                    var track;
+                    if(minfo["curmeta"] !== undefined
+                       && minfo["curmeta"].id !== "") {
+                        track = UPnP.createTrack(minfo["curmeta"])
+                        addTracksNoStart([track]);
+                        updateUIForTrack(track);
+                        updateMprisForTrack(track);
+                    }
+                    if(minfo["nextmeta"] !== undefined
+                            && minfo["nextmeta"].id !== "")
+                        track = UPnP.createTrack(minfo["nextmeta"])
+                        addTracksNoStart([track]);
+                }
+            }
+
         }
     }
 

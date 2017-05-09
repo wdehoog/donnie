@@ -74,9 +74,11 @@ public:
     Q_INVOKABLE int setMute(bool mute);
     Q_INVOKABLE int setTrack(QString uri, QString didl);
     Q_INVOKABLE int setNextTrack(QString uri, QString didl);
+    Q_INVOKABLE int seek(int seconds);
+
     Q_INVOKABLE QString getTransportInfoJson();
     Q_INVOKABLE QString getPositionInfoJson();
-    Q_INVOKABLE int seek(int seconds);
+    Q_INVOKABLE QString getMediaInfoJson();
 
     // for mpris control
     Q_INVOKABLE void mprisPlay();
