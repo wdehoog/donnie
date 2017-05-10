@@ -27,7 +27,7 @@ There are already a lot of Audio Player for Sailfish. Many of which look and wor
 
 
 ### Installation
-Donnie and some libraries it needs can be installed from my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog/sailfish_latest_armv7hl/).
+Packages of Donnie and some libraries it needs can be installed from my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog/sailfish_latest_armv7hl/).
 
 To add this repo:
 
@@ -41,6 +41,11 @@ Then install with
 devel-su pkcon ref
 devel-su pkcon install donnie
 ```
+
+### Develop
+This project is developed with the Sailfish OS IDE (QT Creator). It needs libupnpp which needs libupnp and libmpdclient to be installed on the Build Target (VM) and the Deploy Target (phone). All three can be found in my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog/sailfish_latest_armv7hl/).
+
+
 
 ### Thanks
   * J.F.Dockes for upplay + libupnpp, amazing UPnP support 
