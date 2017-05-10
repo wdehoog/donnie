@@ -1,3 +1,10 @@
+/**
+ * Donnie. Copyright (C) 2017 Willem-Jan de Hoog
+ *
+ * License: MIT
+ */
+
+
 import QtQuick 2.0
 
 import QtQuick 2.0

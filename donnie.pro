@@ -64,7 +64,8 @@ DISTFILES += \
     qml/pages/MainPage.qml \
     qml/pages/LogPage.qml \
     qml/pages/Search.qml \
-    qml/components/MultiItemPicker.qml
+    qml/components/MultiItemPicker.qml \
+    license/License.txt
 
 HEADERS += \
     src/upnp.h \
