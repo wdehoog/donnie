@@ -13,6 +13,7 @@ import org.nemomobile.policy 1.0        // for Permissions
 import org.nemomobile.configuration 1.0 // for ConfigurationValue
 
 import "../UPnP.js" as UPnP
+import "../components"
 
 Page {
     id: rendererPage
@@ -117,7 +118,11 @@ Page {
     function pause() {
         var tstate = getTransportState();
         if(tstate === "Playing") {
-            upnp.pause();
+            var r;
+            if((r = upnp.pause()) !== 0) {
+                showErrorDialog("Failed to Pause the Renderer");
+                return;
+            }
             playIconSource =  "image://theme/icon-l-play";
             cover.playIconSource = "image://theme/icon-cover-play";
         } else {
@@ -125,8 +130,17 @@ Page {
         }
     }
 
+    function showErrorDialog(text) {
+        var dialog = pageStack.push(Qt.resolvedUrl("ErrorDialog.qml"),
+                                    {errorMessageText: text});
+    }
+
     function play() {
-        upnp.play();
+        var r;
+        if((r = upnp.play()) !== 0) {
+            showErrorDialog("Failed to Start the Renderer");
+            return;
+        }
         playing = true;
         // VISIT we also get "Stopped" here
         //var tstate = getTransportState();
@@ -138,10 +152,28 @@ Page {
     }
 
     function stop() {
+        var r;
+        if((r = upnp.stop()) !== 0) {
+            showErrorDialog("Failed to Stop to Renderer");
+            //return;
+        }
         playing = false;
-        upnp.stop();
         playIconSource =  "image://theme/icon-l-play";
         cover.playIconSource = "image://theme/icon-cover-play";
+    }
+
+    function setVolume(volume) {
+        var r;
+        if((r = upnp.setVolume(volume)) !== 0) {
+            showErrorDialog("Failed to set volume on Renderer");
+        }
+    }
+
+    function setMute(mute) {
+        var r;
+        if((r = upnp.setMute(mute)) !== 0) {
+            showErrorDialog("Failed to mute/unmute Renderer");
+        }
     }
 
     property int prevVolume;
@@ -149,11 +181,11 @@ Page {
         var mute = !upnp.getMute();
         if(mute)
             prevVolume = upnp.getVolume();
-        upnp.setMute(mute);
+        setMute(mute);
         if(mute)
             muteIconSource =  "image://theme/icon-m-speaker-mute";
         else {
-            upnp.setVolume(prevVolume);
+            setVolume(prevVolume);
             muteIconSource =  "image://theme/icon-m-speaker";
         }
     }
@@ -205,7 +237,11 @@ Page {
         prevTrackTime = -1;
 
         console.log("loadTrack " + currentItem + ", "+track.uri);
-        upnp.setTrack(track.uri, track.didl);
+        var r;
+        if((r = upnp.setTrack(track.uri, track.didl)) !== 0) {
+            showErrorDialog("Failed to set track to play on Renderer");
+            return;
+        }
 
         updateUIForTrack(track);
         updateMprisForTrack(track);
@@ -359,7 +395,7 @@ Page {
 
                     onReleased: {
                         console.log("setVolume "+sliderValue);
-                        upnp.setVolume(sliderValue);
+                        setVolume(sliderValue);
                     }
                 }
                 IconButton {
@@ -480,7 +516,7 @@ Page {
             volumeSliderValue = volumeSliderValue + 5;
         else
             volumeSliderValue = 100;
-        upnp.setVolume(volumeSliderValue);
+        setVolume(volumeSliderValue);
     }
 
     function decreaseVolume() {
@@ -489,7 +525,7 @@ Page {
             volumeSliderValue = volumeSliderValue - 5;
         else
             volumeSliderValue = 0;
-        upnp.setVolume(volumeSliderValue);
+        setVolume(volumeSliderValue);
     }
 
     MediaKey {
@@ -620,7 +656,9 @@ Page {
                 app.error("Error: getPositionInfo() failed")
                 if(failedAttempts > 3) {
                     stop();
-                    app.error("Error: STOP due to too many failed attempts");
+                    var errTxt = "Lost connection with Renderer."
+                    app.error(errTxt);
+                    showErrorDialog(errTxt);
                 }
                 return;
             } else
