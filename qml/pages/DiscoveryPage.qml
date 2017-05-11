@@ -154,6 +154,7 @@ Page {
                     } else {
                         if(device.UDN === "donnie-player-udn") {
                             app.useBuiltInPlayer = true;
+                            app.setCurrentRenderer(undefined);
                         } else {
                             app.useBuiltInPlayer = false;
                             app.setCurrentRenderer(app.discoveredRenderers[device.discoveryIndex]);

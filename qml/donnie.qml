@@ -12,6 +12,8 @@ import "pages"
 import "cover"
 import "UPnP.js" as UPnP
 
+import "components"
+
 ApplicationWindow
 {
     id: app
@@ -62,6 +64,11 @@ ApplicationWindow
         errorLog.push(msg);
     }
 
+    function showErrorDialog(text) {
+        var dialog = pageStack.push(Qt.resolvedUrl("ErrorDialog.qml"),
+                                    {errorMessageText: text});
+    }
+
     function hasCurrentServer() {
         return app.currentServer ? true : false;
     }
@@ -92,10 +99,18 @@ ApplicationWindow
 
     function setCurrentRenderer(renderer) {
         app.currentRenderer = renderer;
+
+        if(renderer === undefined) {
+            rendererPage.reset();
+            return;
+        }
+
         console.log("setCurrentRenderer to: "+ currentRenderer["friendlyName"]);
         var res = upnp.setCurrentRenderer(currentRenderer["friendlyName"], true);
-        if(!res)
+        if(!res) {
+            rendererPage.reset();
             error("Failed to set Current Renderer to: "+ currentRenderer["friendlyName"]);
+        }
         return res;
     }
 

@@ -34,6 +34,7 @@ void UPnPSearchWorker::process() {
     int code = server->searchSlice(cid, searchString.toUtf8().constData(), startIndex, maxCount, dirbuf, &actualCount, &total);
     if (code) {
         std::cerr << UPnPP::LibUPnP::errAsString("UPnPSearchWorker", code) << std::endl;
+        emit error(QStringLiteral("Failed to search ").append(searchString));
         return;
     }
 

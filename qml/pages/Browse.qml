@@ -99,6 +99,15 @@ Page {
         }
 
         onError: {
+            if(cid !== "0") { // no ".." for the root
+                browseModel.append({
+                    type: "Container",
+                    id: app.currentBrowseStack.peek().pid,
+                    pid: "-2",
+                    title: ".."
+                });
+            }
+            pathText = UPnP.getCurrentPathString(app.currentBrowseStack);
             console.log("Browse::onError: " + msg);
             app.errorLog.push(msg);
             showBusy = false;            
@@ -239,21 +248,21 @@ Page {
                             textFormat: Text.StyledText
                             truncationMode: TruncationMode.Fade
                             width: parent.width - dt.width
-                            text: titleText
+                            text: titleText ? titleText : ""
                         }
                         Label {
                             id: dt
                             anchors.right: parent.right
                             color: Theme.secondaryColor
-                            text: durationText
+                            text: durationText ? durationText : ""
                         }
                     }
 
                     Label {
                         color: Theme.secondaryColor
                         font.pixelSize: Theme.fontSizeExtraSmall
-                        visible: metaText.length > 0
-                        text: metaText
+                        visible: metaText ? metaText.length > 0 : false
+                        text: metaText ? metaText : ""
                         textFormat: Text.StyledText
                         truncationMode: TruncationMode.Fade
                         width: parent.width

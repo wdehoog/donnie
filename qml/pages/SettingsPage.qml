@@ -79,7 +79,7 @@ Page {
                 }
             }*/
 
-            /*TextSwitch {
+            TextSwitch {
                 id: logPage
                 text: "Log Page"
                 description: "Show Open Log Page button"
@@ -88,7 +88,7 @@ Page {
                     show_open_logpage.value = checked ? "true" : "false";
                     show_open_logpage.sync();
                 }
-            }*/
+            }
         }
     }
 

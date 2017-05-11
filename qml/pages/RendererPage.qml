@@ -13,7 +13,6 @@ import org.nemomobile.policy 1.0        // for Permissions
 import org.nemomobile.configuration 1.0 // for ConfigurationValue
 
 import "../UPnP.js" as UPnP
-import "../components"
 
 Page {
     id: rendererPage
@@ -120,7 +119,7 @@ Page {
         if(tstate === "Playing") {
             var r;
             if((r = upnp.pause()) !== 0) {
-                showErrorDialog("Failed to Pause the Renderer");
+                app.showErrorDialog("Failed to Pause the Renderer");
                 return;
             }
             playIconSource =  "image://theme/icon-l-play";
@@ -130,15 +129,10 @@ Page {
         }
     }
 
-    function showErrorDialog(text) {
-        var dialog = pageStack.push(Qt.resolvedUrl("ErrorDialog.qml"),
-                                    {errorMessageText: text});
-    }
-
     function play() {
         var r;
         if((r = upnp.play()) !== 0) {
-            showErrorDialog("Failed to Start the Renderer");
+            app.showErrorDialog("Failed to Start the Renderer");
             return;
         }
         playing = true;
@@ -154,9 +148,15 @@ Page {
     function stop() {
         var r;
         if((r = upnp.stop()) !== 0) {
-            showErrorDialog("Failed to Stop to Renderer");
+            app.showErrorDialog("Failed to Stop to Renderer");
             //return;
         }
+        playing = false;
+        playIconSource =  "image://theme/icon-l-play";
+        cover.playIconSource = "image://theme/icon-cover-play";
+    }
+
+    function reset() {
         playing = false;
         playIconSource =  "image://theme/icon-l-play";
         cover.playIconSource = "image://theme/icon-cover-play";
@@ -165,14 +165,14 @@ Page {
     function setVolume(volume) {
         var r;
         if((r = upnp.setVolume(volume)) !== 0) {
-            showErrorDialog("Failed to set volume on Renderer");
+            app.showErrorDialog("Failed to set volume on Renderer");
         }
     }
 
     function setMute(mute) {
         var r;
         if((r = upnp.setMute(mute)) !== 0) {
-            showErrorDialog("Failed to mute/unmute Renderer");
+            app.showErrorDialog("Failed to mute/unmute Renderer");
         }
     }
 
@@ -239,7 +239,7 @@ Page {
         console.log("loadTrack " + currentItem + ", "+track.uri);
         var r;
         if((r = upnp.setTrack(track.uri, track.didl)) !== 0) {
-            showErrorDialog("Failed to set track to play on Renderer");
+            app.showErrorDialog("Failed to set track to play on Renderer");
             return;
         }
 
@@ -540,6 +540,12 @@ Page {
         onPressed: decreaseVolume()
     }
 
+    MediaKey {
+        enabled: true
+        key: Qt.Key_ToggleCallHangup
+        onReleased: pause()
+    }
+
     // needed for Volume Keys
     Permissions {
         enabled: true
@@ -655,10 +661,10 @@ Page {
                 failedAttempts++;
                 app.error("Error: getPositionInfo() failed")
                 if(failedAttempts > 3) {
-                    stop();
+                    reset();
                     var errTxt = "Lost connection with Renderer."
                     app.error(errTxt);
-                    showErrorDialog(errTxt);
+                    app.showErrorDialog(errTxt);
                 }
                 return;
             } else
