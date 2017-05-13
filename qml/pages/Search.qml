@@ -75,37 +75,14 @@ Page {
                 // containers
                 for(i=0;i<searchResults.containers.length;i++) {
                     var container = searchResults.containers[i];
-                    searchModel.append({
-                        type: "Container",
-                        id: container["id"],
-                        pid: container["pid"],
-                        title: container["title"],
-                        artist: "", album: "", duration: "",
-                        titleText: container["title"], metaText: "", durationText: ""
-                    });
+                    searchModel.append(UPnP.createListContainer(container));
                 }
 
                 // items
                 for(i=0;i<searchResults.items.length;i++) {
                     var item = searchResults.items[i];
                     if(UPnP.startsWith(item.properties["upnp:class"], "object.item.audioItem")) {
-                        var durationText = "";
-                        if(item.resources[0].attributes["duration"])
-                          durationText = UPnP.getDurationString(item.resources[0].attributes["duration"]);
-                        var titleText = item["title"];
-                        var metaText  = item.properties["dc:creator"] + " - " + item.properties["upnp:album"];
-                        searchModel.append({
-                            type: "Item",
-                            id: item["id"],
-                            titleText: titleText,
-                            metaText: metaText,
-                            durationText: durationText,
-                            pid: item["pid"],
-                            title: item["title"],
-                            artist: item.properties["dc:creator"],
-                            album: item.properties["upnp:album"],
-                            duration: item.resources[0].attributes["duration"]
-                        });
+                        searchModel.append(UPnP.createListItem(item));
                     } else
                         console.log("onSearchDone: skipped loading of an object of class " + item.properties["upnp:class"]);
                 }

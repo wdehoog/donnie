@@ -73,6 +73,7 @@ void UPnPBrowseWorker::process() {
         code = server->readDirSlice(cid.toUtf8().constData(), startIndex, maxCount, dirbuf, &actualCount, &total);
     if (code) {
         std::cerr << UPnPP::LibUPnP::errAsString("UPnPBrowseWorker", code) << std::endl;
+        emit error(QStringLiteral("Failed to browse ").append(cid));
         return;
     }
 

@@ -220,3 +220,46 @@ function createTrack(item) {
     track["index"] = item.properties["upnp:originalTrackNumber"];
     return track;
 }
+
+function createListContainer(container) {
+    return {
+        type: "Container",
+        id: container["id"],
+        pid: container["pid"],
+        title: container["title"],
+        titleText: container["title"],
+        metaText: "", durationText: "",
+        artist: "", album: "", durtion: ""
+    };
+}
+
+function createListItem(item) {
+
+    var durationText = "";
+    if(item.resources[0].attributes["duration"])
+      durationText = getDurationString(item.resources[0].attributes["duration"]);
+
+    var titleText = item["title"];
+
+    var metaText = "";
+    if(item.properties["dc:creator"])
+        metaText = item.properties["dc:creator"];
+    if(item.properties["upnp:album"]) {
+        if(metaText.length > 0)
+            metaText += " - " ;
+        metaText += item.properties["upnp:album"];
+    }
+
+    return {
+        type: "Item",
+        id: item["id"],
+        pid: item["pid"],
+        title: item["title"],
+        titleText: titleText,
+        metaText: metaText,
+        durationText: durationText,
+        artist: item.properties["dc:creator"],
+        album: item.properties["upnp:album"],
+        duration: item.resources[0].attributes["duration"]
+    };
+}

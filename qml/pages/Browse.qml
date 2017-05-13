@@ -50,37 +50,14 @@ Page {
 
                 for(i=0;i<contents.containers.length;i++) {
                     var container = contents.containers[i];
-                    browseModel.append({
-                        type: "Container",
-                        id: container["id"],
-                        pid: container["pid"],
-                        title: container["title"],
-                        artist: "", album: "", duration: "",
-                        titleText: container["title"], metaText: "", durationText: ""
-                    });
+                    browseModel.append(UPnP.createListContainer(container));
                 }
 
                 for(i=0;i<contents.items.length;i++) {
                     var item = contents.items[i];
                     var upnpClass = item.properties["upnp:class"];
-                    if(upnpClass && UPnP.startsWith(upnpClass, "object.item.audioItem")) {
-                        var durationText = "";
-                        if(item.resources[0].attributes["duration"])
-                          durationText = UPnP.getDurationString(item.resources[0].attributes["duration"]);
-                        var titleText = item["title"];
-                        var metaText  = item.properties["dc:creator"] + " - " + item.properties["upnp:album"];
-                        browseModel.append({
-                            type: "Item",
-                            id: item["id"],
-                            pid: item["pid"],
-                            titleText: titleText,
-                            metaText: metaText,
-                            durationText: durationText,
-                            title: item["title"],
-                            artist: item.properties["dc:creator"],
-                            album: item.properties["upnp:album"],
-                            duration: item.resources[0].attributes["duration"]
-                        });
+                    if(upnpClass && UPnP.startsWith(upnpClass, "object.item.audioItem")) {                        
+                        browseModel.append(UPnP.createListItem(item));
                     } else
                         console.log("onBrowseDone: skipped loading of an object of class " + item.properties["upnp:class"]);
                 }
