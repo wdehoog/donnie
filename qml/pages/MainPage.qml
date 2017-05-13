@@ -58,93 +58,112 @@ Page {
                         topMargin: Theme.paddingMedium
                     }
 
-                    Column {
+                    // Renderer and Server
+
+                    Item {
                         anchors {
                             left: parent.left
                             right: parent.right
                         }
-                        Row {
+                        height: renderersColumn.height + serversColumn.height
+
+                        Column {
+                            id: renderersColumn
                             anchors {
                                 left: parent.left
                                 right: parent.right
                             }
+                            Row {
+                                anchors {
+                                    left: parent.left
+                                    right: parent.right
+                                }
+                                Text {
+                                    id: rLabel
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: Theme.fontSizeSmall
+                                    color: Theme.secondaryColor
+                                    wrapMode: Text.Wrap
+                                    width: parent.width - anchors.leftMargin - rendererIcon.width
+
+                                    text: "Renderer";
+                                }
+                                IconButton {
+                                    id: rendererIcon
+                                    anchors.rightMargin: Theme.paddingLarge
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    icon.source: isRendererOK()
+                                                 ? "image://theme/icon-s-installed"
+                                                 : "" //"image://donnie-icons/icon-s-failure3"
+                                }
+                            }
+
                             Text {
-                                id: rLabel
-                                anchors.verticalCenter: parent.verticalCenter
-                                font.pixelSize: Theme.fontSizeSmall
-                                color: Theme.secondaryColor
+                                id: rName
+
+                                font.pixelSize: Theme.fontSizeMedium
+                                color: Theme.primaryColor
                                 wrapMode: Text.Wrap
-                                width: parent.width - anchors.leftMargin - rendererIcon.width
+                                width: parent.width
 
-                                text: "Renderer";
-                            }
-                            IconButton {
-                                id: rendererIcon
-                                anchors.rightMargin: Theme.paddingLarge
-                                anchors.verticalCenter: parent.verticalCenter
-                                icon.source: isRendererOK()
-                                             ? "image://theme/icon-s-installed"
-                                             : "" //"image://donnie-icons/icon-s-failure3"
+                                text: renderer_friendlyname.value
+                                      ? renderer_friendlyname.value
+                                      : "[Click to select one]"
                             }
                         }
 
-                        Text {
-                            id: rName
-
-                            font.pixelSize: Theme.fontSizeMedium
-                            color: Theme.primaryColor
-                            wrapMode: Text.Wrap
-                            width: parent.width
-
-                            text: renderer_friendlyname.value
-                                  ? renderer_friendlyname.value
-                                  : "[use Discovery to select one]"
-                        }
-                    }
-
-                    Column {
-                        anchors {
-                            left: parent.left
-                            right: parent.right
-                        }
-                        Row {
+                        Column { // Content Servers
+                            id: serversColumn
                             anchors {
                                 left: parent.left
                                 right: parent.right
+                                top: renderersColumn.bottom
                             }
-                            Text {
-                                id: sLabel
-                                anchors.verticalCenter: parent.verticalCenter
-                                font.pixelSize: Theme.fontSizeSmall
-                                color: Theme.secondaryColor
-                                wrapMode: Text.Wrap
-                                width: parent.width - anchors.leftMargin - serverIcon.width
+                            Row {
+                                anchors {
+                                    left: parent.left
+                                    right: parent.right
+                                }
+                                Text {
+                                    id: sLabel
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: Theme.fontSizeSmall
+                                    color: Theme.secondaryColor
+                                    wrapMode: Text.Wrap
+                                    width: parent.width - anchors.leftMargin - serverIcon.width
 
-                                text: "Content Server"
+                                    text: "Content Server"
+                                }
+                                IconButton {
+                                    id: serverIcon
+                                    anchors.rightMargin: Theme.paddingLarge
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    icon.source: isServerOK()
+                                                 ? "image://theme/icon-s-installed"
+                                                 : "" //"image://donnie-icons/icon-s-failure3"
+                                }
                             }
-                            IconButton {
-                                id: serverIcon
-                                anchors.rightMargin: Theme.paddingLarge
-                                anchors.verticalCenter: parent.verticalCenter
-                                icon.source: isServerOK()
-                                             ? "image://theme/icon-s-installed"
-                                             : "" //"image://donnie-icons/icon-s-failure3"
+
+                            Text {
+                                id: sName
+
+                                font.pixelSize: Theme.fontSizeMedium
+                                color: Theme.primaryColor
+                                wrapMode: Text.Wrap
+                                width: parent.width
+
+                                text: server_friendlyname.value
+                                         ? server_friendlyname.value
+                                         : "[Click to select one]";
                             }
                         }
-
-                        Text {
-                            id: sName
-
-                            font.pixelSize: Theme.fontSizeMedium
-                            color: Theme.primaryColor
-                            wrapMode: Text.Wrap
-                            width: parent.width
-
-                            text: server_friendlyname.value
-                                     ? server_friendlyname.value
-                                     : "[use Discovery to select one]";
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: pageStack.push(Qt.resolvedUrl("DiscoveryPage.qml"))
                         }
                     }
+
+                    // Browser/Search/Player buttons
 
                     Rectangle {
                         width: parent.width
@@ -196,7 +215,7 @@ Page {
                         }
                     }
 
-                    Row {
+                    /*Row {
                         anchors.horizontalCenter: parent.horizontalCenter
                         IconButton {
                             icon.source: "image://theme/icon-m-transfer"
@@ -208,7 +227,7 @@ Page {
                             enabled: !showBusy
                             onClicked: pageStack.push(Qt.resolvedUrl("DiscoveryPage.qml"));
                         }
-                    }
+                    }*/
 
                     /*Row {
                         anchors.horizontalCenter: parent.horizontalCenter

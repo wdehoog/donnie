@@ -227,16 +227,24 @@ function createDisplayProperties(item) {
     var durationText = "";
     if(item.resources && item.resources[0].attributes["duration"])
       durationText = getDurationString(item.resources[0].attributes["duration"]);
+    else if(item.duration)
+      durationText = getDurationString(item.duration);
 
     var titleText = item["title"];
 
     var metaText = "";
     if(item.properties && item.properties["dc:creator"])
         metaText = item.properties["dc:creator"];
+    else if(item.artist)
+        metaText = item.artist;
     if(item.properties && item.properties["upnp:album"]) {
         if(metaText.length > 0)
             metaText += " - " ;
         metaText += item.properties["upnp:album"];
+    } else if(item.abum) {
+        if(metaText.length > 0)
+            metaText += " - " ;
+        metaText += item.album;
     }
 
     return {

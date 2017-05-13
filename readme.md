@@ -4,16 +4,16 @@ A UPnP Control Point and Audio Player for SailfishOS. It is written in QML and C
 
 I use it on my Oneplus One running it's SailfishOS port. For Content Server I use `minidlna` and `minimserver` and for Renderer `mopidy/upmpdcli` on a computer and `rygel` on my phone.
 
+Note that it is still fresh and under development so things might not work as expected.
 
 ### Features
   * Browse and Search Content Server
   * Control a Renderer
-  * Play with built-in Player (QT-Audio)
+  * Play on phone with built-in Player (QT-Audio)
   * Album Art
   * Gapless (setNextAVTransportURI)
   * MPris support (Lock Screen and Gestures)
 
-Note that it is still fresh and under development so things might not work as expected.
 
 ### Issues
   * It crashes. Don't know when. Don't know why.

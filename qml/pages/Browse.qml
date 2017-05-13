@@ -252,7 +252,7 @@ Page {
             Component {
                 id: contextMenu
                 ContextMenu {
-                    enabled: listView.model.get(index).type === "Item"
+                    enabled: (listView.model.get(index).type === "Item")
                     MenuItem {
                         text: "Add To Player"
                         onClicked: addToPlayer(listView.model.get(index).id);

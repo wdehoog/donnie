@@ -157,6 +157,8 @@ ApplicationWindow
     }
 
     function updateMprisState() {
+        // 0x01: play, 0x02: pause, 0x04: next, 0x08: previous
+        // 0x0100: playing, 0x0200: paused
         var mask = 0;
         var player = getPlayerPage();
         /*if(player.canPlay)
@@ -178,8 +180,8 @@ ApplicationWindow
         }
     }
 
-    function updateMprisMetaData(track) {
-        var jsonString= JSON.stringify(track);
+    function updateMprisMetaData(meta) {
+        var jsonString= JSON.stringify(meta);
         upnp.mprisSetMetaData(jsonString);
     }
 }

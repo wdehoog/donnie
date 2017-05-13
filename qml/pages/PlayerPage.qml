@@ -66,10 +66,6 @@ Page {
         onSourceChanged: refreshTransportState()
     }
 
-    //Playlist { only available in 5.8
-    //            id: playlist
-    //}
-
     function next() {
         if(currentItem >= (trackListModel.count-1))
             return;
@@ -128,15 +124,7 @@ Page {
         albumText = track.metaText;
         trackClass = track.class;
 
-        // mpris
-        var meta = {};
-        meta.Title = track.title;
-        meta.Artist = track.artist;
-        meta.Album = track.album;
-        meta.Length = track.duration * 1000; // ms -> us
-        meta.ArtUrl = track.albumArtURI;
-        meta.TrackNumber = currentItem;
-        app.updateMprisMetaData(meta);
+        updateMprisForTrack(track);
     }
 
     function clearList() {
@@ -152,6 +140,25 @@ Page {
 
         cover.imageSource = "";
         cover.coverProgressBar.label = "";
+    }
+
+    function updateMprisForRadio(radio) {
+        var meta = {};
+        meta.Title = radio.title;
+        meta.Artist = radio.artist;
+        meta.Album = radio.station;
+        app.updateMprisMetaData(meta);
+    }
+
+    function updateMprisForTrack(track) {
+        var meta = {};
+        meta.Title = track.title;
+        meta.Artist = track.artist;
+        meta.Album = track.album;
+        meta.Length = track.duration * 1000; // ms -> us
+        meta.ArtUrl = track.albumArtURI;
+        meta.TrackNumber = currentItem;
+        app.updateMprisMetaData(meta);
     }
 
     SilicaListView {
@@ -229,20 +236,25 @@ Page {
                 }
             }
 
-            Label { // for radio streams
+            Rectangle {
+                width: parent.width
+                height:Theme.paddingMedium
+                opacity: 0
+            }
+
+            Label {
                 anchors {
                     left: parent.left
                     leftMargin: Theme.horizontalPageMargin
                     right: parent.right
                     rightMargin: Theme.horizontalPageMargin
                 }
-                visible: !timeSlider.visible
                 color: Theme.primaryColor
                 textFormat: Text.StyledText
                 horizontalAlignment: Text.AlignHCenter
                 text: trackText
             }
-            Label { // for radio streams
+            Label {
                 anchors {
                     left: parent.left
                     leftMargin: Theme.horizontalPageMargin
@@ -250,7 +262,6 @@ Page {
                     rightMargin: Theme.horizontalPageMargin
                     bottomMargin: Theme.paddingLarge
                 }
-                visible: !timeSlider.visible
                 color: Theme.primaryColor
                 textFormat: Text.StyledText
                 horizontalAlignment: Text.AlignHCenter
@@ -260,8 +271,6 @@ Page {
             Slider { // for tracks
                 id: timeSlider
                 maximumValue: 1
-                enabled: trackClass !== "object.item.audioItem.audioBroadcast"
-                visible: enabled
                 handleVisible: false
 
                 anchors.left: parent.left
@@ -277,7 +286,7 @@ Page {
             Timer {
                 id: updateTimer
 
-                running: playerPageActive && timeSlider.enabled
+                running: playerPageActive
                 interval: 1000
                 repeat: true
 
@@ -421,7 +430,7 @@ Page {
 
     }
 
-    // for internet radio the QT Audio object seems to know some metadata
+    // for internet radio the QT Audio object seems to support some metadata
     Timer {
         interval: 5000;
         running: audio.hasAudio && trackClass === "object.item.audioItem.audioBroadcast"
@@ -441,6 +450,11 @@ Page {
             if(delim > -1) {
                 trackText = title.substr(0,delim);
                 albumText = title.substr(delim+2);
+                updateMprisForRadio({
+                  artist: trackText,
+                  title: albumText,
+                  station: publisher
+                });
             } else
                 console.log("could not parse title "+title);
         }
