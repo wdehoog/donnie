@@ -2,12 +2,12 @@
 
 A UPnP Control Point and Audio Player for SailfishOS. It is written in QML and C++. For UPnP it relies on [libupnpp](https://github.com/medoc92/libupnpp).
 
-I use it on my Oneplus One running it's SailfishOS port. For Content Server I use `minidlna` and for Renderer `mopidy/upmpdcli` on a RPi3 and a BananaPi and `rygel` on my phone.
+I use it on my Oneplus One running it's SailfishOS port. For Content Server I use `minidlna` and `minimserver` and for Renderer `mopidy/upmpdcli` on a computer and `rygel` on my phone.
 
 
 ### Features
   * Browse and Search Content Server
-  * Control Renderer
+  * Control a Renderer
   * Play with built-in Player (QT-Audio)
   * Album Art
   * Gapless (setNextAVTransportURI)
@@ -16,8 +16,8 @@ I use it on my Oneplus One running it's SailfishOS port. For Content Server I us
 Note that it is still fresh and under development so things might not work as expected.
 
 ### Issues
+  * It crashes. Don't know when. Don't know why.
   * Sometimes not all UPnP devices are discovered. A restart of the app can help.
-  * Phone call's do not pause the player.
   * Donnie will probably fail if another control point interferes.
   * When the same track appears twice in the list and next to each other a
     track change will not be detected and the next track will not be started.
@@ -42,7 +42,7 @@ devel-su pkcon ref
 devel-su pkcon install donnie
 ```
 
-### Develop
+### Development
 This project is developed with the Sailfish OS IDE (QT Creator). It needs libupnpp, libupnp and libmpdclient to be installed on the Build Target (VM) and the Deploy Target (phone). All three can be found in my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog/sailfish_latest_armv7hl/).
 
 

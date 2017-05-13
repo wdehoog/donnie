@@ -208,17 +208,42 @@ function startsWith(str, start) {
 }
 
 function createTrack(item) {
-    var track = {};
-    track["id"] = item.id;
-    track["title"] = item["title"];
-    track["didl"] = item["didl"];
-    track["artist"] = item.properties["dc:creator"];
-    track["album"] = item.properties["upnp:album"];
-    track["albumArtURI"] = item.properties["upnp:albumArtURI"];
-    track["uri"] = item.resources[0]["Uri"];
-    track["duration"] = item.resources[0].attributes["duration"];
-    track["index"] = item.properties["upnp:originalTrackNumber"];
-    return track;
+    return {
+        id: item.id,
+        title: item["title"],
+        didl: item["didl"],
+        artist: item.properties["dc:creator"],
+        album: item.properties["upnp:album"],
+        albumArtURI: item.properties["upnp:albumArtURI"],
+        uri: item.resources[0]["Uri"],
+        duration: item.resources[0].attributes["duration"],
+        //index: item.properties["upnp:originalTrackNumber"]
+        //       ? item.properties["upnp:originalTrackNumber"] : "",
+        class: item.properties["upnp:class"]
+    };
+}
+
+function createDisplayProperties(item) {
+    var durationText = "";
+    if(item.resources && item.resources[0].attributes["duration"])
+      durationText = getDurationString(item.resources[0].attributes["duration"]);
+
+    var titleText = item["title"];
+
+    var metaText = "";
+    if(item.properties && item.properties["dc:creator"])
+        metaText = item.properties["dc:creator"];
+    if(item.properties && item.properties["upnp:album"]) {
+        if(metaText.length > 0)
+            metaText += " - " ;
+        metaText += item.properties["upnp:album"];
+    }
+
+    return {
+        titleText: titleText,
+        metaText: metaText,
+        durationText: durationText
+    }
 }
 
 function createListContainer(container) {
@@ -229,37 +254,26 @@ function createListContainer(container) {
         title: container["title"],
         titleText: container["title"],
         metaText: "", durationText: "",
-        artist: "", album: "", durtion: ""
+        artist: "", album: "", durtion: "",
+        class: container.properties["upnp:class"]
     };
 }
 
 function createListItem(item) {
 
-    var durationText = "";
-    if(item.resources[0].attributes["duration"])
-      durationText = getDurationString(item.resources[0].attributes["duration"]);
-
-    var titleText = item["title"];
-
-    var metaText = "";
-    if(item.properties["dc:creator"])
-        metaText = item.properties["dc:creator"];
-    if(item.properties["upnp:album"]) {
-        if(metaText.length > 0)
-            metaText += " - " ;
-        metaText += item.properties["upnp:album"];
-    }
+    var dprops = createDisplayProperties(item);
 
     return {
         type: "Item",
         id: item["id"],
         pid: item["pid"],
         title: item["title"],
-        titleText: titleText,
-        metaText: metaText,
-        durationText: durationText,
+        titleText: dprops.titleText,
+        metaText: dprops.metaText,
+        durationText: dprops.durationText,
         artist: item.properties["dc:creator"],
         album: item.properties["upnp:album"],
-        duration: item.resources[0].attributes["duration"]
+        duration: item.resources[0].attributes["duration"],
+        class: item.properties["upnp:class"]
     };
 }

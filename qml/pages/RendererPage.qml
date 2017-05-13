@@ -568,24 +568,20 @@ Page {
     function addTracksNoStart(tracks) {
         var i;
         for(i=0;i<tracks.length;i++) {
-            var idx = trackListModel.count;
-            var durationText = "";
-            if(tracks[i].duration)
-              durationText = UPnP.getDurationString(tracks[i].duration);
-            var titleText = tracks[i].title;
-            var metaText  = tracks[i].artist + " - " + tracks[i].album;
+            var dprops = UPnP.createDisplayProperties(tracks[i]);
             trackListModel.append(
                         {id: tracks[i].id,
-                         titleText: titleText,
-                         metaText: metaText,
-                         durationText: durationText,
+                         titleText: dprops.titleText,
+                         metaText: dprops.metaText,
+                         durationText: dprops.durationText,
                          uri: tracks[i].uri,
                          didl: tracks[i].didl,
                          albumArtURI: tracks[i].albumArtURI,
                          title: tracks[i].title,
                          artist: tracks[i].artist,
                          duration: tracks[i].duration,
-                         album: tracks[i].album});
+                         album: tracks[i].album,
+                         class: tracks[i].class});
         }
     }
 
@@ -642,8 +638,22 @@ Page {
            next();
     }
 
-    property int failedAttempts: 0
+    // testing
+    /*Timer {
+        interval: 5000;
+        running: app.hasCurrentRenderer()
+        repeat: true
+        onTriggered: {
+            var minfo = getMediaInfo();
+            if(minfo !== undefined) {
+                if(minfo["curmeta"] !== undefined) {
+                    console.log(minfo["curmeta"]);
+                }
+            }
+        }
+    }*/
 
+    property int failedAttempts: 0
     Timer {
         interval: 1000;
         //running: rendererPageActive;

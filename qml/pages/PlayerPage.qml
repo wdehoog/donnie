@@ -22,6 +22,7 @@ Page {
     property bool metaShown : false
     property string trackText
     property string albumText
+    property string trackClass
 
     property bool hasTracks : listView.model.count > 0
     property bool canNext: hasTracks && (currentItem < (listView.model.count - 1))
@@ -125,6 +126,7 @@ Page {
 
         trackText = track.titleText;
         albumText = track.metaText;
+        trackClass = track.class;
 
         // mpris
         var meta = {};
@@ -144,6 +146,7 @@ Page {
         listView.model.clear();
         trackText = "";
         albumText = "";
+        trackClass = "";
         currentItem = -1;
         imageItemSource = "";
 
@@ -168,6 +171,7 @@ Page {
 
         header: Column {
             width: parent.width
+            anchors.bottomMargin: Theme.paddingLarge
 
             Rectangle {
                 width: parent.width
@@ -225,10 +229,39 @@ Page {
                 }
             }
 
-            Slider {
+            Label { // for radio streams
+                anchors {
+                    left: parent.left
+                    leftMargin: Theme.horizontalPageMargin
+                    right: parent.right
+                    rightMargin: Theme.horizontalPageMargin
+                }
+                visible: !timeSlider.visible
+                color: Theme.primaryColor
+                textFormat: Text.StyledText
+                horizontalAlignment: Text.AlignHCenter
+                text: trackText
+            }
+            Label { // for radio streams
+                anchors {
+                    left: parent.left
+                    leftMargin: Theme.horizontalPageMargin
+                    right: parent.right
+                    rightMargin: Theme.horizontalPageMargin
+                    bottomMargin: Theme.paddingLarge
+                }
+                visible: !timeSlider.visible
+                color: Theme.primaryColor
+                textFormat: Text.StyledText
+                horizontalAlignment: Text.AlignHCenter
+                text: albumText
+            }
+
+            Slider { // for tracks
                 id: timeSlider
                 maximumValue: 1
-                enabled: true
+                enabled: trackClass !== "object.item.audioItem.audioBroadcast"
+                visible: enabled
                 handleVisible: false
 
                 anchors.left: parent.left
@@ -244,7 +277,7 @@ Page {
             Timer {
                 id: updateTimer
 
-                running: playerPageActive
+                running: playerPageActive && timeSlider.enabled
                 interval: 1000
                 repeat: true
 
@@ -388,6 +421,31 @@ Page {
 
     }
 
+    // for internet radio the QT Audio object seems to know some metadata
+    Timer {
+        interval: 5000;
+        running: audio.hasAudio && trackClass === "object.item.audioItem.audioBroadcast"
+        repeat: true
+        onTriggered: {
+            var title = audio.metaData.title
+            var publisher = audio.metaData.publisher;
+
+            /*if(title !== undefined)
+                albumText = title;
+            if(publisher !== undefined)
+                trackText = publisher;*/
+
+            if(title === undefined)
+                return;
+            var delim = title.indexOf(" - ");
+            if(delim > -1) {
+                trackText = title.substr(0,delim);
+                albumText = title.substr(delim+2);
+            } else
+                console.log("could not parse title "+title);
+        }
+    }
+
     Connections {
         target: upnp
         onMprisControl: {
@@ -425,23 +483,19 @@ Page {
     function addTracks(tracks) {
         var i;
         for(i=0;i<tracks.length;i++) {
-            var idx = trackListModel.count;
-            var durationText = "";
-            if(tracks[i].duration)
-              durationText = UPnP.getDurationString(tracks[i].duration);
-            var titleText = tracks[i].title;
-            var metaText  = tracks[i].artist + " - " + tracks[i].album;
+            var dprops = UPnP.createDisplayProperties(tracks[i]);
             trackListModel.append(
                         {id: tracks[i].id,
-                         titleText: titleText,
-                         metaText: metaText,
-                         durationText: durationText,
+                         titleText: dprops.titleText,
+                         metaText: dprops.metaText,
+                         durationText: dprops.durationText,
                          uri: tracks[i].uri,
                          albumArtURI: tracks[i].albumArtURI,
                          title: tracks[i].title,
                          artist: tracks[i].artist,
                          duration: tracks[i].duration,
-                         album: tracks[i].album});
+                         album: tracks[i].album,
+                         class: tracks[i].class});
         }
         if(currentItem == -1 && trackListModel.count>0) {
             next();
