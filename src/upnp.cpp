@@ -515,7 +515,7 @@ int UPNP::play() {
 
     int err;
     if((err = avt->play())) {
-        QString msg = QStringLiteral("UPNP::pause: failed with error %1").arg(err);
+        QString msg = QStringLiteral("UPNP::play: failed with error %1").arg(err);
         emit error(msg);
     }
 
