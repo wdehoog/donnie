@@ -387,10 +387,12 @@ Page {
                         visible: listView.model.get(index).type === "Item"
                         onClicked: addAllToPlayer();
                     }
-                    MenuItem {
-                        text: "Browse (experimental)"
-                        onClicked: openBrowseOn(listView.model.get(index).pid);
-                    }
+                    // minidlna and minimserver give complete collection as parent
+                    // so browsing that is useless (and for some reason does not work)
+                    //MenuItem {
+                    //    text: "Browse (experimental)"
+                    //    onClicked: openBrowseOn(listView.model.get(index).pid);
+                    //}
                 }
             }
         }
