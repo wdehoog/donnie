@@ -246,7 +246,8 @@ Page {
         updateUIForTrack(track);
         updateMprisForTrack(track);
 
-        play();
+        if(!playing)
+            play();
 
         // if available set next track
         if(useNextURI && trackListModel.count > (currentItem+1)) {
