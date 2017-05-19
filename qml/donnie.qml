@@ -65,7 +65,7 @@ ApplicationWindow
     }
 
     function showErrorDialog(text) {
-        var dialog = pageStack.push(Qt.resolvedUrl("ErrorDialog.qml"),
+        var dialog = pageStack.push(Qt.resolvedUrl("components/ErrorDialog.qml"),
                                     {errorMessageText: text});
     }
 
