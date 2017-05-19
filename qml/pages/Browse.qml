@@ -274,8 +274,12 @@ Page {
                     popFromBrowseStack();
                 else if(item.type === "Container")
                     pushOnBrowseStack(item.id, item.pid, item.title);
-                if(item.type !== "Item")
-                  cid = item.id;
+                if(item.type !== "Item") {
+                    if(item.id !== "-1" )
+                        cid = item.id;
+                    else // something went wrong
+                        cid = "0";
+                }
             }
 
         }
