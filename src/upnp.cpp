@@ -515,6 +515,7 @@ int UPNP::play() {
 
     int err;
     if((err = avt->play())) {
+        // 701 means not "Stopped" nor "Paused"
         QString msg = QStringLiteral("UPNP::play: failed with error %1").arg(err);
         emit error(msg);
     }
