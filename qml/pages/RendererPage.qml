@@ -233,30 +233,30 @@ Page {
     }
 
     function loadTrack() {
-        var track = trackListModel.get(currentItem);
+        var track = trackListModel.get(currentItem)
 
-        prevTrackURI = "";
-        prevTrackDuration = -1;
-        prevTrackTime = -1;
+        prevTrackURI = ""
+        prevTrackDuration = -1
+        prevTrackTime = -1
 
-        console.log("loadTrack " + currentItem + ", "+track.uri);
-        var r;
+        console.log("loadTrack " + currentItem + ", "+track.uri)
+        var r
         if((r = upnp.setTrack(track.uri, track.didl)) !== 0) {
-            app.showErrorDialog("Failed to set track to play on Renderer");
-            return;
+            app.showErrorDialog("Failed to set track to play on Renderer")
+            return
         }
 
-        updateUIForTrack(track);
-        updateMprisForTrack(track);
+        updateUIForTrack(track)
+        updateMprisForTrack(track)
 
         if(!playing)
-            play();
+            play()
 
         // if available set next track
         if(useNextURI && trackListModel.count > (currentItem+1)) {
-            track = trackListModel.get(currentItem+1);
-            console.log("loadTrack setNextTrack "+track.uri);
-            upnp.setNextTrack(track.uri, track.didl);
+            track = trackListModel.get(currentItem+1)
+            console.log("loadTrack setNextTrack "+track.uri)
+            upnp.setNextTrack(track.uri, track.didl)
         }
     }
 
@@ -657,6 +657,7 @@ Page {
         }
     }*/
 
+    property int skipRefresh: 0
     property int failedAttempts: 0
     Timer {
         interval: 1000;
@@ -665,52 +666,65 @@ Page {
         repeat: true
         onTriggered: {
 
+            // do not refresh all info every second but do show progress
+            skipRefresh++
+            if(skipRefresh>1) {
+
+                if(transportState === 1) {
+                    timeSliderValue = timeSliderValue + 1
+                    cover.coverProgressBar.value = timeSliderValue
+                }
+
+                skipRefresh = 0
+                return
+            }
+
             // read time to update ui and detect track changes
 
-            refreshTransportState();
+            refreshTransportState()
 
             // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
-            var pinfo = getPositionInfo();
+            var pinfo = getPositionInfo()
             if(pinfo === undefined) {
-                failedAttempts++;
+                failedAttempts++
                 app.error("Error: getPositionInfo() failed")
                 if(failedAttempts > 3) {
-                    reset();
+                    reset()
                     var errTxt = "Lost connection with Renderer."
-                    app.error(errTxt);
-                    app.showErrorDialog(errTxt);
+                    app.error(errTxt)
+                    app.showErrorDialog(errTxt)
                 }
-                return;
+                return
             } else
-                failedAttempts = 0;
+                failedAttempts = 0
 
-            var trackuri = pinfo["trackuri"];
-            var trackduration = parseInt(pinfo["trackduration"]);
-            var tracktime = parseInt(pinfo["reltime"]);
-            var abstime = parseInt(pinfo["abstime"]);
+            var trackuri = pinfo["trackuri"]
+            var trackduration = parseInt(pinfo["trackduration"])
+            var tracktime = parseInt(pinfo["reltime"])
+            var abstime = parseInt(pinfo["abstime"])
 
             // track duration
-            timeSliderLabel = UPnP.formatDuration(trackduration);
+            timeSliderLabel = UPnP.formatDuration(trackduration)
             //console.log("setting timeSliderLabel to "+timeSliderLabel + " based on " + trackduration);
             //cover.coverProgressBar.label = timeSliderLabel;
 
             if(timeSliderMaximumValue != trackduration && trackduration > -1) {
-                timeSliderMaximumValue = trackduration;
+                timeSliderMaximumValue = trackduration
                 //console.log("setting timeSliderMaximumValue to "+timeSliderMaximumValue)
-                cover.coverProgressBar.maximumValue = trackduration;
+                cover.coverProgressBar.maximumValue = trackduration
             }
 
             // Check User is using the slider, if so don't update the value
             if(!timeSliderDown) {
 
                 // value
-                timeSliderValue = tracktime;
-                cover.coverProgressBar.value = tracktime;
+                timeSliderValue = tracktime
+                cover.coverProgressBar.value = tracktime
                 //console.log("setting timeSliderValue to "+tracktime)
-                timeSliderValueText = UPnP.formatDuration(tracktime);
+                timeSliderValueText = UPnP.formatDuration(tracktime)
                 //console.log("setting timeSliderValueText to "+timeSliderValueText)
                 if(currentItem > -1)
-                  cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + timeSliderValueText;
+                  cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + timeSliderValueText
                 else
                   cover.coverProgressBar.label = ""
 
@@ -722,32 +736,39 @@ Page {
             // (maybe we should start using upplay's avtransport_qo.h etc.)
             if(playing) {
 
-                if(prevTrackURI !== "" && prevTrackURI !== trackuri) {
+                if(transportState <= 0) { // renderer has stopped unexpectedly
+
+                    playing = false
+                    playIconSource =  "image://theme/icon-l-play"
+                    cover.playIconSource = "image://theme/icon-cover-play"
+                    console.log(" renderer has stopped unexpectedly")
+
+                } else if(prevTrackURI !== "" && prevTrackURI !== trackuri) {
 
                     // track changed
                     console.log("uri changed from ["+prevTrackURI + "] to [" + trackuri + "]");
-                    var trackIndex = getTrackIndexForURI(trackuri);
+                    var trackIndex = getTrackIndexForURI(trackuri)
                     if(trackIndex >= 0)
-                        onChangedTrack(trackIndex);
+                        onChangedTrack(trackIndex)
                     else if(trackuri === "") // no setNextAVTransportURI support?
-                        loadNextTrack();
+                        loadNextTrack()
 
                 } else if(tracktime === 0
                           && abstime === prevAbsTime
                           && prevTrackTime > 0) {
 
                     // stopped playing so load next track
-                    loadNextTrack();
+                    loadNextTrack()
 
                 }
 
             }
 
             //
-            prevTrackURI = trackuri;
-            prevTrackDuration = trackduration;
-            prevTrackTime = tracktime;
-            prevAbsTime = abstime;
+            prevTrackURI = trackuri
+            prevTrackDuration = trackduration
+            prevTrackTime = tracktime
+            prevAbsTime = abstime
         }
     }
 
