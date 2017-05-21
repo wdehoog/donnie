@@ -132,8 +132,11 @@ Page {
     function play() {
         var r;
         if((r = upnp.play()) !== 0) {
-            app.showErrorDialog("Failed to Start the Renderer");
-            return;
+            // rygel: 701 means not "Stopped" nor "Paused" so assume already playing
+            if(r !== 701) {
+                app.showErrorDialog("Failed to Start the Renderer");
+                return;
+            }
         }
         playing = true;
         // VISIT we also get "Stopped" here
