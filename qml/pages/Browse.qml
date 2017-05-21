@@ -268,11 +268,15 @@ Page {
                         onClicked: addToPlayer(listView.model.get(index).id);
                     }
                     MenuItem {
+                        text: "Replace In Player"
+                        onClicked: replaceInPlayer(listView.model.get(index).id);
+                    }
+                    MenuItem {
                         text: "Add All To Player"
                         onClicked: addAllToPlayer();
                     }
                     MenuItem {
-                        text: "Replace All in Player"
+                        text: "Replace All In Player"
                         onClicked: replaceAllInPlayer();
                     }
                 }
@@ -429,6 +433,14 @@ Page {
         var track = getTrack(id);
         if(track !== undefined)
             getPlayerPage().addTracks([track]);
+    }
+
+    function replaceInPlayer(id) {
+        var track = getTrack(id);
+        if(track !== undefined) {
+            getPlayerPage().clearList();
+            getPlayerPage().addTracks([track]);
+        }
     }
 
     function getAllTracks() {
