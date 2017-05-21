@@ -16,7 +16,8 @@ Page {
     id: page
 
     property bool showBusy: false
-    property string cid : ""
+    property string cid : "" // current id
+    property int cScrollIndex: -1 // index to scroll to when going 'back'
     property var contents
 
     property int startIndex: 0
@@ -44,7 +45,8 @@ Page {
                         pid: "-2",
                         title: "..",
                         artist: "", album: "", duration: "",
-                        titleText: "..", metaText: "", durationText: ""
+                        titleText: "..", metaText: "", durationText: "",
+                        currentIndex: app.currentBrowseStack.peek().currentIndex
                     });
                 }
 
@@ -67,6 +69,11 @@ Page {
 
                 totalCount = contents["totalCount"];
 
+                // scroll to previous position
+                if(cScrollIndex > -1 && cScrollIndex < browseModel.count) {
+                    listView.positionViewAtIndex(cScrollIndex, ListView.Center)
+                }
+
             } catch( err ) {
                 app.error("Exception in onBrowseDone: " + err);
                 app.error("json: " + contentsJson);
@@ -81,7 +88,10 @@ Page {
                     type: "Container",
                     id: app.currentBrowseStack.peek().pid,
                     pid: "-2",
-                    title: ".."
+                    title: "..",
+                    artist: "", album: "", duration: "",
+                    titleText: "..", metaText: "", durationText: "",
+                    currentIndex: app.currentBrowseStack.peek().currentIndex
                 });
             }
             pathText = UPnP.getCurrentPathString(app.currentBrowseStack);
@@ -269,16 +279,16 @@ Page {
             }
 
             onClicked: {
-                var item = listView.model.get(index);
+                var item = listView.model.get(index)
                 if(item.pid === "-2") // the ".." item
-                    popFromBrowseStack();
+                    popFromBrowseStack()
                 else if(item.type === "Container")
-                    pushOnBrowseStack(item.id, item.pid, item.title);
+                    pushOnBrowseStack(item.id, item.pid, item.title, index);
                 if(item.type !== "Item") {
                     if(item.id !== "-1" )
-                        cid = item.id;
+                        cid = item.id
                     else // something went wrong
-                        cid = "0";
+                        cid = "0"
                 }
             }
 
@@ -321,9 +331,10 @@ Page {
                     id: delegateItem
 
                     onClicked: {
-                        popFromBrowseStackUntil(model.item.id);
-                        cid = item.id;
-                        pageStack.pop();
+                        popFromBrowseStackUntil(model.item.id)
+                        cid = item.id
+                        cScrollIndex = item.currentIndex
+                        pageStack.pop()
                     }
 
                     Label {
@@ -352,13 +363,14 @@ Page {
 
         if(app.currentBrowseStack.empty()) {
             if(cid === "0") { // root
-                pushOnBrowseStack(cid, "-1", "[Top Level]");
-            } else {
+                pushOnBrowseStack(cid, "-1", "[Top Level]", -1);
+            } /*else {
                 // probably arrived here from search page
                 // so we have to 'create' a browse stack
+                // BUT that option has been disabled
                 createBrowseStackFor(cid);
                 pathText = UPnP.getCurrentPathString(app.currentBrowseStack);
-            }
+            }*/
         }
 
         browseModel.clear();
@@ -374,6 +386,7 @@ Page {
         pathListModel.clear();
         app.currentBrowseStack.empty();
         cid = "";
+        cScrollIndex = -1
     }
 
     function popFromBrowseStackUntil(id) {
@@ -385,6 +398,7 @@ Page {
     }
 
     function popFromBrowseStack() {        
+        cScrollIndex = app.currentBrowseStack.peek().currentIndex;
         app.currentBrowseStack.pop();
         if(pathListModel.count > 1) {
             pathListModel.remove(0);
@@ -393,13 +407,8 @@ Page {
             console.log("popFromBrowseStack too often")
     }
 
-    function pushOnBrowseStack(id, pid, title) {
-        var dir = new Object();
-        dir.id = id;
-        dir.pid = pid;
-        dir.title = title;
-        app.currentBrowseStack.push(dir);
-
+    function pushOnBrowseStack(id, pid, title, currentIndex) {
+        app.currentBrowseStack.push( {id: id, pid: pid, title: title, currentIndex: currentIndex});
         pathListModel.insert(0, {id: id, pid: pid, title: title});
         //pathComboBoxIndex = -1;
     }
@@ -444,7 +453,7 @@ Page {
         getPlayerPage().addTracks(tracks);
     }
 
-    function createBrowseStackFor(id) {
+    /*function createBrowseStackFor(id) {
         var i;
 
         pushOnBrowseStack("0", "-1", "[Top Level]");
@@ -457,7 +466,7 @@ Page {
             app.error("Exception in createBrowseStackFor: " + err);
             app.error("json: " + pathJson);
         }
-    }
+    }*/
 
     ConfigurationValue {
             id: max_number_of_results
