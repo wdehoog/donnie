@@ -122,7 +122,7 @@ Page {
 
         trackText = track.titleText;
         albumText = track.metaText;
-        trackClass = track.class;
+        trackClass = track.upnpclass;
 
         updateMprisForTrack(track);
     }
@@ -509,7 +509,7 @@ Page {
                          artist: tracks[i].artist,
                          duration: tracks[i].duration,
                          album: tracks[i].album,
-                         class: tracks[i].class});
+                         upnpclass: tracks[i].upnpclass});
         }
         if(currentItem == -1 && trackListModel.count>0) {
             next();

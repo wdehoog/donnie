@@ -585,7 +585,7 @@ Page {
                          artist: tracks[i].artist,
                          duration: tracks[i].duration,
                          album: tracks[i].album,
-                         class: tracks[i].class});
+                         upnpclass: tracks[i].upnpclass});
         }
     }
 
@@ -659,6 +659,7 @@ Page {
 
     property int skipRefresh: 0
     property int failedAttempts: 0
+    property int stoppedPlayingDetection: 0
     Timer {
         interval: 1000;
         //running: rendererPageActive;
@@ -679,10 +680,20 @@ Page {
                 return
             }
 
-            // read time to update ui and detect track changes
-
+            // update and check transport state
             refreshTransportState()
+            if(playing && transportState <= 0) { // detect renderer has stopped unexpectedly
+                stoppedPlayingDetection++
+                if(stoppedPlayingDetection > 3) {
+                    playing = false
+                    playIconSource =  "image://theme/icon-l-play"
+                    cover.playIconSource = "image://theme/icon-cover-play"
+                    app.showErrorDialog("The renderer has stopped playing unexpectedly.")
+                }
+            } else
+                stoppedPlayingDetection = 0
 
+            // read time to update ui and detect track changes
             // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
             var pinfo = getPositionInfo()
             if(pinfo === undefined) {
@@ -736,14 +747,7 @@ Page {
             // (maybe we should start using upplay's avtransport_qo.h etc.)
             if(playing) {
 
-                if(transportState <= 0) { // renderer has stopped unexpectedly
-
-                    playing = false
-                    playIconSource =  "image://theme/icon-l-play"
-                    cover.playIconSource = "image://theme/icon-cover-play"
-                    console.log(" renderer has stopped unexpectedly")
-
-                } else if(prevTrackURI !== "" && prevTrackURI !== trackuri) {
+                if(prevTrackURI !== "" && prevTrackURI !== trackuri) {
 
                     // track changed
                     console.log("uri changed from ["+prevTrackURI + "] to [" + trackuri + "]");

@@ -38,7 +38,8 @@ Page {
             try {
                 contents = JSON.parse(contentsJson);
 
-                if(cid !== "0") { // no ".." for the root
+                // no ".." for the root or if there already is one
+                if(cid !== "0" && browseModel.count == 0) {
                     browseModel.append({
                         type: "Container",
                         id: app.currentBrowseStack.peek().pid,
@@ -83,7 +84,7 @@ Page {
         }
 
         onError: {
-            if(cid !== "0") { // no ".." for the root
+            if(cid !== "0" && browseModel.count == 0) { // no ".." for the root
                 browseModel.append({
                     type: "Container",
                     id: app.currentBrowseStack.peek().pid,
@@ -207,6 +208,7 @@ Page {
             Row {
                 spacing: Theme.paddingMedium
                 width: parent.width
+                anchors.rightMargin: Theme.paddingMedium
 
                 Image {
                   id: imageItem
@@ -215,7 +217,7 @@ Page {
                   source: {
                       if(pid === "-2") // the ".." item
                           return "image://theme/icon-m-back";
-                      if(type === "Container")
+                      if(type === "Container" && upnpclass !== "object.container.album.musicAlbum")
                           return "image://theme/icon-m-folder";
                       return "";
                   }

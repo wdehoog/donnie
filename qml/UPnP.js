@@ -219,7 +219,7 @@ function createTrack(item) {
         duration: item.resources[0].attributes["duration"],
         //index: item.properties["upnp:originalTrackNumber"]
         //       ? item.properties["upnp:originalTrackNumber"] : "",
-        class: item.properties["upnp:class"]
+        upnpclass: item.properties["upnp:class"]
     };
 }
 
@@ -247,6 +247,10 @@ function createDisplayProperties(item) {
         metaText += item.album;
     }
 
+    var audioType = getAudioType(item);
+    if(audioType.length > 0)
+        metaText += " - " + audioType;
+
     return {
         titleText: titleText,
         metaText: metaText,
@@ -254,17 +258,40 @@ function createDisplayProperties(item) {
     }
 }
 
+function getDateYear(dateStr) {
+    var date = new Date(dateStr);
+    if(!isNaN(date.getTime()))
+        return date.getFullYear().toString();
+    else
+        return "";
+}
+
 function createListContainer(container) {
-    return {
-        type: "Container",
-        id: container["id"],
-        pid: container["pid"],
-        title: container["title"],
-        titleText: container["title"],
-        metaText: "", durationText: "",
-        artist: "", album: "", durtion: "",
-        class: container.properties["upnp:class"]
-    };
+    if("object.container.album.musicAlbum" === container.properties["upnp:class"])
+        return {
+            type: "Container",
+            id: container["id"],
+            pid: container["pid"],
+            title: container["title"],
+            titleText: container["title"],
+            metaText: container.properties["upnp:artist"],
+            durationText: getDateYear(container.properties["dc:date"]),
+            artist: container.properties["upnp:artist"],
+            album: container["title"],
+            duration: "",
+            upnpclass: container.properties["upnp:class"]
+        };
+    else
+        return {
+            type: "Container",
+            id: container["id"],
+            pid: container["pid"],
+            title: container["title"],
+            titleText: container["title"],
+            metaText: "", durationText: "",
+            artist: "", album: "", duration: "",
+            upnpclass: container.properties["upnp:class"]
+        };
 }
 
 function createListItem(item) {
@@ -282,6 +309,31 @@ function createListItem(item) {
         artist: item.properties["dc:creator"],
         album: item.properties["upnp:album"],
         duration: item.resources[0].attributes["duration"],
-        class: item.properties["upnp:class"]
+        upnpclass: item.properties["upnp:class"]
     };
+}
+
+function getAudioType(item) {
+    var p;
+    var t;
+    if(item.resources[0].attributes["protocolInfo"]) {
+        // protocolInfo: "http-get:*:audio/ogg:DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000"
+        var protocolInfo = item.resources[0].attributes["protocolInfo"];
+        var a = protocolInfo.split(':');
+        if(a.length < 3)
+            return "";
+        p = a[2].indexOf("/");
+        if(p === -1)
+            return a[2];
+        t = a[2].substr(p+1);
+        if(startsWith(t,"x-")) // for example audio/x-flac
+            return t.substr(2);
+        return t;
+    } else if(item.uri) {
+        p = item.uri.lastIndexOf(".");
+        if(p === -1)
+            return "";
+        return item.uri.substr(p+1);
+    } else
+        return "";
 }
