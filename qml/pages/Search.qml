@@ -375,7 +375,7 @@ Page {
                     MenuItem {
                         text: "Add To Player"
                         visible: listView.model.get(index).type === "Item"
-                        onClicked: addToPlayer(listView.model.get(index).id);
+                        onClicked: addToPlayer(listView.model.get(index));
                     }
                     MenuItem {
                         text: "Add Group To Player"
@@ -401,44 +401,42 @@ Page {
 
     }
 
-    function getTrack(id) {
-        var i;
-
-        for(i=0;i<searchResults.items.length;i++) {
-            if(searchResults.items[i].id === id) {
-                var track = UPnP.createTrack(searchResults.items[i]);
-                return track;
-            }
-        }
-        return undefined;
+    function addToPlayer(track) {
+        getPlayerPage().addTracks([track]);
     }
 
-    function addToPlayer(id) {
-        var track = getTrack(id);
-        if(track !== undefined)
-            getPlayerPage().addTracks([track]);
+    function replaceInPlayer(track) {
+        getPlayerPage().clearList();
+        getPlayerPage().addTracks([track]);
     }
 
-    function addGroupToPlayer(field, value) {
+    function getAllTracks() {
         var tracks = [];
-
         for(var i=0;i<listView.model.count;i++) {
-            var track = getTrack(listView.model.get(i).id);
-            if(track !== undefined
-               && track[field] === value)
-                tracks.push(track);
+            if(listView.model.get(i).type === "Item")
+                tracks.push(listView.model.get(i));
         }
-
-        getPlayerPage().addTracks(tracks);
+        return tracks;
     }
 
     function addAllToPlayer() {
-        var tracks = [];
+        var tracks = getAllTracks();
+        getPlayerPage().addTracks(tracks);
+    }
 
+    function replaceAllInPlayer() {
+        var tracks = getAllTracks();
+        getPlayerPage().clearList();
+        getPlayerPage().addTracks(tracks);
+    }
+
+    function addGroupToPlayer(field, value) {
         for(var i=0;i<listView.model.count;i++) {
-            var track = getTrack(listView.model.get(i).id);
-            if(track !== undefined)
-                tracks.push(track);
+            if(listView.model.get(i).type === "Item") {
+                var track = listView.model.get(i);
+                if(track[field] === value)
+                    tracks.push(track);
+            }
         }
 
         getPlayerPage().addTracks(tracks);

@@ -267,11 +267,11 @@ Page {
                     enabled: (listView.model.get(index).type === "Item")
                     MenuItem {
                         text: "Add To Player"
-                        onClicked: addToPlayer(listView.model.get(index).id);
+                        onClicked: addToPlayer(listView.model.get(index));
                     }
                     MenuItem {
                         text: "Replace In Player"
-                        onClicked: replaceInPlayer(listView.model.get(index).id);
+                        onClicked: replaceInPlayer(listView.model.get(index));
                     }
                     MenuItem {
                         text: "Add All To Player"
@@ -419,39 +419,20 @@ Page {
         //pathComboBoxIndex = -1;
     }
 
-    function getTrack(id) {
-        var i;
-
-        for(i=0;i<contents.items.length;i++) {
-            if(contents.items[i].id === id) {
-                var track = UPnP.createTrack(contents.items[i]);
-                return track;
-            }
-        }
-        return undefined;
+    function addToPlayer(track) {
+        getPlayerPage().addTracks([track]);
     }
 
-    function addToPlayer(id) {
-        var track = getTrack(id);
-        if(track !== undefined)
-            getPlayerPage().addTracks([track]);
-    }
-
-    function replaceInPlayer(id) {
-        var track = getTrack(id);
-        if(track !== undefined) {
-            getPlayerPage().clearList();
-            getPlayerPage().addTracks([track]);
-        }
+    function replaceInPlayer(track) {
+        getPlayerPage().clearList();
+        getPlayerPage().addTracks([track]);
     }
 
     function getAllTracks() {
         var tracks = [];
         for(var i=0;i<listView.model.count;i++) {
-            var item = listView.model.get(i);
-            var track = getTrack(item.id);
-            if(track !== undefined)
-                tracks.push(track);
+            if(listView.model.get(i).type === "Item")
+                tracks.push(listView.model.get(i));
         }
         return tracks;
     }

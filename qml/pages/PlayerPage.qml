@@ -496,24 +496,10 @@ Page {
 
     function addTracks(tracks) {
         var i;
-        for(i=0;i<tracks.length;i++) {
-            var dprops = UPnP.createDisplayProperties(tracks[i]);
-            trackListModel.append(
-                        {id: tracks[i].id,
-                         titleText: dprops.titleText,
-                         metaText: dprops.metaText,
-                         durationText: dprops.durationText,
-                         uri: tracks[i].uri,
-                         albumArtURI: tracks[i].albumArtURI,
-                         title: tracks[i].title,
-                         artist: tracks[i].artist,
-                         duration: tracks[i].duration,
-                         album: tracks[i].album,
-                         upnpclass: tracks[i].upnpclass});
-        }
-        if(currentItem == -1 && trackListModel.count>0) {
-            next();
-        }
+        for(i=0;i<tracks.length;i++)
+            trackListModel.append(tracks[i])
+        if(currentItem == -1 && trackListModel.count>0)
+            next();        
         playerPageActive = true;
     }
 

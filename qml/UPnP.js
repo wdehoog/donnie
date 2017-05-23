@@ -207,25 +207,9 @@ function startsWith(str, start) {
     return str.match("^"+start) !== null;
 }
 
-function createTrack(item) {
-    return {
-        id: item.id,
-        title: item["title"],
-        didl: item["didl"],
-        artist: item.properties["dc:creator"],
-        album: item.properties["upnp:album"],
-        albumArtURI: item.properties["upnp:albumArtURI"],
-        uri: item.resources[0]["Uri"],
-        duration: item.resources[0].attributes["duration"],
-        //index: item.properties["upnp:originalTrackNumber"]
-        //       ? item.properties["upnp:originalTrackNumber"] : "",
-        upnpclass: item.properties["upnp:class"]
-    };
-}
-
 function createDisplayProperties(item) {
     var durationText = "";
-    if(item.resources && item.resources[0].attributes["duration"])
+    if(item.resources && item.resources[0] && item.resources[0].attributes["duration"])
       durationText = getDurationString(item.resources[0].attributes["duration"]);
     else if(item.duration)
       durationText = getDurationString(item.duration);
@@ -233,17 +217,11 @@ function createDisplayProperties(item) {
     var titleText = item["title"];
 
     var metaText = "";
-    if(item.properties && item.properties["dc:creator"])
-        metaText = item.properties["dc:creator"];
-    else if(item.artist)
+    if(item.artist)
         metaText = item.artist;
-    if(item.properties && item.properties["upnp:album"]) {
+    if(item.album) {
         if(metaText.length > 0)
-            metaText += " - " ;
-        metaText += item.properties["upnp:album"];
-    } else if(item.abum) {
-        if(metaText.length > 0)
-            metaText += " - " ;
+            metaText += " - ";
         metaText += item.album;
     }
 
@@ -296,30 +274,36 @@ function createListContainer(container) {
 
 function createListItem(item) {
 
-    var dprops = createDisplayProperties(item);
-
-    return {
+    var listItem = {
         type: "Item",
         id: item["id"],
         pid: item["pid"],
         title: item["title"],
-        titleText: dprops.titleText,
-        metaText: dprops.metaText,
-        durationText: dprops.durationText,
         artist: item.properties["dc:creator"],
         album: item.properties["upnp:album"],
-        duration: item.resources[0].attributes["duration"],
+        albumArtURI: item.properties["upnp:albumArtURI"],
+        uri: item.resources[0]["Uri"],
+        duration: (item.resources[0] && item.resources[0].attributes["duration"])
+                      ? item.resources[0].attributes["duration"] : "",
+        protocolInfo: (item.resources[0] && item.resources[0].attributes["protocolInfo"])
+                      ? item.resources[0].attributes["protocolInfo"] : "",
         upnpclass: item.properties["upnp:class"]
     };
+
+    var dprops = createDisplayProperties(listItem);
+    listItem.titleText = dprops.titleText;
+    listItem.metaText = dprops.metaText;
+    listItem.durationText = dprops.durationText;
+
+    return listItem;
 }
 
 function getAudioType(item) {
     var p;
     var t;
-    if(item.resources[0].attributes["protocolInfo"]) {
+    if(item.protocolInfo) {
         // protocolInfo: "http-get:*:audio/ogg:DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000"
-        var protocolInfo = item.resources[0].attributes["protocolInfo"];
-        var a = protocolInfo.split(':');
+        var a = item.protocolInfo.split(':');
         if(a.length < 3)
             return "";
         p = a[2].indexOf("/");
