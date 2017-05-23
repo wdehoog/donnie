@@ -70,6 +70,8 @@ public:
     Q_INVOKABLE QString getPositionInfoJson();
     Q_INVOKABLE QString getMediaInfoJson();
 
+    Q_INVOKABLE void getTransportInfoJsonAsync();
+
     // for mpris control
     Q_INVOKABLE void mprisPlay();
     Q_INVOKABLE void mprisPause();

@@ -80,6 +80,7 @@ Page {
 
     function getTransportState() {
         // {"curspeed":"1","tpstate":"Playing","tpstatus":"OK"}
+        upnp.getTransportInfoJsonAsync() // VISIT
         var stateJson = upnp.getTransportInfoJson()
         try {
             var tstate = JSON.parse(stateJson);
@@ -512,6 +513,10 @@ Page {
                 break;
             }
         }
+
+        onTransportInfo: {
+            console.log(transportInfoJson)
+        }
     }
 
     function increaseVolume() {
@@ -571,22 +576,8 @@ Page {
 
     function addTracksNoStart(tracks) {
         var i;
-        for(i=0;i<tracks.length;i++) {
-            var dprops = UPnP.createDisplayProperties(tracks[i]);
-            trackListModel.append(
-                        {id: tracks[i].id,
-                         titleText: dprops.titleText,
-                         metaText: dprops.metaText,
-                         durationText: dprops.durationText,
-                         uri: tracks[i].uri,
-                         didl: tracks[i].didl,
-                         albumArtURI: tracks[i].albumArtURI,
-                         title: tracks[i].title,
-                         artist: tracks[i].artist,
-                         duration: tracks[i].duration,
-                         album: tracks[i].album,
-                         upnpclass: tracks[i].upnpclass});
-        }
+        for(i=0;i<tracks.length;i++)
+            trackListModel.append(tracks[i])
     }
 
     function addTracks(tracks) {
@@ -602,23 +593,24 @@ Page {
     onStatusChanged: {
         if(status == PageStatus.Active) {
             if(app.hasCurrentRenderer())
-                volumeSliderValue = upnp.getVolume();
+                volumeSliderValue = upnp.getVolume()
 
             if(!hasTracks) {
                 var minfo = getMediaInfo();
                 if(minfo !== undefined) {
-                    var track;
+                    var track
                     if(minfo["curmeta"] !== undefined
                        && minfo["curmeta"].id !== "") {
-                        track = UPnP.createTrack(minfo["curmeta"])
-                        addTracksNoStart([track]);
-                        updateUIForTrack(track);
-                        updateMprisForTrack(track);
+                        track = UPnP.createListItem(minfo["curmeta"])
+                        addTracksNoStart([track])
+                        updateUIForTrack(track)
+                        updateMprisForTrack(track)
                     }
                     if(minfo["nextmeta"] !== undefined
-                            && minfo["nextmeta"].id !== "")
-                        track = UPnP.createTrack(minfo["nextmeta"])
-                        addTracksNoStart([track]);
+                            && minfo["nextmeta"].id !== "") {
+                        track = UPnP.createListItem(minfo["nextmeta"])
+                        addTracksNoStart([track])
+                    }
                 }
             }
 
@@ -682,7 +674,7 @@ Page {
 
             // update and check transport state
             refreshTransportState()
-            if(playing && transportState <= 0) { // detect renderer has stopped unexpectedly
+            /*if(playing && transportState <= 0) { // detect renderer has stopped unexpectedly
                 stoppedPlayingDetection++
                 if(stoppedPlayingDetection > 3) {
                     playing = false
@@ -692,6 +684,7 @@ Page {
                 }
             } else
                 stoppedPlayingDetection = 0
+            */
 
             // read time to update ui and detect track changes
             // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}

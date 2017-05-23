@@ -6,6 +6,7 @@
 
 
 #include <QThread>
+#include <QThreadPool>
 
 #include <vector>
 #include <set>
@@ -16,6 +17,7 @@
 #include "upnpsearchworker.h"
 #include "upnpgetrendererworker.h"
 #include "upnpgetserverworker.h"
+#include "upnpgettransportinforunnable.h"
 
 #include <MprisPlayer>
 
@@ -881,6 +883,22 @@ QString UPNP::getMediaInfoJson() {
 
     QJsonDocument doc(mediaInfo);
     return doc.toJson(QJsonDocument::Compact);
+}
+
+void UPNP::getTransportInfoJsonAsync() {
+    if(!currentRenderer) {
+        emit error("UPNP::getTransportInfoJsonAsync: No Current Renderer");
+        return;
+    }
+
+    UPnPClient::AVTH avt = currentRenderer->avt();
+    if (!avt) {
+        emit error("UPNP::getTransportInfoJsonAsync: Device has no AVTransport service");
+        return;
+    }
+
+    UPnPGetTransportRunnable * tr = new UPnPGetTransportRunnable(avt);
+    QThreadPool::globalInstance()->start(tr);
 }
 
 
