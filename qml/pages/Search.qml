@@ -344,14 +344,13 @@ Page {
                             textFormat: Text.StyledText
                             truncationMode: TruncationMode.Fade
                             width: parent.width - dt.width
-                            //anchors.right: dt.left
                             text: titleText
                         }
                         Label {
                             id: dt
-                            //anchors.left: tt.right
                             anchors.right: parent.right
                             color: Theme.secondaryColor
+                            font.pixelSize: Theme.fontSizeExtraSmall
                             text: durationText
                         }
                     }

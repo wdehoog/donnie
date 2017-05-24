@@ -243,6 +243,7 @@ Page {
                             id: dt
                             anchors.right: parent.right
                             color: Theme.secondaryColor
+                            font.pixelSize: Theme.fontSizeExtraSmall
                             text: durationText ? durationText : ""
                         }
                     }
