@@ -50,8 +50,8 @@ Page {
             showBusy = true;
             upnp.search(searchQuery, 0, maxCount);
             //console.log("search start="+startIndex);
-        } else
-            searchModel.clear();
+        }
+        searchModel.clear();
     }
 
     function searchMore(start) {
@@ -431,6 +431,7 @@ Page {
     }
 
     function addGroupToPlayer(field, value) {
+        var tracks = [];
         for(var i=0;i<listView.model.count;i++) {
             if(listView.model.get(i).type === "Item") {
                 var track = listView.model.get(i);
@@ -438,7 +439,6 @@ Page {
                     tracks.push(track);
             }
         }
-
         getPlayerPage().addTracks(tracks);
     }
 
