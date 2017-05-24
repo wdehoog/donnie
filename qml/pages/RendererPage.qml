@@ -52,9 +52,8 @@ Page {
     // state initiated by the app. not the actual state
     property bool playing : false
 
-    function refreshTransportState() {
+    function refreshTransportState(tstate) {
         var newState;
-        var tstate = getTransportState();
         if(tstate === "Playing")
             newState = 1;
         else if(tstate === "PausedPlayback")
@@ -80,7 +79,6 @@ Page {
 
     function getTransportState() {
         // {"curspeed":"1","tpstate":"Playing","tpstatus":"OK"}
-        upnp.getTransportInfoJsonAsync() // VISIT
         var stateJson = upnp.getTransportInfoJson()
         try {
             var tstate = JSON.parse(stateJson);
@@ -494,6 +492,10 @@ Page {
 
     }
 
+    property var transportInfo
+    property var mediaInfo
+    property var positionInfo
+
     Connections {
         target: upnp
         onMprisControl: {
@@ -515,7 +517,33 @@ Page {
         }
 
         onTransportInfo: {
-            console.log(transportInfoJson)
+            try {
+                transportInfo = JSON.parse(transportInfoJson)
+                refreshTransportState(transportInfo["tpstate"])
+                //console.log(transportInfoJson)
+            } catch(err) {
+                app.error("Exception in onTransportInfo: "+err)
+                app.error("json: " + transportInfoJson)
+            }
+        }
+
+        onPositionInfo: {
+            try {
+                positionInfo = JSON.parse(positionInfoJson)
+                //console.log(positionInfoJson)
+            } catch(err) {
+                app.error("Exception in onPositionInfo: "+err)
+                app.error("json: " + positionInfoJson)
+            }
+        }
+
+        onMediaInfo: {
+            try {
+                mediaInfo = JSON.parse(mediaInfoJson)
+            } catch(err) {
+                app.error("Exception in onMediaInfo: "+err)
+                app.error("json: " + mediaInfoJson)
+            }
         }
     }
 
@@ -649,7 +677,21 @@ Page {
         }
     }*/
 
-    property int skipRefresh: 0
+    function updateSlidersProgress(value) {
+        timeSliderValue = value
+        timeSliderValueText = UPnP.formatDuration(value)
+        cover.coverProgressBar.value = value
+
+    }
+
+    function updateCoverProgress() {
+        if(currentItem > -1)
+          cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + timeSliderValueText
+        else
+          cover.coverProgressBar.label = ""
+    }
+
+    property int skipRefresh: 1
     property int failedAttempts: 0
     property int stoppedPlayingDetection: 0
     Timer {
@@ -662,19 +704,23 @@ Page {
             // do not refresh all info every second but do show progress
             skipRefresh++
             if(skipRefresh>1) {
-
                 if(transportState === 1) {
-                    timeSliderValue = timeSliderValue + 1
-                    cover.coverProgressBar.value = timeSliderValue
+                    // if using the slider, don't update the value
+                    if(!timeSliderDown) {
+                        updateSlidersProgress(timeSliderValue + 1)
+                        updateCoverProgress()
+                    }
                 }
-
                 skipRefresh = 0
                 return
             }
 
-            // update and check transport state
-            refreshTransportState()
-            /*if(playing && transportState <= 0) { // detect renderer has stopped unexpectedly
+            // trigger update of transport state and position info
+            upnp.getTransportInfoJsonAsync()
+            upnp.getPositionInfoJsonAsync()
+
+            /* Disabled since it is triggered too soon
+              if(playing && transportState <= 0) { // detect renderer has stopped unexpectedly
                 stoppedPlayingDetection++
                 if(stoppedPlayingDetection > 3) {
                     playing = false
@@ -686,9 +732,10 @@ Page {
                 stoppedPlayingDetection = 0
             */
 
-            // read time to update ui and detect track changes
+            // update ui and detect track changes
             // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
-            var pinfo = getPositionInfo()
+            var pinfo = positionInfo
+            positionInfo = undefined // use only once
             if(pinfo === undefined) {
                 failedAttempts++
                 app.error("Error: getPositionInfo() failed")
@@ -714,24 +761,13 @@ Page {
 
             if(timeSliderMaximumValue != trackduration && trackduration > -1) {
                 timeSliderMaximumValue = trackduration
-                //console.log("setting timeSliderMaximumValue to "+timeSliderMaximumValue)
                 cover.coverProgressBar.maximumValue = trackduration
             }
 
-            // Check User is using the slider, if so don't update the value
+            // if using the slider, don't update the value
             if(!timeSliderDown) {
-
-                // value
-                timeSliderValue = tracktime
-                cover.coverProgressBar.value = tracktime
-                //console.log("setting timeSliderValue to "+tracktime)
-                timeSliderValueText = UPnP.formatDuration(tracktime)
-                //console.log("setting timeSliderValueText to "+timeSliderValueText)
-                if(currentItem > -1)
-                  cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + timeSliderValueText
-                else
-                  cover.coverProgressBar.label = ""
-
+                updateSlidersProgress(tracktime)
+                updateCoverProgress()
             }
 
             // how to detect track change? uri will mostly work
