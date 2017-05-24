@@ -42,6 +42,52 @@ devel-su pkcon ref
 devel-su pkcon install donnie
 ```
 
+###  Usage
+#### Main page
+Shows the current Renderer and Content Server. Click on the area to select another one.
+
+Three buttons open the Browse, Renderer or Player pages.
+
+Pully menus give access to:
+
+  * Settings Page
+  * About Page
+
+#### Browser
+Will browse the Content Server. 
+
+Click on a folder or album to open it. A long press on an item will open a context menu with: 
+
+  * Add to Player
+  * Replace in Player
+  * Add All to Player
+  * Replace All in Player
+
+Pully/Push menus will allow to load more list items (if available):
+
+  * Load More
+  * Load Next Set
+  * Load Previous Set
+  
+#### Search
+Will allow to query the Content Server. The result list provides the same functions as the Browse list.
+
+The search can be performd on one or more of the following fields: Creator, Title, Album, Artist or Genre.
+
+The search results can be grouped by Creator, Title, Album, Artist and Genre.
+
+#### Player
+Gives access to the player controls. You can:
+
+  * Pause/Play/Stop
+  * Next/Previous
+  * Set Volume and Mute
+  * Seek
+  * Select track
+  * Remove a track
+
+A Pully menu allows to Empty the list.
+
 ### Development
 This project is developed with the Sailfish OS IDE (QT Creator). It needs libupnpp, libupnp and libmpdclient to be installed on the Build Target (VM) and the Deploy Target (phone). All three can be found in my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog/sailfish_latest_armv7hl/).
 
