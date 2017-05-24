@@ -71,6 +71,7 @@ public:
     Q_INVOKABLE QString getMediaInfoJson();
 
     Q_INVOKABLE void getTransportInfoJsonAsync();
+    Q_INVOKABLE void getMediaInfoJsonAsync();
 
     // for mpris control
     Q_INVOKABLE void mprisPlay();
@@ -91,6 +92,7 @@ signals:
     void error(QString msg);
     void mprisControl(QString action);
     void transportInfo(QString transportInfoJson);
+    void mediaInfo(QString mediaInfoJson);
 
 public slots:
     void onGetRendererDone(QString rendererJson);
@@ -100,6 +102,7 @@ public slots:
     void onSearchDone(QString searchResultsJson);
     void onError(QString msg);
     void onTransportInfo(QString transportInfoJson);
+    void onMediaInfo(QString mediaInfoJson);
 
 protected:
     UPnPP::LibUPnP * libUPnP;

@@ -18,6 +18,7 @@
 #include "upnpgetrendererworker.h"
 #include "upnpgetserverworker.h"
 #include "upnpgettransportinforunnable.h"
+#include "upnpgetmediainforunnable.h"
 
 #include <MprisPlayer>
 
@@ -908,6 +909,31 @@ void UPNP::getTransportInfoJsonAsync() {
 
 void UPNP::onTransportInfo(QString transportInfoJson) {
     emit transportInfo(transportInfoJson);
+}
+
+void UPNP::getMediaInfoJsonAsync() {
+    if(!currentRenderer) {
+        emit error("UPNP::getMediaInfoJsonAsync: No Current Renderer");
+        return;
+    }
+
+    UPnPClient::AVTH avt = currentRenderer->avt();
+    if (!avt) {
+        emit error("UPNP::getMediaInfoJsonAsync: Device has no AVTransport service");
+        return;
+    }
+
+    UPnPGetMediaInfoRunnable * tr = new UPnPGetMediaInfoRunnable(avt);
+    tr->setAutoDelete(true);
+
+    connect(tr, SIGNAL (error(QString)), this, SLOT (onError(QString)));
+    connect(tr, SIGNAL (mediaInfo(QString)), this, SLOT (onMediaInfo(QString)));
+
+    QThreadPool::globalInstance()->start(tr);
+}
+
+void UPNP::onMediaInfo(QString mediaInfoJson) {
+    emit mediaInfo(mediaInfoJson);
 }
 
 
