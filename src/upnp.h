@@ -90,6 +90,7 @@ signals:
     void searchDone(QString searchResultsJson);
     void error(QString msg);
     void mprisControl(QString action);
+    void transportInfo(QString transportInfoJson);
 
 public slots:
     void onGetRendererDone(QString rendererJson);
@@ -98,6 +99,7 @@ public slots:
     void onBrowseDone(QString contentsJson);
     void onSearchDone(QString searchResultsJson);
     void onError(QString msg);
+    void onTransportInfo(QString transportInfoJson);
 
 protected:
     UPnPP::LibUPnP * libUPnP;

@@ -898,7 +898,16 @@ void UPNP::getTransportInfoJsonAsync() {
     }
 
     UPnPGetTransportRunnable * tr = new UPnPGetTransportRunnable(avt);
+    tr->setAutoDelete(true);
+
+    connect(tr, SIGNAL (error(QString)), this, SLOT (onError(QString)));
+    connect(tr, SIGNAL (transportInfo(QString)), this, SLOT (onTransportInfo(QString)));
+
     QThreadPool::globalInstance()->start(tr);
+}
+
+void UPNP::onTransportInfo(QString transportInfoJson) {
+    emit transportInfo(transportInfoJson);
 }
 
 
