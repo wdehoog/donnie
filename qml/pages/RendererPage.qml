@@ -760,7 +760,6 @@ Page {
             positionInfo = undefined // use only once
             if(pinfo === undefined) {
                 failedAttempts++
-                app.error("Error: getPositionInfo() failed")
                 if(failedAttempts > 3) {
                     reset()
                     var errTxt = "Lost connection with Renderer."
