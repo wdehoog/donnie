@@ -37,6 +37,7 @@ UPNP::UPNP(QObject *parent) :
     superdir = nullptr;
     currentRenderer = nullptr;
     currentServer = nullptr;
+    cavt = nullptr;
 
     mprisPlayer->setServiceName("donnie");
     mprisPlayer->setCanControl(true);
@@ -47,6 +48,7 @@ UPNP::UPNP(QObject *parent) :
 }
 
 void UPNP::init(int search_window) {
+
     if(!libUPnP || !libUPnP->ok()) {
         libUPnP = UPnPP::LibUPnP::getLibUPnP(false, 0, "wlan0"); //, "127.0.0.1");
         if (!libUPnP || !libUPnP->ok()) {
@@ -61,11 +63,10 @@ void UPNP::init(int search_window) {
         }
     }
     if (libUPnP && libUPnP->ok()) {
-        libUPnP->setLogLevel(UPnPP::LibUPnP::LogLevelDebug);
-        if (Logger::getTheLog("/tmp/donnie.log") == 0) {
-            std::cerr << "Can't initialize log" << std::endl;
-        } else
-            Logger::getTheLog("/tmp/donnie.log")->setLogLevel(Logger::LLDEB1);
+        libUPnP->setLogFileName("/home/nemo/.donnie.log", UPnPP::LibUPnP::LogLevelDebug);
+//        Logger::getTheLog("/home/nemo/.donnie.log")->setLogLevel(Logger::LLDEB1);
+//        if (Logger::getTheLog("stderr") == 0)
+//            std::cerr << "Can't initialize log" << std::endl;
     }
 
     if(!superdir) {
@@ -410,15 +411,24 @@ void UPNP::getServerJson(QString friendlyName, int search_window) {
 
 bool UPNP::setCurrentRenderer(QString name, bool isfriendlyname) {
     UPnPClient::MRDH newRenderer = getRenderer(name, isfriendlyname);
+
     if(newRenderer) {
+        std::cerr << "cpp setCurrentRenderer to: " + name.toStdString() <<  std::endl;
         if(currentRenderer) {
+            std::cerr << "  reset old renderer" <<  std::endl;
             currentRenderer.reset();
-            //delete avtPlayer;
+            cavt.reset();
         }
         currentRenderer = newRenderer;
-        //avtPlayer = new AVTPlayer(currentRenderer->avt());
+        if(currentRenderer)
+            // MediaRenderer has a weak_ptr to avt. since donnie does not use
+            // a permanent reference to it the AVTransport migth be deleted causing
+            // a segfault due to received upnp events. should not happen but it does.
+            // so save a ref to keep the object alive.
+            cavt = currentRenderer->avt();
         return true;
     }
+    std::cerr << "setCurrentRenderer: FAILED for" + name.toStdString() <<  std::endl;
     return false;
 }
 

@@ -112,6 +112,7 @@ protected:
     UPnPClient::UPnPDeviceDirectory *superdir;
     UPnPClient::MRDH currentRenderer;
     UPnPClient::CDSH currentServer;
+    UPnPClient::AVTH cavt;
 
     MprisPlayer *mprisPlayer;
 
