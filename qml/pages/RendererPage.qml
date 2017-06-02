@@ -65,7 +65,7 @@ Page {
         app.notifyTransportState(transportState);
     }
 
-    function getPositionInfo() {
+    /*function getPositionInfo() {
         // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
         var pinfoJson = upnp.getPositionInfoJson();
         //console.log(pinfoJson);
@@ -75,7 +75,7 @@ Page {
             app.error("Exception in getPositionInfo: "+err);
             app.error("json: " + pinfoJson);
         }
-    }
+    }*/
 
     function getTransportState() {
         // {"curspeed":"1","tpstate":"Playing","tpstatus":"OK"}
@@ -525,6 +525,7 @@ Page {
                 app.error("Exception in onTransportInfo: "+err)
                 app.error("json: " + transportInfoJson)
             }
+            refreshState = 2
         }
 
         onPositionInfo: {
@@ -535,6 +536,7 @@ Page {
                 app.error("Exception in onPositionInfo: "+err)
                 app.error("json: " + positionInfoJson)
             }
+            refreshState = 4
         }
 
         onMediaInfo: {
@@ -543,6 +545,17 @@ Page {
             } catch(err) {
                 app.error("Exception in onMediaInfo: "+err)
                 app.error("json: " + mediaInfoJson)
+            }
+        }
+
+        onError: {
+            switch(refreshState) {
+            case 1:
+                refreshState = 2
+                break
+            case 3:
+                refreshState = 4
+                break
             }
         }
     }
@@ -655,13 +668,6 @@ Page {
         return -1;
     }
 
-    function loadNextTrack() {
-        // still playing? then do not start next track
-        var tstate = getTransportState();
-        if(tstate === "Stopped")
-           next();
-    }
-
     // testing
     /*Timer {
         interval: 5000;
@@ -691,6 +697,13 @@ Page {
           cover.coverProgressBar.label = ""
     }
 
+    // 0 - inactive
+    // 1 - transportInfo requested
+    // 2 - transportInfo received
+    // 3 - positionInfo requested
+    // 4 - positionInfo requested
+    property int refreshState: 0
+
     property int skipRefresh: 1
     property int failedAttempts: 0
     property int stoppedPlayingDetection: 0
@@ -715,9 +728,18 @@ Page {
                 return
             }
 
-            // trigger update of transport state and position info
-            upnp.getTransportInfoJsonAsync()
-            upnp.getPositionInfoJsonAsync()
+            // check and trigger update of transport state and position info
+            switch(refreshState) {
+            case 0:
+            case 4:
+                upnp.getTransportInfoJsonAsync()
+                refreshState = 1
+                break;
+            case 2:
+                upnp.getPositionInfoJsonAsync()
+                refreshState = 3
+                break;
+            }
 
             /* Disabled since it is triggered too soon
               if(playing && transportState <= 0) { // detect renderer has stopped unexpectedly
@@ -783,15 +805,18 @@ Page {
                     var trackIndex = getTrackIndexForURI(trackuri)
                     if(trackIndex >= 0)
                         onChangedTrack(trackIndex)
-                    else if(trackuri === "") // no setNextAVTransportURI support?
-                        loadNextTrack()
+                    else if(trackuri === "") { // no setNextAVTransportURI support?
+                        if(transportInfo["tpstate"] === "Stopped")
+                           next();
+                    }
 
                 } else if(tracktime === 0
                           && abstime === prevAbsTime
                           && prevTrackTime > 0) {
 
                     // stopped playing so load next track
-                    loadNextTrack()
+                    if(transportInfo["tpstate"] === "Stopped")
+                       next();
 
                 }
 
