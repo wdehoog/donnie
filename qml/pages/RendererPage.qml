@@ -370,7 +370,6 @@ Page {
 
                 label: timeSliderLabel
                 maximumValue: timeSliderMaximumValue
-                //value: timeSliderValue
                 valueText: timeSliderValueText
 
                 onPositionChanged: {
@@ -379,11 +378,13 @@ Page {
                 }
 
                 onReleased: {
-                    console.log("timeSlider onReleased: value=" + value
-                                + ", sliderValue=" + sliderValue
-                                + ", maximumValue=" + maximumValue);
                     console.log("calling seek with " + sliderValue);
                     upnp.seek(sliderValue);
+                    updateSlidersProgress(sliderValue);
+                    // try to override update info which will make the slider jump back
+                    positionInfo = undefined
+                    upnp.getPositionInfoJsonAsync()
+                    refreshState = 5
                 }
             }
 
@@ -534,6 +535,10 @@ Page {
         }
 
         onPositionInfo: {
+            if(refreshState == 5) { // ignore first positionInfo after a seek
+                refreshState = 6
+                return
+            }
             try {
                 positionInfo = JSON.parse(positionInfoJson)
                 //console.log(positionInfoJson)
@@ -559,6 +564,7 @@ Page {
                 refreshState = 2
                 break
             case 3:
+            case 5:
                 refreshState = 4
                 break
             }
@@ -706,7 +712,9 @@ Page {
     // 1 - transportInfo requested
     // 2 - transportInfo received
     // 3 - positionInfo requested
-    // 4 - positionInfo requested
+    // 4 - positionInfo received
+    // 5 - positionInfo requested after seek
+    // 6 - ignored received positionInfo ( after seek)
     property int refreshState: 0
 
     property int skipRefresh: 1
@@ -727,6 +735,7 @@ Page {
                 refreshState = 1
                 break;
             case 2:
+            case 6:
                 upnp.getPositionInfoJsonAsync()
                 refreshState = 3
                 break;
@@ -734,10 +743,6 @@ Page {
             case 3:
                 // do nothing
                 break;
-            //default:
-            //    // something went wrong
-            //    refreshState = 0
-            //    break;
             }
 
             // do not refresh all info every second but do show progress
