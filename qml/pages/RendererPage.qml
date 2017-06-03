@@ -362,6 +362,7 @@ Page {
             Slider {
                 id: timeSlider
                 property int position: timeSliderValue
+                property string positionText: timeSliderValueText
 
                 enabled: true
                 anchors.left: parent.left
@@ -370,11 +371,15 @@ Page {
 
                 label: timeSliderLabel
                 maximumValue: timeSliderMaximumValue
-                valueText: timeSliderValueText
 
                 onPositionChanged: {
                     if (!pressed)
                         value = position
+                }
+
+                onPositionTextChanged: {
+                    if (!pressed)
+                        valueText = positionText
                 }
 
                 onReleased: {
