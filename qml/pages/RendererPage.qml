@@ -24,7 +24,6 @@ Page {
     property string trackText : ""
     property string albumText : ""
 
-    property bool timeSliderDown: false
     property string timeSliderLabel : ""
     property int timeSliderValue : 0
     property int timeSliderMaximumValue : 0
@@ -362,6 +361,8 @@ Page {
 
             Slider {
                 id: timeSlider
+                property int position: timeSliderValue
+
                 enabled: true
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -369,14 +370,18 @@ Page {
 
                 label: timeSliderLabel
                 maximumValue: timeSliderMaximumValue
-                value: timeSliderValue
+                //value: timeSliderValue
                 valueText: timeSliderValueText
 
-                onPressedChanged: {
-                    timeSliderDown = pressed;
-                    console.log("timeSlider onPressedChanged " + pressed);
+                onPositionChanged: {
+                    if (!pressed)
+                        value = position
                 }
+
                 onReleased: {
+                    console.log("timeSlider onReleased: value=" + value
+                                + ", sliderValue=" + sliderValue
+                                + ", maximumValue=" + maximumValue);
                     console.log("calling seek with " + sliderValue);
                     upnp.seek(sliderValue);
                 }
@@ -739,11 +744,8 @@ Page {
             skipRefresh++
             if(skipRefresh>1) {
                 if(transportState === 1) {
-                    // if using the slider, don't update the value
-                    if(!timeSliderDown) {
-                        updateSlidersProgress(timeSliderValue + 1)
-                        updateCoverProgress()
-                    }
+                    updateSlidersProgress(timeSliderValue + 1)
+                    updateCoverProgress()
                 }
                 skipRefresh = 0
                 return
@@ -793,11 +795,8 @@ Page {
                 cover.coverProgressBar.maximumValue = trackduration
             }
 
-            // if using the slider, don't update the value
-            if(!timeSliderDown) {
-                updateSlidersProgress(tracktime)
-                updateCoverProgress()
-            }
+            updateSlidersProgress(tracktime)
+            updateCoverProgress()
 
             // how to detect track change? uri will mostly work
             // but not when a track appears twice and next to each other.
