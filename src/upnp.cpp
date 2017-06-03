@@ -57,16 +57,18 @@ void UPNP::init(int search_window) {
             // try second time without specifying iface
             libUPnP = UPnPP::LibUPnP::getLibUPnP();
             if (!libUPnP || !libUPnP->ok()) {
-                if (libUPnP)
-                    std::cerr << libUPnP->errAsString("init 2nd try", libUPnP->getInitError()) << std::endl;
+                if (!libUPnP)
+                    std::cerr << "init failed to create libUPnP 2nd try" << std::endl;
+                else
+                    std::cerr << libUPnP->errAsString("Error on init 2nd try: ", libUPnP->getInitError()) << std::endl;
             }
         }
-    }
-    if (libUPnP && libUPnP->ok()) {
-        libUPnP->setLogFileName("/home/nemo/.donnie.log", UPnPP::LibUPnP::LogLevelDebug);
-//        Logger::getTheLog("/home/nemo/.donnie.log")->setLogLevel(Logger::LLDEB1);
-//        if (Logger::getTheLog("stderr") == 0)
-//            std::cerr << "Can't initialize log" << std::endl;
+        if (libUPnP && libUPnP->ok()) {
+            libUPnP->setLogFileName("/home/nemo/.donnie.log", UPnPP::LibUPnP::LogLevelDebug);
+    //        Logger::getTheLog("/home/nemo/.donnie.log")->setLogLevel(Logger::LLDEB1);
+    //        if (Logger::getTheLog("stderr") == 0)
+    //            std::cerr << "Can't initialize log" << std::endl;
+        }
     }
 
     if(!superdir) {
