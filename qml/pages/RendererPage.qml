@@ -714,6 +714,27 @@ Page {
         repeat: true
         onTriggered: {
 
+            // check and trigger update of transport state and position info
+            switch(refreshState) {
+            case 0:
+            case 4:
+                upnp.getTransportInfoJsonAsync()
+                refreshState = 1
+                break;
+            case 2:
+                upnp.getPositionInfoJsonAsync()
+                refreshState = 3
+                break;
+            case 1:
+            case 3:
+                // do nothing
+                break;
+            //default:
+            //    // something went wrong
+            //    refreshState = 0
+            //    break;
+            }
+
             // do not refresh all info every second but do show progress
             skipRefresh++
             if(skipRefresh>1) {
@@ -726,19 +747,6 @@ Page {
                 }
                 skipRefresh = 0
                 return
-            }
-
-            // check and trigger update of transport state and position info
-            switch(refreshState) {
-            case 0:
-            case 4:
-                upnp.getTransportInfoJsonAsync()
-                refreshState = 1
-                break;
-            case 2:
-                upnp.getPositionInfoJsonAsync()
-                refreshState = 3
-                break;
             }
 
             /* Disabled since it is triggered too soon
