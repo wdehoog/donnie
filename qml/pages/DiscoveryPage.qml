@@ -328,7 +328,7 @@ Page {
     ConfigurationValue {
             id: search_window
             key: "/donnie/search_window"
-            defaultValue: 10
+            defaultValue: 2
     }
     ConfigurationValue {
             id: renderer_udn
