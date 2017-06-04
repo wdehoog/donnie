@@ -4,6 +4,8 @@ A UPnP Control Point and Audio Player for SailfishOS. It is written in QML and C
 
 I use it on my Oneplus One running it's SailfishOS port. For Content Server I use `minidlna` and `minimserver` and for Renderer `mopidy/upmpdcli` on a computer and `rygel` on my phone.
 
+See the [screenshots](https://github.com/wdehoog/donnie/tree/master/screenshots) directory for how it looks.
+
 Note that it is still fresh and under development so things might not work as expected.
 
 ### Features
@@ -16,7 +18,6 @@ Note that it is still fresh and under development so things might not work as ex
 
 
 ### Issues
-  * It crashes. Don't know when. Don't know why.
   * Sometimes not all UPnP devices are discovered. A restart of the app can help.
   * Donnie will probably fail if another control point interferes.
   * When the same track appears twice in the list and next to each other a
