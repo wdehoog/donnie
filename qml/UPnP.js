@@ -283,6 +283,7 @@ function createListItem(item) {
         album: item.properties["upnp:album"],
         albumArtURI: item.properties["upnp:albumArtURI"],
         uri: item.resources[0]["Uri"],
+        didl: item["didl"],
         duration: (item.resources[0] && item.resources[0].attributes["duration"])
                       ? item.resources[0].attributes["duration"] : "",
         protocolInfo: (item.resources[0] && item.resources[0].attributes["protocolInfo"])
