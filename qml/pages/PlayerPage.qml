@@ -16,7 +16,8 @@ Page {
 
     property bool playerPageActive: false
     property alias audio: audio
-    property string imageItemSource : ""
+    property string defaultImageSource : "image://theme/icon-l-music"
+    property string imageItemSource : defaultImageSource
     property string playIconSource : "image://theme/icon-l-play"
     property int currentItem: -1
     property bool metaShown : false
@@ -111,8 +112,8 @@ Page {
             imageItemSource = track.albumArtURI;
             cover.imageSource = track.albumArtURI;
         } else {
-            imageItemSource = "";
-            cover.imageSource = "";
+            imageItemSource = defaultImageSource;
+            cover.imageSource = cover.defaultImageSource;
         }
         //audio.play();
         if(audio.playbackState == Audio.PlayingState) {
@@ -136,9 +137,9 @@ Page {
         albumText = "";
         trackClass = "";
         currentItem = -1;
-        imageItemSource = "";
+        imageItemSource = defaultImageSource;
 
-        cover.imageSource = "";
+        cover.imageSource = cover.defaultImageSource;
         cover.coverProgressBar.label = "";
     }
 

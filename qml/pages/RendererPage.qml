@@ -17,7 +17,8 @@ import "../UPnP.js" as UPnP
 Page {
     id: rendererPage
     //property bool rendererPageActive: false
-    property string imageItemSource : ""
+    property string defaultImageSource : "image://theme/icon-l-music"
+    property string imageItemSource : defaultImageSource
     property string playIconSource : "image://theme/icon-l-play"
     property int currentItem: -1
     property bool metaShown : false
@@ -196,8 +197,8 @@ Page {
             imageItemSource = track.albumArtURI;
             cover.imageSource = track.albumArtURI;
         } else {
-            imageItemSource = "";
-            cover.imageSource = "";
+            imageItemSource = defaultImageSource;
+            cover.imageSource = cover.defaultImageSource;
         }
         trackText = track.titleText;
         albumText = track.metaText;
@@ -265,10 +266,10 @@ Page {
         trackText = "";
         albumText = "";
         currentItem = -1;
-        imageItemSource = "";
+        imageItemSource = defaultImageSource;
 
-        cover.imageSource = "image://theme/icon-l-pause";
-        cover.coverProgressBar.label = "image://theme/icon-l-pause";
+        cover.imageSource = cover.defaultImageSource;
+        cover.coverProgressBar.label = "";
     }
 
 

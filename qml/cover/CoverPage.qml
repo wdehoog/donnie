@@ -11,7 +11,8 @@ import Sailfish.Silica 1.0
 CoverBackground {
     id: cover
 
-    property string imageSource : ""
+    property string defaultImageSource : "image://theme/icon-l-music"
+    property string imageSource : defaultImageSource
     property string playIconSource : "image://theme/icon-cover-play"
     property alias coverProgressBar : coverProgressBar
 
