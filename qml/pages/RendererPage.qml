@@ -76,7 +76,7 @@ Page {
         }
     }*/
 
-    function getTransportState() {
+    /*function getTransportState() {
         // {"curspeed":"1","tpstate":"Playing","tpstatus":"OK"}
         var stateJson = upnp.getTransportInfoJson()
         try {
@@ -86,7 +86,7 @@ Page {
             app.error("Exception in getTransportState: "+err);
             app.error("json: " + stateJson);
         }
-    }
+    }*/
 
     function getMediaInfo() {
         var mediaInfoJson = upnp.getMediaInfoJson();
@@ -113,8 +113,7 @@ Page {
     }
 
     function pause() {
-        var tstate = getTransportState();
-        if(tstate === "Playing") {
+        if(transportInfo["tpstate"] === "Playing") {
             var r;
             if((r = upnp.pause()) !== 0) {
                 app.showErrorDialog("Failed to Pause the Renderer");
@@ -159,6 +158,7 @@ Page {
 
     function reset() {
         playing = false;
+        transportState = -1
         playIconSource =  "image://theme/icon-l-play";
         cover.playIconSource = "image://theme/icon-cover-play";
     }
@@ -247,8 +247,8 @@ Page {
         updateUIForTrack(track)
         updateMprisForTrack(track)
 
-        if(!playing)
-            play()
+        //if(!playing)
+        //    play()
 
         // if available set next track
         if(useNextURI && trackListModel.count > (currentItem+1)) {
@@ -553,7 +553,6 @@ Page {
             }
             try {
                 positionInfo = JSON.parse(positionInfoJson)
-                console.log(positionInfoJson)
 
                 if(refreshState == 6) {
                     // ignore positionInfo after a seek having abs/reltime == 0
@@ -654,10 +653,18 @@ Page {
     }
 
     function addTracks(tracks) {
+        var wasAtLastTrack = currentItem == (trackListModel.count-1);
         addTracksNoStart(tracks);
         if(currentItem == -1 && trackListModel.count > 0) {
+            // start playing
             currentItem = 0;
             loadTrack();
+            play();
+        } else if(wasAtLastTrack) {
+            // if the last track is playing there is no nexturi
+            // but now it can be set
+            var track = trackListModel.get(currentItem+1)
+            upnp.setNextTrack(track.uri, track.didl);
         }
 
         //rendererPageActive = true;
@@ -729,13 +736,14 @@ Page {
           cover.coverProgressBar.label = ""
     }
 
-    // 0 - inactive
-    // 1 - transportInfo requested
-    // 2 - transportInfo received
-    // 3 - positionInfo requested
-    // 4 - positionInfo received
-    // 5 - ignore after seek has been called
-    // 6 - check vor valid times after seek has been called
+    //   0 - inactive
+    //   1 - transportInfo requested
+    //   2 - transportInfo received
+    //   3 - positionInfo requested
+    //   4 - positionInfo received
+    //   5 - ignore after seek has been called
+    //   6 - check for valid times after seek has been called
+    // 128 - lost connection with renderer
     property int refreshState: 0
 
     property int skipRefresh: 1
@@ -743,7 +751,7 @@ Page {
     property int stoppedPlayingDetection: 0
     Timer {
         interval: 1000;
-        running: app.hasCurrentRenderer()
+        running: app.hasCurrentRenderer() && !useBuiltInPlayer
         repeat: true
         onTriggered: {
 
@@ -751,6 +759,7 @@ Page {
             switch(refreshState) {
             case 0:
             case 4:
+            case 128:
                 upnp.getTransportInfoJsonAsync()
                 refreshState = 1
                 break
@@ -766,15 +775,17 @@ Page {
             case 6:
                 // in state 5/6 positionInfo can be skipped so does need to be refreshed
                 // to get a good one asap
-                upnp.getPositionInfoJsonAsync()
                 // while seeking it is of no use to update the player info so bail out
+            case 128:
+                // in state 128 we try to get contact with the renderer again
+                upnp.getPositionInfoJsonAsync()
                 return
             }
 
             // do not refresh all info every second but do show progress
             skipRefresh++
-            if(skipRefresh>1) {
-                if(transportState === 1) {
+            if(skipRefresh > 1) {
+                if(transportState === 1 && timeSliderValue > 0) {
                     updateSlidersProgress(timeSliderValue + 1)
                     updateCoverProgress()
                 }
@@ -782,18 +793,19 @@ Page {
                 return
             }
 
-            /* Disabled since it is triggered too soon
-              if(playing && transportState <= 0) { // detect renderer has stopped unexpectedly
+            // detect renderer has stopped unexpectedly
+            if(playing && transportState <= 0) {
                 stoppedPlayingDetection++
                 if(stoppedPlayingDetection > 3) {
-                    playing = false
-                    playIconSource =  "image://theme/icon-l-play"
-                    cover.playIconSource = "image://theme/icon-cover-play"
-                    app.showErrorDialog("The renderer has stopped playing unexpectedly.")
+                    reset()
+                    stoppedPlayingDetection = 0
+                    // for now stopped at the last track is considered normal
+                    if(currentItem < (trackListModel.count-1))
+                        app.showErrorDialog("The renderer has stopped playing unexpectedly.")
                 }
             } else
                 stoppedPlayingDetection = 0
-            */
+
 
             // update ui and detect track changes
             var pinfo = positionInfo
@@ -807,6 +819,7 @@ Page {
                     var errTxt = "Lost connection with Renderer."
                     app.error(errTxt)
                     app.showErrorDialog(errTxt)
+                    refreshState = 128
                 }
                 return
             } else
