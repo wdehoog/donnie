@@ -419,15 +419,15 @@ bool UPNP::setCurrentRenderer(QString name, bool isfriendlyname) {
         if(currentRenderer) {
             std::cerr << "  reset old renderer" <<  std::endl;
             currentRenderer.reset();
-            cavt.reset();
+            //cavt.reset();
         }
         currentRenderer = newRenderer;
-        if(currentRenderer)
+        //if(currentRenderer)
             // MediaRenderer has a weak_ptr to avt. since donnie does not use
             // a permanent reference to it the AVTransport migth be deleted causing
             // a segfault due to received upnp events. should not happen but it does.
             // so save a ref to keep the object alive.
-            cavt = currentRenderer->avt();
+            //cavt = currentRenderer->avt();
         return true;
     }
     std::cerr << "setCurrentRenderer: FAILED for" + name.toStdString() <<  std::endl;
