@@ -66,7 +66,6 @@ Page {
     }
 
     /*function getPositionInfo() {
-        // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
         var pinfoJson = upnp.getPositionInfoJson();
         //console.log(pinfoJson);
         try {
@@ -385,12 +384,11 @@ Page {
 
                 onReleased: {
                     console.log("calling seek with " + sliderValue);
+                    refreshState = 5
+                    positionInfo = undefined
                     upnp.seek(sliderValue);
                     updateSlidersProgress(sliderValue);
-                    // try to override update info which will make the slider jump back
-                    positionInfo = undefined
                     upnp.getPositionInfoJsonAsync()
-                    refreshState = 5
                 }
             }
 
@@ -529,10 +527,10 @@ Page {
         }
 
         onTransportInfo: {
+            //console.log("onTransportInfo: " + transportInfoJson)
             try {
                 transportInfo = JSON.parse(transportInfoJson)
                 refreshTransportState(transportInfo["tpstate"])
-                //console.log(transportInfoJson)
             } catch(err) {
                 app.error("Exception in onTransportInfo: "+err)
                 app.error("json: " + transportInfoJson)
@@ -540,14 +538,34 @@ Page {
             refreshState = 2
         }
 
+        // On receiving position info parse and set the data
+        // It seems that a renderer can send position 0 after a seek
+        // this position info is then ignored
+        //
+        // {"abscount":"9080364","abstime":"27",
+        //  "relcount":"9080364","reltime":"27",
+        //  "trackduration":"378","trackuri":"http....."}
         onPositionInfo: {
+            //console.log("OnPositionInfo: refreshState:" + refreshState + ", json:" + positionInfoJson)
             if(refreshState == 5) { // ignore first positionInfo after a seek
                 refreshState = 6
                 return
             }
             try {
                 positionInfo = JSON.parse(positionInfoJson)
-                //console.log(positionInfoJson)
+                console.log(positionInfoJson)
+
+                if(refreshState == 6) {
+                    // ignore positionInfo after a seek having abs/reltime == 0
+                    // the value is useless and it would make the slider jump back and forth
+                    if(positionInfo["reltime"] == 0
+                       && positionInfo["abstime"] == 0
+                       && positionInfo["trackuri"] === prevTrackURI) {
+                        positionInfo = undefined
+                        return
+                    }
+                }
+
             } catch(err) {
                 app.error("Exception in onPositionInfo: "+err)
                 app.error("json: " + positionInfoJson)
@@ -556,6 +574,7 @@ Page {
         }
 
         onMediaInfo: {
+            //console.log("onMediaInfo: " + mediaInfoJson)
             try {
                 mediaInfo = JSON.parse(mediaInfoJson)
             } catch(err) {
@@ -571,6 +590,7 @@ Page {
                 break
             case 3:
             case 5:
+            case 6:
                 refreshState = 4
                 break
             }
@@ -626,11 +646,6 @@ Page {
             optional: true
         }
     }
-
-    //onStatusChanged: {
-        //if(status !== PageStatus.Active)
-        //    return;
-    //}
 
     function addTracksNoStart(tracks) {
         var i;
@@ -701,10 +716,10 @@ Page {
     }*/
 
     function updateSlidersProgress(value) {
+        //console.log("updateSlidersProgress value:"+value)
         timeSliderValue = value
         timeSliderValueText = UPnP.formatDuration(value)
         cover.coverProgressBar.value = value
-
     }
 
     function updateCoverProgress() {
@@ -719,8 +734,8 @@ Page {
     // 2 - transportInfo received
     // 3 - positionInfo requested
     // 4 - positionInfo received
-    // 5 - positionInfo requested after seek
-    // 6 - ignored received positionInfo ( after seek)
+    // 5 - ignore after seek has been called
+    // 6 - check vor valid times after seek has been called
     property int refreshState: 0
 
     property int skipRefresh: 1
@@ -728,7 +743,6 @@ Page {
     property int stoppedPlayingDetection: 0
     Timer {
         interval: 1000;
-        //running: rendererPageActive;
         running: app.hasCurrentRenderer()
         repeat: true
         onTriggered: {
@@ -739,16 +753,22 @@ Page {
             case 4:
                 upnp.getTransportInfoJsonAsync()
                 refreshState = 1
-                break;
+                break
             case 2:
-            case 6:
                 upnp.getPositionInfoJsonAsync()
                 refreshState = 3
-                break;
+                break
             case 1:
             case 3:
                 // do nothing
-                break;
+                break
+            case 5:
+            case 6:
+                // in state 5/6 positionInfo can be skipped so does need to be refreshed
+                // to get a good one asap
+                upnp.getPositionInfoJsonAsync()
+                // while seeking it is of no use to update the player info so bail out
+                return
             }
 
             // do not refresh all info every second but do show progress
@@ -776,10 +796,11 @@ Page {
             */
 
             // update ui and detect track changes
-            // {"abscount":"9080364","abstime":"27","relcount":"9080364","reltime":"27","trackduration":"378"}
             var pinfo = positionInfo
             positionInfo = undefined // use only once
             if(pinfo === undefined) {
+                if(refreshState >= 5) // 5 & 6 skip positionInfo
+                    return
                 failedAttempts++
                 if(failedAttempts > 3) {
                     reset()
