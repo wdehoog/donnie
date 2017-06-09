@@ -93,7 +93,7 @@ function repeatChar(count, ch) {
 function getPathString(browseStack, id) {
     var pathString = "";
     var elements = browseStack.elements();
-    for(var i=1; i<elements.length;i++) {
+    for(var i=0; i<elements.length;i++) {
         pathString += elements[i].title;
         if(elements[i].id === id)
             break;
@@ -106,7 +106,7 @@ function getPathString(browseStack, id) {
 function getCurrentPathString(browseStack) {
     var pathString = "";
     var elements = browseStack.elements();
-    for(var i=1; i<elements.length;i++) {
+    for(var i=0; i<elements.length;i++) {
         pathString += elements[i].title;
         if(i<(elements.length-1))
             pathString += "/";
@@ -117,7 +117,7 @@ function getCurrentPathString(browseStack) {
 function getCurrentPathTreeString(browseStack) {
     var pathTreeString = "";
     var elements = browseStack.elements();
-    for(var i=1; i<elements.length;i++) {
+    for(var i=0; i<elements.length;i++) {
         var spaces = repeatChar(i, ' ');
         pathTreeString += spaces + elements[i].title;
         if(i<(elements.length-1))

@@ -36,6 +36,8 @@ Page {
             var i;
 
             try {
+
+                console.log(contentsJson)
                 contents = JSON.parse(contentsJson);
 
                 // no ".." for the root or if there already is one
@@ -217,7 +219,7 @@ Page {
                   source: {
                       if(pid === "-2") // the ".." item
                           return "image://theme/icon-m-back";
-                      if(type === "Container" && upnpclass !== "object.container.album.musicAlbum")
+                      if(type === "Container") // && upnpclass !== "object.container.album.musicAlbum")
                           return "image://theme/icon-m-folder";
                       return "";
                   }
@@ -314,9 +316,10 @@ Page {
 
             Component.onCompleted: {
                 var menuItems = app.currentBrowseStack.elements();
-                for (var i = 0; i < menuItems.length; i++) {
+                for (var i = 1; i <= menuItems.length; i++) {
                     var child = menuItems[menuItems.length-i];
                     items.append( {"item": child } );
+                    console.log("added:" +child.title)
                 }
             }
 
