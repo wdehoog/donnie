@@ -58,7 +58,7 @@ Page {
                     Label {
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Theme.fontSizeLarge
-                        text: "Donnie 0.4"
+                        text: "Donnie 0.5"
                     }
 
                     Label {

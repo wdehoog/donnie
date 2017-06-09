@@ -46,11 +46,12 @@ Page {
     property bool canPlay: hasTracks && transportState != 1
     property bool canPause: transportState == 1
 
-    // 1 playing, 2 paused, the rest inactive
-    property int transportState : -1
 
     // state initiated by the app. not the actual state
     property bool playing : false
+
+    // -1 initial, 1 playing, 2 paused, 3 stopped the rest inactive
+    property int transportState : -1
 
     function refreshTransportState(tstate) {
         var newState;
@@ -58,6 +59,8 @@ Page {
             newState = 1;
         else if(tstate === "PausedPlayback")
             newState = 2;
+        else if(tstate === "Stopped")
+            newState = 3
         else
             newState = -1;
         transportState = newState;
@@ -745,16 +748,12 @@ Page {
     //   6 - check for valid times after seek has been called
     // 128 - lost connection with renderer
     property int refreshState: 0
-
-    property int skipRefresh: 1
-    property int failedAttempts: 0
-    property int stoppedPlayingDetection: 0
     Timer {
+        id: fetchRendererInfo
         interval: 1000;
-        running: app.hasCurrentRenderer() && !useBuiltInPlayer
+        running: handleRendererInfo.running
         repeat: true
         onTriggered: {
-
             // check and trigger update of transport state and position info
             switch(refreshState) {
             case 0:
@@ -782,19 +781,20 @@ Page {
                 return
             }
 
-            // do not refresh all info every second but do show progress
-            skipRefresh++
-            if(skipRefresh > 1) {
-                if(transportState === 1 && timeSliderValue > 0) {
-                    updateSlidersProgress(timeSliderValue + 1)
-                    updateCoverProgress()
-                }
-                skipRefresh = 0
-                return
-            }
+        }
+    }
+
+    property int failedAttempts: 0
+    property int stoppedPlayingDetection: 0
+    Timer {
+        id: handleRendererInfo
+        interval: 1000;
+        running: app.hasCurrentRenderer() && !useBuiltInPlayer
+        repeat: true
+        onTriggered: {
 
             // detect renderer has stopped unexpectedly
-            if(playing && transportState <= 0) {
+            if(playing && transportState == 3) {
                 stoppedPlayingDetection++
                 if(stoppedPlayingDetection > 3) {
                     reset()
@@ -802,17 +802,27 @@ Page {
                     // for now stopped at the last track is considered normal
                     if(currentItem < (trackListModel.count-1))
                         app.showErrorDialog("The renderer has stopped playing unexpectedly.")
+                    return
                 }
             } else
                 stoppedPlayingDetection = 0
 
-
-            // update ui and detect track changes
+            // handle position info
             var pinfo = positionInfo
-            positionInfo = undefined // use only once
-            if(pinfo === undefined) {
-                if(refreshState >= 5) // 5 & 6 skip positionInfo
+            positionInfo = undefined   // use it only once
+            if(pinfo === undefined) {  // if no new info
+
+                // in state 5 & 6 positionInfo is skipped on purpose
+                if(refreshState >= 5)
                     return
+
+                // pretend progress
+                if(transportState === 1 && timeSliderValue > 0) {
+                    updateSlidersProgress(timeSliderValue + 1)
+                    updateCoverProgress()
+                }
+
+                // detect lost connection
                 failedAttempts++
                 if(failedAttempts > 3) {
                     reset()
@@ -820,10 +830,14 @@ Page {
                     app.error(errTxt)
                     app.showErrorDialog(errTxt)
                     refreshState = 128
-                }
+                    return
+                } else
+                    failedAttempts = 0
+
                 return
-            } else
-                failedAttempts = 0
+            }
+
+            // update ui and detect track changes
 
             var trackuri = pinfo["trackuri"]
             var trackduration = parseInt(pinfo["trackduration"])
@@ -873,7 +887,7 @@ Page {
 
             }
 
-            //
+            // save to detect changes
             prevTrackURI = trackuri
             prevTrackDuration = trackduration
             prevTrackTime = tracktime
