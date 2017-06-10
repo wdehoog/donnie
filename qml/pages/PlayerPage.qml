@@ -167,6 +167,7 @@ Page {
         model: trackListModel
         width: parent.width
         anchors.fill: parent
+        anchors.margins: Theme.paddingMedium
 
         PullDownMenu {
             MenuItem {
@@ -358,48 +359,43 @@ Page {
         delegate: ListItem {
             id: delegate
             width: parent.width
+            anchors.margins: Theme.paddingMedium
 
             Column {
-                anchors {
-                    left: parent.left
-                    leftMargin: Theme.horizontalPageMargin
-                    right: durationLabel.left
-                    rightMargin: Theme.paddingMedium
-                    //horizontalCenter: parent.horizontalCenter
-                }
+                width: parent.width
 
-                Label {
-                    color: currentItem === index ? Theme.highlightColor : Theme.primaryColor
-                    textFormat: Text.StyledText
-                    //truncationMode: TruncationMode.Fade
+                Item {
                     width: parent.width
-                    text: titleText
+                    height: tt.height
+
+                    Label {
+                        id: tt
+                        color: currentItem === index ? Theme.highlightColor : Theme.primaryColor
+                        textFormat: Text.StyledText
+                        truncationMode: TruncationMode.Fade
+                        width: parent.width - dt.width
+                        text: titleText
+                    }
+
+                    Label {
+                        id: dt
+                        anchors.right: parent.right
+                        color: currentItem === index ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                        font.pixelSize: Theme.fontSizeExtraSmall
+                        text: durationText
+                    }
                 }
 
                 Label {
                     color: currentItem === index ? Theme.secondaryHighlightColor : Theme.secondaryColor
                     font.pixelSize: Theme.fontSizeExtraSmall
-                    text: metaText
                     textFormat: Text.StyledText
-                    //truncationMode: TruncationMode.Fade
+                    truncationMode: TruncationMode.Fade
                     width: parent.width
-                }
-            }
-
-            Label {
-                id: durationLabel
-
-                anchors {
-                    right: parent.right
-                    rightMargin: Theme.horizontalPageMargin
-                    top: parent.top
-                    topMargin: Theme.paddingSmall
-                    //bottomMargin: Theme.paddingSmall
+                    visible: metaText ? metaText.length > 0 : false
+                    text: metaText
                 }
 
-                color: currentItem === index ? Theme.secondaryHighlightColor : Theme.secondaryColor
-                font.pixelSize: Theme.fontSizeExtraSmall
-                text: durationText
             }
 
             menu: contextMenu

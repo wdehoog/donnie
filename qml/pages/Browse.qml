@@ -37,7 +37,7 @@ Page {
 
             try {
 
-                console.log(contentsJson)
+                //console.log(contentsJson)
                 contents = JSON.parse(contentsJson);
 
                 // no ".." for the root or if there already is one
@@ -253,11 +253,11 @@ Page {
                     Label {
                         color: Theme.secondaryColor
                         font.pixelSize: Theme.fontSizeExtraSmall
-                        visible: metaText ? metaText.length > 0 : false
-                        text: metaText ? metaText : ""
                         textFormat: Text.StyledText
                         truncationMode: TruncationMode.Fade
                         width: parent.width
+                        visible: metaText ? metaText.length > 0 : false
+                        text: metaText ? metaText : ""
                     }
                 }
 
