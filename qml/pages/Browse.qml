@@ -214,15 +214,22 @@ Page {
 
                 Image {
                   id: imageItem
+                  width: sourceSize.width > 0 ? Theme.iconSizeMedium : 0
+                  height: Theme.iconSizeMedium
                   fillMode: Image.PreserveAspectFit
                   anchors.verticalCenter: parent.verticalCenter
                   source: {
                       if(pid === "-2") // the ".." item
                           return "image://theme/icon-m-back";
-                      if(type === "Container") // && upnpclass !== "object.container.album.musicAlbum")
-                          return "image://theme/icon-m-folder";
+                      if(type === "Container") { // && upnpclass !== "object.container.album.musicAlbum")
+                          if(albumArtURI && albumArtURI.length > 0)
+                              return albumArtURI
+                          else
+                              return "image://theme/icon-m-folder";
+                      }
                       return "";
                   }
+                  visible: sourceSize.width > 0
                 }
 
                 Column {
