@@ -256,6 +256,7 @@ function createListContainer(container) {
             durationText: getDateYear(container.properties["dc:date"]),
             artist: container.properties["upnp:artist"],
             album: container["title"],
+            albumArtURI: container.properties["upnp:albumArtURI"],
             duration: "",
             upnpclass: container.properties["upnp:class"]
         };
@@ -267,7 +268,7 @@ function createListContainer(container) {
             title: container["title"],
             titleText: container["title"],
             metaText: "", durationText: "",
-            artist: "", album: "", duration: "",
+            artist: "", album: "", albumArtURI: "", duration: "",
             upnpclass: container.properties["upnp:class"]
         };
 }
