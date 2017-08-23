@@ -229,7 +229,6 @@ Page {
                       }
                       return "";
                   }
-                  visible: sourceSize.width > 0
                 }
 
                 Column {
@@ -269,6 +268,7 @@ Page {
                 }
 
             }
+
             menu: contextMenu
 
             Component {
