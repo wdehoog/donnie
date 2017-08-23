@@ -16,7 +16,8 @@ import "../UPnP.js" as UPnP
 
 Page {
     id: rendererPage
-    //property bool rendererPageActive: false
+
+    property bool rendererPageActive: !app.useBuiltInPlayer
     property string defaultImageSource : "image://theme/icon-l-music"
     property string imageItemSource : defaultImageSource
     property string playIconSource : "image://theme/icon-l-play"
@@ -525,6 +526,7 @@ Page {
             }
         }
 
+        // {"curspeed":"1","tpstate":"Playing","tpstatus":"OK"}
         onTransportInfo: {
             //console.log("onTransportInfo: " + transportInfoJson)
             try {
@@ -614,19 +616,19 @@ Page {
     }
 
     MediaKey {
-        enabled: volumeKeysResource.acquired
+        enabled: rendererPageActive && hasCurrentRenderer() && volumeKeysResource.acquired
         key: Qt.Key_VolumeUp
         onPressed: increaseVolume()
     }
 
     MediaKey {
-        enabled: volumeKeysResource.acquired
+        enabled: rendererPageActive && hasCurrentRenderer() && volumeKeysResource.acquired
         key: Qt.Key_VolumeDown
         onPressed: decreaseVolume()
     }
 
     MediaKey {
-        enabled: true
+        enabled: rendererPageActive && hasCurrentRenderer()
         key: Qt.Key_ToggleCallHangup
         onReleased: pause()
     }
@@ -671,8 +673,10 @@ Page {
 
     onStatusChanged: {
         if(status == PageStatus.Active) {
-            if(app.hasCurrentRenderer())
+            if(app.hasCurrentRenderer()) {
                 volumeSliderValue = upnp.getVolume()
+                console.log("onStatusChanged initial volume=" + volumeSliderValue)
+            }
 
             if(!hasTracks) {
                 var minfo = getMediaInfo();
