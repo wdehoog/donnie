@@ -366,6 +366,7 @@ Page {
                 }
 
             }
+
             menu: contextMenu
 
             Component {
