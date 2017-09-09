@@ -304,17 +304,26 @@ function getAudioType(item) {
     var p;
     var t;
     if(item.protocolInfo) {
+
         // protocolInfo: "http-get:*:audio/ogg:DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000"
+        //               "http-get:*:*:*"
         var a = item.protocolInfo.split(':');
         if(a.length < 3)
             return "";
+
         p = a[2].indexOf("/");
-        if(p === -1)
-            return a[2];
+        if(p === -1) {
+            if(a[2].length > 1)
+                return a[2];
+            else
+                return "";
+        }
+
         t = a[2].substr(p+1);
         if(startsWith(t,"x-")) // for example audio/x-flac
             return t.substr(2);
         return t;
+
     } else if(item.uri) {
         p = item.uri.lastIndexOf(".");
         if(p === -1)
