@@ -215,19 +215,21 @@ Page {
                 Image {
                   id: imageItem
                   width: sourceSize.width > 0 ? Theme.iconSizeMedium : 0
-                  height: Theme.iconSizeMedium
+                  height: sourceSize.height > 0 ? Theme.iconSizeMedium : 0
                   fillMode: Image.PreserveAspectFit
                   anchors.verticalCenter: parent.verticalCenter
                   source: {
                       if(pid === "-2") // the ".." item
                           return "image://theme/icon-m-back";
-                      if(type === "Container") { // && upnpclass !== "object.container.album.musicAlbum")
+                      if(type === "Container") { //
                           if(albumArtURI && albumArtURI.length > 0)
                               return albumArtURI
+                          else if(upnpclass == "object.container.album.musicAlbum")
+                              return "image://theme/icon-m-music"
                           else
-                              return "image://theme/icon-m-folder";
+                              return "image://theme/icon-m-folder"
                       }
-                      return "";
+                      return ""
                   }
                 }
 
@@ -253,6 +255,7 @@ Page {
                             color: Theme.secondaryColor
                             font.pixelSize: Theme.fontSizeExtraSmall
                             text: durationText ? durationText : ""
+
                         }
                     }
 
@@ -262,7 +265,7 @@ Page {
                         textFormat: Text.StyledText
                         truncationMode: TruncationMode.Fade
                         width: parent.width
-                        visible: metaText ? metaText.length > 0 : false
+                        visible: metaText ? (metaText.length > 0) : false
                         text: metaText ? metaText : ""
                     }
                 }
