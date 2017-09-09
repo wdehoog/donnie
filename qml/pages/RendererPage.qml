@@ -674,9 +674,8 @@ Page {
     onStatusChanged: {
         if(status == PageStatus.Active) {
             if(app.hasCurrentRenderer()) {
-                //console.log("volume: "+ volumeControl.volume)
                 volumeSliderValue = upnp.getVolume()
-                console.log("onStatusChanged initial volume=" + volumeSliderValue)
+                console.log("onStatusChanged initial renderer volume=" + volumeSliderValue)
             }
 
             if(!hasTracks) {
