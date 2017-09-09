@@ -615,7 +615,7 @@ Page {
         setVolume(volumeSliderValue);
     }
 
-    MediaKey {
+    /*MediaKey {
         enabled: rendererPageActive && hasCurrentRenderer() && volumeKeysResource.acquired
         key: Qt.Key_VolumeUp
         onPressed: increaseVolume()
@@ -625,7 +625,7 @@ Page {
         enabled: rendererPageActive && hasCurrentRenderer() && volumeKeysResource.acquired
         key: Qt.Key_VolumeDown
         onPressed: decreaseVolume()
-    }
+    }*/
 
     MediaKey {
         enabled: rendererPageActive && hasCurrentRenderer()
@@ -633,7 +633,7 @@ Page {
         onReleased: pause()
     }
 
-    // needed for Volume Keys
+    // needed for Volume Keys and maybe also Key_ToggleCallHangup
     Permissions {
         enabled: true
         autoRelease: true
@@ -674,6 +674,7 @@ Page {
     onStatusChanged: {
         if(status == PageStatus.Active) {
             if(app.hasCurrentRenderer()) {
+                //console.log("volume: "+ volumeControl.volume)
                 volumeSliderValue = upnp.getVolume()
                 console.log("onStatusChanged initial volume=" + volumeSliderValue)
             }
