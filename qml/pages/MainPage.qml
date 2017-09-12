@@ -383,7 +383,7 @@ Page {
         }
 
         onError: {
-            console.log(msg);
+            console.log("Main::onError: " + msg);
             app.error(msg);
             showBusy = false; // VISIT only one could fail
         }

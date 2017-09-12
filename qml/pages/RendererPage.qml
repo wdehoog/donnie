@@ -152,7 +152,7 @@ Page {
     function stop() {
         var r;
         if((r = upnp.stop()) !== 0) {
-            app.showErrorDialog("Failed to Stop to Renderer");
+            app.showErrorDialog("Failed to Stop the Renderer");
             //return;
         }
         playing = false;
@@ -584,13 +584,17 @@ Page {
         }
 
         onError: {
+            console.log("RenderPage::onError: " + msg)
             switch(refreshState) {
             case 1:
+                refreshTransportState("") // transport info failed
                 refreshState = 2
                 break
             case 3:
             case 5:
             case 6:
+                // position info failed set refreshState to 4 so
+                // it is not treated as 'to be skipped'
                 refreshState = 4
                 break
             }
@@ -758,7 +762,6 @@ Page {
             switch(refreshState) {
             case 0:
             case 4:
-            case 128:
                 upnp.getTransportInfoJsonAsync()
                 refreshState = 1
                 break
@@ -776,8 +779,9 @@ Page {
                 // to get a good one asap
                 // while seeking it is of no use to update the player info so bail out
             case 128:
-                // in state 128 we try to get contact with the renderer again
-                upnp.getPositionInfoJsonAsync()
+                // in state 128 we could try to get contact with the renderer again
+                // but for now we do not
+                //upnp.getPositionInfoJsonAsync()
                 return
             }
 
@@ -830,12 +834,12 @@ Page {
                     app.error(errTxt)
                     app.showErrorDialog(errTxt)
                     refreshState = 128
-                    return
-                } else
-                    failedAttempts = 0
+                }
 
                 return
-            }
+
+            } else
+                failedAttempts = 0
 
             // update ui and detect track changes
 
