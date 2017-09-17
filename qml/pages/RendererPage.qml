@@ -235,26 +235,41 @@ Page {
     }
 
     function loadTrack() {
-        var track = trackListModel.get(currentItem)
+        var track
 
         prevTrackURI = ""
         prevTrackDuration = -1
         prevTrackTime = -1
 
-        console.log("loadTrack " + currentItem + ", "+track.uri)
-        var r
-        if((r = upnp.setTrack(track.uri, track.didl)) !== 0) {
-            var errMsg = UPnP.getUPNPErrorString(r)
-            if(errMsg.length > 0)
-                app.showErrorDialog("Failed to set track to play on Renderer:"
-                                    + "\n\n" + errMsg
-                                    + "\n\n" +  track.uri)
-            else
-                app.showErrorDialog("Failed to set track to play on Renderer" +
-                                    "\n\n" +  track.uri)
-            return
-        }
+        var loaded = false
+        while(!loaded) {
+            track = trackListModel.get(currentItem)
+            console.log("loadTrack trying item " + currentItem + ": "+track.uri)
+            var r
+            if((r = upnp.setTrack(track.uri, track.didl)) !== 0) {
 
+                var errMsg = UPnP.getUPNPErrorString(r)
+                if(errMsg.length > 0)
+                    app.showErrorDialog("Failed to set track to play on Renderer:"
+                                        + "\n\n" + r + ": " + errMsg
+                                        + "\n\n" +  track.title
+                                        + "\n\n" +  track.uri)
+                else
+                    app.showErrorDialog("Failed to set track to play on Renderer" +
+                                        + "\n\nError code: " + r
+                                        + "\n\n" +  track.title
+                                        + "\n\n" +  track.uri)
+
+                // loading track fails. try the next one.
+                // when end of list clear next uri otherwise renderer starts to play
+                // unexpected source. but how to clear it?
+                if(currentItem >= (trackListModel.count-1))
+                    return
+
+                currentItem++;
+            } else
+                loaded  = true
+        }
         updateUIForTrack(track)
         updateMprisForTrack(track)
 
