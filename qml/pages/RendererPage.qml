@@ -244,7 +244,14 @@ Page {
         console.log("loadTrack " + currentItem + ", "+track.uri)
         var r
         if((r = upnp.setTrack(track.uri, track.didl)) !== 0) {
-            app.showErrorDialog("Failed to set track to play on Renderer")
+            var errMsg = UPnP.getUPNPErrorString(r)
+            if(errMsg.length > 0)
+                app.showErrorDialog("Failed to set track to play on Renderer:"
+                                    + "\n\n" + errMsg
+                                    + "\n\n" +  track.uri)
+            else
+                app.showErrorDialog("Failed to set track to play on Renderer" +
+                                    "\n\n" +  track.uri)
             return
         }
 

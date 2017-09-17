@@ -332,3 +332,27 @@ function getAudioType(item) {
     } else
         return "";
 }
+
+function getUPNPErrorString(errorCode) {
+    // 2.4.1.4. Errors
+    switch(errorCode) {
+    case 402:
+        return "Invalid Args";
+        // Could be any of the following: not enough in args, too many in
+        // args, no in arg by that name, one or more in args are of the wrong
+        // data type.
+    case 714: return "Illegal MIME-type";
+        // The specified resource has a MIME-type which is not supported
+        // by the AVTransport service
+    case 715: return "Content ‘BUSY’";
+        // This indicates the resource is already being played by other
+        // means. The actual implementation might detect through HTTP
+        // Busy, and returns this error code.
+    case 716: return "Resource not found. The specified resource cannot be found in the network";
+    case 718: return "Invalid InstanceID The specified instanceID is invalid for this AVTransport.";
+    case 737: return "No DNS Server The DNS Server is not available (HTTP error 503)";
+    case 738: return "Bad Domain Name Unable to resolve the Fully Qualified Domain Name. (HTTP error 502)";
+    case 739:  return "Server Error The server that hosts the resource is unreachable or unresponsive (HTTP error 404/410).";
+    default: return "";
+    }
+}
