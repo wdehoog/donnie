@@ -64,9 +64,15 @@ ApplicationWindow
         errorLog.push(msg);
     }
 
-    function showErrorDialog(text) {
+    function showErrorDialog(text, showCancelAll, cancelAll) {
         var dialog = pageStack.push(Qt.resolvedUrl("components/ErrorDialog.qml"),
-                                    {errorMessageText: text});
+                                    {errorMessageText: text, showCancelAll: showCancelAll});
+        if(showCancelAll) {
+          dialog.accepted.connect(function() {
+              if(dialog.cancelAll)
+                cancelAll()
+          })
+        }
     }
 
     function hasCurrentServer() {

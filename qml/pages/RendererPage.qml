@@ -250,15 +250,19 @@ Page {
 
                 var errMsg = UPnP.getUPNPErrorString(r)
                 if(errMsg.length > 0)
-                    app.showErrorDialog("Failed to set track to play on Renderer:"
-                                        + "\n\n" + r + ": " + errMsg
-                                        + "\n\n" +  track.title
-                                        + "\n\n" +  track.uri)
+                    errMsg = "Failed to set track to play on Renderer:"
+                             + "\n\n" + r + ": " + errMsg
+                             + "\n\n" +  track.title
+                             + "\n\n" +  track.uri
                 else
-                    app.showErrorDialog("Failed to set track to play on Renderer" +
-                                        + "\n\nError code: " + r
-                                        + "\n\n" +  track.title
-                                        + "\n\n" +  track.uri)
+                    errMsg = "Failed to set track to play on Renderer" +
+                             + "\n\nError code: " + r
+                             + "\n\n" +  track.title
+                             + "\n\n" +  track.uri
+
+                // don't know how to make modal behaviour
+                // var choice = app.showErrorDialog(errMsg, true, cancelAll)
+                app.showErrorDialog(errMsg, false, undefined)
 
                 // loading track fails. try the next one.
                 // when end of list clear next uri otherwise renderer starts to play
@@ -283,6 +287,13 @@ Page {
             upnp.setNextTrack(track.uri, track.didl)
         }
     }
+
+    // to cancel loading next track when having all errors
+    // but it does not work since the load loop is not waiting
+    //signal cancelAll()
+    //onCancelAll: {
+    //    reset()
+    //}
 
     function clearList() {
         //rendererPageActive = false;

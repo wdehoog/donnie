@@ -3,6 +3,8 @@ import Sailfish.Silica 1.0
 
 Dialog {
     property string errorMessageText : ""
+    property bool   cancelAll: false
+    property bool   showCancelAll: false
 
     id: errorDialog
     canAccept: true
@@ -19,7 +21,6 @@ Dialog {
         Column {
             id: column
             width: parent.width
-            //height: childRect.height
 
             PageHeader { title: "Error" }
 
@@ -28,6 +29,14 @@ Dialog {
                 width: parent.width
                 readOnly: true
                 text: errorMessageText
+            }
+
+            TextSwitch {
+                 id: cancelAllSwitch
+                 visible: showCancelAll
+                 text: "Cancel All"
+                 description: "Cancels all loading"
+                 onCheckedChanged: cancelAll = checked
             }
         }
 
