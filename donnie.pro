@@ -79,4 +79,6 @@ HEADERS += \
     src/upnpsearchworker.h \
     src/upnpgettransportinforunnable.h \
     src/upnpgetmediainforunnable.h \
-    src/upnpgetpositioninforunnable.h
+    src/upnpgetpositioninforunnable.h \
+    src/upnpsettrackrunnable.h \
+    src/upnpsetnexttrackrunnable.h
