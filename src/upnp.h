@@ -70,9 +70,12 @@ public:
     Q_INVOKABLE QString getPositionInfoJson();
     Q_INVOKABLE QString getMediaInfoJson();
 
+    // async api
     Q_INVOKABLE void getTransportInfoJsonAsync();
     Q_INVOKABLE void getMediaInfoJsonAsync();
     Q_INVOKABLE void getPositionInfoJsonAsync();
+    Q_INVOKABLE void setTrackAsync(QString uri, QString didl);
+    Q_INVOKABLE void setNextTrackAsync(QString uri, QString didl);
 
     // for mpris control
     Q_INVOKABLE void mprisPlay();
@@ -95,6 +98,8 @@ signals:
     void transportInfo(QString transportInfoJson);
     void mediaInfo(QString mediaInfoJson);
     void positionInfo(QString positionInfoJson);
+    void trackSet(QString uri, unsigned int status);
+    void nextTrackSet(QString uri, unsigned int status);
 
 public slots:
     void onGetRendererDone(QString rendererJson);
@@ -106,6 +111,8 @@ public slots:
     void onTransportInfo(QString transportInfoJson);
     void onMediaInfo(QString mediaInfoJson);
     void onPositionInfo(QString positionInfoJson);
+    void onTrackSet(QString uri, unsigned int status);
+    void onNextTrackSet(QString uri, unsigned int status);
 
 protected:
     UPnPP::LibUPnP * libUPnP;

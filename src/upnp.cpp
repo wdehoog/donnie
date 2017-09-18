@@ -20,6 +20,8 @@
 #include "upnpgettransportinforunnable.h"
 #include "upnpgetmediainforunnable.h"
 #include "upnpgetpositioninforunnable.h"
+#include "upnpsettrackrunnable.h"
+#include "upnpsetnexttrackrunnable.h"
 
 #include <MprisPlayer>
 
@@ -974,4 +976,53 @@ void UPNP::onPositionInfo(QString positionInfoJson) {
     emit positionInfo(positionInfoJson);
 }
 
+void UPNP::setTrackAsync(QString uri, QString didl) {
+    if(!currentRenderer) {
+        emit error("UPNP::setTrackAsync: No Current Renderer");
+        return;
+    }
+
+    UPnPClient::AVTH avt = currentRenderer->avt();
+    if (!avt) {
+        emit error("UPNP::setTrackAsync: Device has no AVTransport service");
+        return;
+    }
+
+    UPnPSetTrackRunnable * tr = new UPnPSetTrackRunnable(avt, uri, didl);
+    tr->setAutoDelete(true);
+
+    connect(tr, SIGNAL (error(QString)), this, SLOT (onError(QString)));
+    connect(tr, SIGNAL (trackSet(QString,unsigned int)), this, SLOT (onTrackSet(QString, unsigned int)));
+
+    QThreadPool::globalInstance()->start(tr);
+}
+
+void UPNP::onTrackSet(QString uri, unsigned int status) {
+    emit trackSet(uri, status);
+}
+
+void UPNP::setNextTrackAsync(QString uri, QString didl) {
+    if(!currentRenderer) {
+        emit error("UPNP::setNextTrackAsync: No Current Renderer");
+        return;
+    }
+
+    UPnPClient::AVTH avt = currentRenderer->avt();
+    if (!avt) {
+        emit error("UPNP::setNextTrackAsync: Device has no AVTransport service");
+        return;
+    }
+
+    UPnPSetNextTrackRunnable * tr = new UPnPSetNextTrackRunnable(avt, uri, didl);
+    tr->setAutoDelete(true);
+
+    connect(tr, SIGNAL (error(QString)), this, SLOT (onError(QString)));
+    connect(tr, SIGNAL (nextTrackSet(QString,unsigned int)), this, SLOT (onNextTrackSet(QString, unsigned int)));
+
+    QThreadPool::globalInstance()->start(tr);
+}
+
+void UPNP::onNextTrackSet(QString uri, unsigned int status) {
+    emit nextTrackSet(uri, status);
+}
 
