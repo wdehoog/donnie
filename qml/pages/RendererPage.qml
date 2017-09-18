@@ -229,7 +229,7 @@ Page {
         if(useNextURI && trackListModel.count > (currentItem+1)) {
             track = trackListModel.get(currentItem+1);
             console.log("onChangedTrack setNextTrack "+track.uri);
-            upnp.setNextTrack(track.uri, track.didl);
+            upnp.setNextTrackAsync(track.uri, track.didl);
         }
         console.log("onChangedTrack: index="+trackIndex);
     }
@@ -242,50 +242,10 @@ Page {
         prevTrackTime = -1
 
         var loaded = false
-        while(!loaded) {
-            track = trackListModel.get(currentItem)
-            console.log("loadTrack trying item " + currentItem + ": "+track.uri)
-            var r
-            if((r = upnp.setTrack(track.uri, track.didl)) !== 0) {
-
-                var errMsg = UPnP.getUPNPErrorString(r)
-                if(errMsg.length > 0)
-                    errMsg = "Failed to set track to play on Renderer:"
-                             + "\n\n" + r + ": " + errMsg
-                             + "\n\n" +  track.title
-                             + "\n\n" +  track.uri
-                else
-                    errMsg = "Failed to set track to play on Renderer" +
-                             + "\n\nError code: " + r
-                             + "\n\n" +  track.title
-                             + "\n\n" +  track.uri
-
-                // don't know how to make modal behaviour
-                // var choice = app.showErrorDialog(errMsg, true, cancelAll)
-                app.showErrorDialog(errMsg, false, undefined)
-
-                // loading track fails. try the next one.
-                // when end of list clear next uri otherwise renderer starts to play
-                // unexpected source. but how to clear it?
-                if(currentItem >= (trackListModel.count-1))
-                    return
-
-                currentItem++;
-            } else
-                loaded  = true
-        }
-        updateUIForTrack(track)
-        updateMprisForTrack(track)
-
-        //if(!playing)
-        //    play()
-
-        // if available set next track
-        if(useNextURI && trackListModel.count > (currentItem+1)) {
-            track = trackListModel.get(currentItem+1)
-            console.log("loadTrack setNextTrack "+track.uri)
-            upnp.setNextTrack(track.uri, track.didl)
-        }
+        track = trackListModel.get(currentItem)
+        console.log("loadTrack trying item " + currentItem + ": "+track.uri)
+        rendererBusy = true;
+        upnp.setTrackAsync(track.uri, track.didl)
     }
 
     // to cancel loading next track when having all errors
@@ -302,6 +262,7 @@ Page {
         trackText = "";
         albumText = "";
         currentItem = -1;
+        transportState = -1
         imageItemSource = defaultImageSource;
 
         cover.imageSource = cover.defaultImageSource;
@@ -616,6 +577,75 @@ Page {
             }
         }
 
+        onTrackSet: {
+            rendererBusy = false;
+            console.log("RenderPage::onTrackSet status=" + status + ", uri=" + uri)
+
+            var trackIndex = getTrackIndexForURI(uri)
+            if(trackIndex < 0) // unknown track
+                return
+            var track = trackListModel.get(trackIndex)
+
+            if(status > 0) {
+                var errMsg = UPnP.getUPNPErrorString(status)
+                if(errMsg.length > 0)
+                    errMsg = "Failed to set track to play on Renderer:"
+                             + "\n\n" + status + ": " + errMsg
+                             + "\n\n" +  track.title
+                             + "\n\n" +  track.uri
+                else
+                    errMsg = "Failed to set track to play on Renderer" +
+                             + "\n\nError code: " + status
+                             + "\n\n" +  track.title
+                             + "\n\n" +  track.uri
+
+                // don't know how to make modal behaviour
+                // var choice = app.showErrorDialog(errMsg, true, cancelAll)
+                console.log(errMsg)
+                app.showErrorDialog(errMsg)
+            } else {
+                updateUIForTrack(track)
+                updateMprisForTrack(track)
+
+                if(!playing)
+                    play()
+
+                // if available set next track
+                if(useNextURI && trackListModel.count > (currentItem+1)) {
+                    track = trackListModel.get(currentItem+1)
+                    console.log("loadTrack setNextTrack "+track.uri)
+                    rendererBusy = true;
+                    upnp.setNextTrackAsync(track.uri, track.didl)
+                }
+            }
+        }
+
+        onNextTrackSet : {
+            rendererBusy = false;
+            console.log("RenderPage::onNextTrackSet status=" + status + ", uri=" + uri)
+            if(status === 0) // success
+                return
+
+            var trackIndex = getTrackIndexForURI(uri)
+            if(trackIndex < 0) // unknown track
+                return
+            var track = trackListModel.get(trackIndex)
+
+            var errMsg = UPnP.getUPNPErrorString(status)
+            if(errMsg.length > 0)
+                errMsg = "Failed to set next track to play on Renderer:"
+                         + "\n\n" + status + ": " + errMsg
+                         + "\n\n" +  track.title
+                         + "\n\n" +  track.uri
+            else
+                errMsg = "Failed to set next track to play on Renderer" +
+                         + "\n\nError code: " + status
+                         + "\n\n" +  track.title
+                         + "\n\n" +  track.uri
+            console.log(errMsg)
+            app.showErrorDialog(errMsg)
+        }
+
         onError: {
             console.log("RenderPage::onError: " + msg)
             switch(refreshState) {
@@ -697,12 +727,11 @@ Page {
             // start playing
             currentItem = 0;
             loadTrack();
-            play();
         } else if(wasAtLastTrack) {
             // if the last track is playing there is no nexturi
             // but now it can be set
             var track = trackListModel.get(currentItem+1)
-            upnp.setNextTrack(track.uri, track.didl);
+            upnp.setNextTrackAsync(track.uri, track.didl);
         }
 
         //rendererPageActive = true;
@@ -785,6 +814,7 @@ Page {
     //   6 - check for valid times after seek has been called
     // 128 - lost connection with renderer
     property int refreshState: 0
+
     Timer {
         id: fetchRendererInfo
         interval: 1000;
@@ -807,15 +837,18 @@ Page {
                 // do nothing
                 break
             case 5:
-            case 6:
-                // in state 5/6 positionInfo can be skipped so does need to be refreshed
-                // to get a good one asap
                 // while seeking it is of no use to update the player info so bail out
+                break
+            case 6:
+                // in state 6 positionInfo can be skipped so does need to be refreshed
+                // to get a good one
+                upnp.getPositionInfoJsonAsync()
+                break
             case 128:
                 // in state 128 we could try to get contact with the renderer again
                 // but for now we do not
                 //upnp.getPositionInfoJsonAsync()
-                return
+                break
             }
 
         }
@@ -823,12 +856,16 @@ Page {
 
     property int failedAttempts: 0
     property int stoppedPlayingDetection: 0
+    property bool rendererBusy: false
     Timer {
         id: handleRendererInfo
         interval: 1000;
         running: app.hasCurrentRenderer() && !useBuiltInPlayer
         repeat: true
         onTriggered: {
+
+            if(rendererBusy) // some actions make the renderer unreachable
+                return;
 
             // detect renderer has stopped unexpectedly
             if(playing && transportState == 3) {

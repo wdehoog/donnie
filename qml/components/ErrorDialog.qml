@@ -31,13 +31,13 @@ Dialog {
                 text: errorMessageText
             }
 
-            TextSwitch {
+            /*TextSwitch {
                  id: cancelAllSwitch
                  visible: showCancelAll
                  text: "Cancel All"
                  description: "Cancels all loading"
                  onCheckedChanged: cancelAll = checked
-            }
+            }*/
         }
 
         VerticalScrollDecorator{}
