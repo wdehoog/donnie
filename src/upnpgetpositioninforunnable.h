@@ -22,8 +22,7 @@ public:
     }
 
 signals:
-    void error(QString err);
-    void positionInfo(QString positionInfoJson);
+    void positionInfo(unsigned int error, QString positionInfoJson);
 
 public slots:
     void run() {
@@ -31,7 +30,7 @@ public slots:
         UPnPClient::AVTransport::PositionInfo info;
         if((err = avt->getPositionInfo(info)) != 0) {
             QString msg = QStringLiteral("getPositionInfo failed with error  %1").arg(err);
-            emit error(msg);
+            emit positionInfo(err, msg);
             return ;
         }
 
@@ -45,7 +44,7 @@ public slots:
         pInfo["abscount"] = QString::number(info.abscount);
 
         QJsonDocument doc(pInfo);
-        emit positionInfo(doc.toJson(QJsonDocument::Compact));
+        emit positionInfo(0, doc.toJson(QJsonDocument::Compact));
     }
 
 protected:

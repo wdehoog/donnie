@@ -69,29 +69,6 @@ Page {
         app.notifyTransportState(transportState);
     }
 
-    /*function getPositionInfo() {
-        var pinfoJson = upnp.getPositionInfoJson();
-        //console.log(pinfoJson);
-        try {
-            return JSON.parse(pinfoJson);
-        } catch(err) {
-            app.error("Exception in getPositionInfo: "+err);
-            app.error("json: " + pinfoJson);
-        }
-    }*/
-
-    /*function getTransportState() {
-        // {"curspeed":"1","tpstate":"Playing","tpstatus":"OK"}
-        var stateJson = upnp.getTransportInfoJson()
-        try {
-            var tstate = JSON.parse(stateJson);
-            return tstate["tpstate"];
-        } catch(err) {
-            app.error("Exception in getTransportState: "+err);
-            app.error("json: " + stateJson);
-        }
-    }*/
-
     function getMediaInfo() {
         var mediaInfoJson = upnp.getMediaInfoJson();
         try {
@@ -247,13 +224,6 @@ Page {
         rendererBusy = true;
         upnp.setTrackAsync(track.uri, track.didl)
     }
-
-    // to cancel loading next track when having all errors
-    // but it does not work since the load loop is not waiting
-    //signal cancelAll()
-    //onCancelAll: {
-    //    reset()
-    //}
 
     function clearList() {
         //rendererPageActive = false;
@@ -523,12 +493,17 @@ Page {
         // {"curspeed":"1","tpstate":"Playing","tpstatus":"OK"}
         onTransportInfo: {
             //console.log("onTransportInfo: " + transportInfoJson)
-            try {
-                transportInfo = JSON.parse(transportInfoJson)
-                refreshTransportState(transportInfo["tpstate"])
-            } catch(err) {
-                app.error("Exception in onTransportInfo: "+err)
-                app.error("json: " + transportInfoJson)
+            if(error === 0) {
+                try {
+                    transportInfo = JSON.parse(transportInfoJson)
+                    refreshTransportState(transportInfo["tpstate"])
+                } catch(err) {
+                    app.error("Exception in onTransportInfo: "+err)
+                    app.error("json: " + transportInfoJson)
+                }
+            } else {
+                console.log("onTransportInfo: error=" + error + ", " + transportInfoJson)
+                refreshTransportState("")
             }
             refreshState = 2
         }
@@ -542,10 +517,23 @@ Page {
         //  "trackduration":"378","trackuri":"http....."}
         onPositionInfo: {
             //console.log("OnPositionInfo: refreshState:" + refreshState + ", json:" + positionInfoJson)
-            if(refreshState == 5) { // ignore first positionInfo after a seek
+
+            // error?
+            if(error !== 0) {
+                console.log("onPositionInfo: error=" + error + ", " + positionInfoJson)
+                // position info failed set refreshState to 4
+                // for now also for refreshState 5 and 6, since we have a bigger problem then an erroneous position
+                refreshState = 4
+                return
+            }
+
+            // ignore first positionInfo after a seek
+            if(refreshState == 5) {
                 refreshState = 6
                 return
             }
+
+            // handle received position info
             try {
                 positionInfo = JSON.parse(positionInfoJson)
 
@@ -564,29 +552,33 @@ Page {
                 app.error("Exception in onPositionInfo: "+err)
                 app.error("json: " + positionInfoJson)
             }
+
             refreshState = 4
         }
 
         onMediaInfo: {
             //console.log("onMediaInfo: " + mediaInfoJson)
-            try {
-                mediaInfo = JSON.parse(mediaInfoJson)
-            } catch(err) {
-                app.error("Exception in onMediaInfo: "+err)
-                app.error("json: " + mediaInfoJson)
-            }
+            if(error === 0) {
+                try {
+                    mediaInfo = JSON.parse(mediaInfoJson)
+                } catch(err) {
+                    app.error("Exception in onMediaInfo: "+err)
+                    app.error("json: " + mediaInfoJson)
+                }
+            } else
+                console.log("onMediaInfo: error=" + error + ', ' + mediaInfoJson)
         }
 
         onTrackSet: {
             rendererBusy = false;
-            console.log("RenderPage::onTrackSet status=" + status + ", uri=" + uri)
+            console.log("RenderPage::onTrackSet error=" + error + ", uri=" + uri)
 
             var trackIndex = getTrackIndexForURI(uri)
             if(trackIndex < 0) // unknown track
                 return
             var track = trackListModel.get(trackIndex)
 
-            if(status > 0) {
+            if(error > 0) {
                 var errMsg = UPnP.getUPNPErrorString(status)
                 if(errMsg.length > 0)
                     errMsg = "Failed to set track to play on Renderer:"
@@ -622,8 +614,8 @@ Page {
 
         onNextTrackSet : {
             rendererBusy = false;
-            console.log("RenderPage::onNextTrackSet status=" + status + ", uri=" + uri)
-            if(status === 0) // success
+            console.log("RenderPage::onNextTrackSet error=" + error + ", uri=" + uri)
+            if(error === 0) // success
                 return
 
             var trackIndex = getTrackIndexForURI(uri)
@@ -648,20 +640,7 @@ Page {
 
         onError: {
             console.log("RenderPage::onError: " + msg)
-            switch(refreshState) {
-            case 1:
-                refreshTransportState("") // transport info failed
-                refreshState = 2
-                break
-            case 3:
-            case 5:
-            case 6:
-                // position info failed set refreshState to 4 so
-                // it is not treated as 'to be skipped'
-                refreshState = 4
-                break
-            }
-        }
+       }
     }
 
     function increaseVolume() {
@@ -681,18 +660,6 @@ Page {
             volumeSliderValue = 0;
         setVolume(volumeSliderValue);
     }
-
-    /*MediaKey {
-        enabled: rendererPageActive && hasCurrentRenderer() && volumeKeysResource.acquired
-        key: Qt.Key_VolumeUp
-        onPressed: increaseVolume()
-    }
-
-    MediaKey {
-        enabled: rendererPageActive && hasCurrentRenderer() && volumeKeysResource.acquired
-        key: Qt.Key_VolumeDown
-        onPressed: decreaseVolume()
-    }*/
 
     MediaKey {
         enabled: rendererPageActive && hasCurrentRenderer()
@@ -776,21 +743,6 @@ Page {
         return -1;
     }
 
-    // testing
-    /*Timer {
-        interval: 5000;
-        running: app.hasCurrentRenderer()
-        repeat: true
-        onTriggered: {
-            var minfo = getMediaInfo();
-            if(minfo !== undefined) {
-                if(minfo["curmeta"] !== undefined) {
-                    console.log(minfo["curmeta"]);
-                }
-            }
-        }
-    }*/
-
     function updateSlidersProgress(value) {
         //console.log("updateSlidersProgress value:"+value)
         timeSliderValue = value
@@ -810,8 +762,8 @@ Page {
     //   2 - transportInfo received
     //   3 - positionInfo requested
     //   4 - positionInfo received
-    //   5 - ignore after seek has been called
-    //   6 - check for valid times after seek has been called
+    //   5 - ignore after seek has been called (positionInfo)
+    //   6 - check for valid times after seek has been called (positionInfo)
     // 128 - lost connection with renderer
     property int refreshState: 0
 

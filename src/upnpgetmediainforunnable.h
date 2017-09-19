@@ -24,8 +24,7 @@ public:
     }
 
 signals:
-    void error(QString err);
-    void mediaInfo(QString mediaInfoJson);
+    void mediaInfo(unsigned int error, QString mediaInfoJson);
 
 public slots:
     void run() {
@@ -34,7 +33,7 @@ public slots:
         UPnPClient::AVTransport::MediaInfo info;
         if((err = avt->getMediaInfo(info)) != 0) {
             QString msg = QStringLiteral("UPnP::getMediaInfo failed with error  %1").arg(err);
-            emit error(msg);
+            emit mediaInfo(err, msg);
             return;
         }
 
@@ -51,7 +50,7 @@ public slots:
         mInfo["nextmeta"] = dirObj1;
 
         QJsonDocument doc(mInfo);
-        emit mediaInfo(doc.toJson(QJsonDocument::Compact));
+        emit mediaInfo(0, doc.toJson(QJsonDocument::Compact));
 
     }
 

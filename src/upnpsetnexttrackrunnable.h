@@ -24,13 +24,12 @@ public:
     }
 
 signals:
-    void error(QString err);
-    void nextTrackSet(QString uri, unsigned int status);
+    void nextTrackSet(unsigned int status, QString uri);
 
 public slots:
     void run() {
         int err = avt->setNextAVTransportURI(uri.toStdString(), didl.toStdString());
-        emit nextTrackSet(uri, err);
+        emit nextTrackSet(err, uri);
     }
 
 protected:

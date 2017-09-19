@@ -916,14 +916,13 @@ void UPNP::getTransportInfoJsonAsync() {
     UPnPGetTransportRunnable * tr = new UPnPGetTransportRunnable(avt);
     tr->setAutoDelete(true);
 
-    connect(tr, SIGNAL (error(QString)), this, SLOT (onError(QString)));
-    connect(tr, SIGNAL (transportInfo(QString)), this, SLOT (onTransportInfo(QString)));
+    connect(tr, SIGNAL (transportInfo(unsigned int, QString)), this, SLOT (onTransportInfo(unsigned int, QString)));
 
     QThreadPool::globalInstance()->start(tr);
 }
 
-void UPNP::onTransportInfo(QString transportInfoJson) {
-    emit transportInfo(transportInfoJson);
+void UPNP::onTransportInfo(unsigned int error, QString transportInfoJson) {
+    emit transportInfo(error, transportInfoJson);
 }
 
 void UPNP::getMediaInfoJsonAsync() {
@@ -941,14 +940,13 @@ void UPNP::getMediaInfoJsonAsync() {
     UPnPGetMediaInfoRunnable * tr = new UPnPGetMediaInfoRunnable(avt);
     tr->setAutoDelete(true);
 
-    connect(tr, SIGNAL (error(QString)), this, SLOT (onError(QString)));
-    connect(tr, SIGNAL (mediaInfo(QString)), this, SLOT (onMediaInfo(QString)));
+    connect(tr, SIGNAL (mediaInfo(unsigned int, QString)), this, SLOT (onMediaInfo(unsigned int, QString)));
 
     QThreadPool::globalInstance()->start(tr);
 }
 
-void UPNP::onMediaInfo(QString mediaInfoJson) {
-    emit mediaInfo(mediaInfoJson);
+void UPNP::onMediaInfo(unsigned int error, QString mediaInfoJson) {
+    emit mediaInfo(error, mediaInfoJson);
 }
 
 void UPNP::getPositionInfoJsonAsync() {
@@ -966,14 +964,13 @@ void UPNP::getPositionInfoJsonAsync() {
     UPnPGetPositionRunnable * tr = new UPnPGetPositionRunnable(avt);
     tr->setAutoDelete(true);
 
-    connect(tr, SIGNAL (error(QString)), this, SLOT (onError(QString)));
-    connect(tr, SIGNAL (positionInfo(QString)), this, SLOT (onPositionInfo(QString)));
+    connect(tr, SIGNAL (positionInfo(unsigned int, QString)), this, SLOT (onPositionInfo(unsigned int, QString)));
 
     QThreadPool::globalInstance()->start(tr);
 }
 
-void UPNP::onPositionInfo(QString positionInfoJson) {
-    emit positionInfo(positionInfoJson);
+void UPNP::onPositionInfo(unsigned int error, QString positionInfoJson) {
+    emit positionInfo(error, positionInfoJson);
 }
 
 void UPNP::setTrackAsync(QString uri, QString didl) {
@@ -991,14 +988,13 @@ void UPNP::setTrackAsync(QString uri, QString didl) {
     UPnPSetTrackRunnable * tr = new UPnPSetTrackRunnable(avt, uri, didl);
     tr->setAutoDelete(true);
 
-    connect(tr, SIGNAL (error(QString)), this, SLOT (onError(QString)));
-    connect(tr, SIGNAL (trackSet(QString,unsigned int)), this, SLOT (onTrackSet(QString, unsigned int)));
+    connect(tr, SIGNAL (trackSet(unsigned int, QString)), this, SLOT (onTrackSet(unsigned int, QString)));
 
     QThreadPool::globalInstance()->start(tr);
 }
 
-void UPNP::onTrackSet(QString uri, unsigned int status) {
-    emit trackSet(uri, status);
+void UPNP::onTrackSet(unsigned int error, QString uri) {
+    emit trackSet(error, uri);
 }
 
 void UPNP::setNextTrackAsync(QString uri, QString didl) {
@@ -1016,13 +1012,12 @@ void UPNP::setNextTrackAsync(QString uri, QString didl) {
     UPnPSetNextTrackRunnable * tr = new UPnPSetNextTrackRunnable(avt, uri, didl);
     tr->setAutoDelete(true);
 
-    connect(tr, SIGNAL (error(QString)), this, SLOT (onError(QString)));
-    connect(tr, SIGNAL (nextTrackSet(QString,unsigned int)), this, SLOT (onNextTrackSet(QString, unsigned int)));
+    connect(tr, SIGNAL (nextTrackSet(unsigned int, QString)), this, SLOT (onNextTrackSet(unsigned int, QString)));
 
     QThreadPool::globalInstance()->start(tr);
 }
 
-void UPNP::onNextTrackSet(QString uri, unsigned int status) {
-    emit nextTrackSet(uri, status);
+void UPNP::onNextTrackSet(unsigned int error, QString uri) {
+    emit nextTrackSet(error, uri);
 }
 

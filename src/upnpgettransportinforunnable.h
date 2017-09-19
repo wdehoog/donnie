@@ -22,8 +22,7 @@ public:
     }
 
 signals:
-    void error(QString err);
-    void transportInfo(QString transportInfoJson);
+    void transportInfo(unsigned int error, QString transportInfoJson);
 
 public slots:
     void run() {
@@ -31,7 +30,7 @@ public slots:
         UPnPClient::AVTransport::TransportInfo tinfo;
         if ((err = avt->getTransportInfo(tinfo)) != 0) {
             QString msg = QStringLiteral("UPNP::getTransportInfo: failed with error %1").arg(err);
-            emit error(msg);
+            emit transportInfo(err, msg);
             return;
         }
 
@@ -79,7 +78,7 @@ public slots:
         tInfo["curspeed"] = QString::number(tinfo.curspeed);
 
         QJsonDocument doc(tInfo);
-        emit transportInfo(doc.toJson(QJsonDocument::Compact));
+        emit transportInfo(0, doc.toJson(QJsonDocument::Compact));
 
     }
 
