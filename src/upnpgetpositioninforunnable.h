@@ -13,6 +13,8 @@
 #include <libupnpp/control/mediaserver.hxx>
 #include <libupnpp/control/renderingcontrol.hxx>
 
+#include "upnpbrowseworker.h"
+
 class UPnPGetPositionRunnable : public QObject, public QRunnable
 {
     Q_OBJECT
@@ -34,7 +36,7 @@ public slots:
             return ;
         }
 
-        QJsonObject pInfo;
+        QJsonObject pInfo, metaObj;
 
         pInfo["trackuri"] = QString::fromStdString(info.trackuri);
         pInfo["trackduration"] = QString::number(info.trackduration);
@@ -42,6 +44,8 @@ public slots:
         pInfo["abstime"] = QString::number(info.abstime);
         pInfo["relcount"] = QString::number(info.relcount);
         pInfo["abscount"] = QString::number(info.abscount);
+        UPnPBrowseWorker::load(info.trackmeta, metaObj);
+        pInfo["trackmeta"] = metaObj;
 
         QJsonDocument doc(pInfo);
         emit positionInfo(0, doc.toJson(QJsonDocument::Compact));
