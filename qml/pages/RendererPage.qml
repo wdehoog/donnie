@@ -26,6 +26,9 @@ Page {
     property string trackText : ""
     property string albumText : ""
 
+    property string trackMetaText1 : ""
+    property string trackMetaText2 : ""
+
     property string timeSliderLabel : ""
     property int timeSliderValue : 0
     property int timeSliderMaximumValue : 0
@@ -364,6 +367,8 @@ Page {
             Row {
                 anchors.left: parent.left
                 anchors.right: parent.right
+                anchors.bottomMargin: Theme.paddingMedium
+
                 //spacing: Theme.paddingSmall
                 Slider {
                     id: volumeSlider
@@ -388,8 +393,33 @@ Page {
                 }
             }
 
-        }
+            Column {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                Text {
+                    width: parent.width
+                    font.pixelSize: Theme.fontSizeMedium
+                    color:  Theme.highlightColor
+                    textFormat: Text.StyledText
+                    wrapMode: Text.Wrap
+                    text: trackMetaText1
+                }
+                Text {
+                    width: parent.width
+                    font.pixelSize: Theme.fontSizeMedium
+                    color: Theme.secondaryHighlightColor
+                    textFormat: Text.StyledText
+                    wrapMode: Text.Wrap
+                    text: trackMetaText2
+                }
+            }
 
+            Separator {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                color: "white"
+            }
+        }
         VerticalScrollDecorator {}
 
         ListModel {
@@ -556,6 +586,8 @@ Page {
             refreshState = 4
         }
 
+
+        // "nrtracks" "mduration" "cururi" "curmeta" "nexturi" "nextmeta"
         onMediaInfo: {
             //console.log("onMediaInfo: " + mediaInfoJson)
             if(error === 0) {
@@ -757,6 +789,18 @@ Page {
           cover.coverProgressBar.label = ""
     }
 
+    function getCurrentTitleText() {
+        if(currentItem < 0 || currentItem >= trackListModel.count)
+            return ""
+        return trackListModel.get(currentItem).titleText
+    }
+
+    function getCurrentMetaText() {
+        if(currentItem < 0 || currentItem >= trackListModel.count)
+            return ""
+        return trackListModel.get(currentItem).metaText
+    }
+
     //   0 - inactive
     //   1 - transportInfo requested
     //   2 - transportInfo received
@@ -839,7 +883,7 @@ Page {
             if(pinfo === undefined) {  // if no new info
 
                 // in state 5 & 6 positionInfo is skipped on purpose
-                if(refreshState >= 5)
+                if(refreshState == 5 || refreshState == 6)
                     return
 
                 // pretend progress
@@ -869,6 +913,21 @@ Page {
             var trackduration = parseInt(pinfo["trackduration"])
             var tracktime = parseInt(pinfo["reltime"])
             var abstime = parseInt(pinfo["abstime"])
+
+            // track meta data
+            if(pinfo.trackmeta
+               && pinfo.trackmeta.title
+               && pinfo.trackmeta.title.length > 0)
+                trackMetaText1 = pinfo.trackmeta.title
+            else
+                trackMetaText1 = getCurrentTitleText()
+
+            if(pinfo.trackmeta
+               && pinfo.trackmeta.properties["upnp:artist"]
+               && pinfo.trackmeta.properties["upnp:artist"].length > 0)
+                trackMetaText2 = pinfo.trackmeta.properties["upnp:artist"]
+            else
+                trackMetaText2 = getCurrentMetaText()
 
             // track duration
             timeSliderLabel = UPnP.formatDuration(trackduration)
