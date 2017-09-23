@@ -225,6 +225,8 @@ Page {
         track = trackListModel.get(currentItem)
         console.log("loadTrack trying item " + currentItem + ": "+track.uri)
         rendererBusy = true;
+        trackMetaText1 = track.titleText
+        trackMetaText2 = track.metaText
         upnp.setTrackAsync(track.uri, track.didl)
     }
 
@@ -367,7 +369,6 @@ Page {
             Row {
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.bottomMargin: Theme.paddingMedium
 
                 //spacing: Theme.paddingSmall
                 Slider {
@@ -396,6 +397,7 @@ Page {
             Column {
                 anchors.left: parent.left
                 anchors.right: parent.right
+
                 Text {
                     width: parent.width
                     font.pixelSize: Theme.fontSizeMedium
@@ -417,9 +419,11 @@ Page {
             Separator {
                 anchors.left: parent.left
                 anchors.right: parent.right
+                anchors.bottomMargin: Theme.paddingMedium
                 color: "white"
             }
         }
+
         VerticalScrollDecorator {}
 
         ListModel {
@@ -789,16 +793,10 @@ Page {
           cover.coverProgressBar.label = ""
     }
 
-    function getCurrentTitleText() {
+    function getCurrentTrack() {
         if(currentItem < 0 || currentItem >= trackListModel.count)
-            return ""
-        return trackListModel.get(currentItem).titleText
-    }
-
-    function getCurrentMetaText() {
-        if(currentItem < 0 || currentItem >= trackListModel.count)
-            return ""
-        return trackListModel.get(currentItem).metaText
+            return undefined
+        return trackListModel.get(currentItem)
     }
 
     //   0 - inactive
@@ -814,7 +812,7 @@ Page {
     Timer {
         id: fetchRendererInfo
         interval: 1000;
-        running: handleRendererInfo.running
+        running: handleRendererInfo.running && playing
         repeat: true
         onTriggered: {
             // check and trigger update of transport state and position info
@@ -839,11 +837,6 @@ Page {
                 // in state 6 positionInfo can be skipped so does need to be refreshed
                 // to get a good one
                 upnp.getPositionInfoJsonAsync()
-                break
-            case 128:
-                // in state 128 we could try to get contact with the renderer again
-                // but for now we do not
-                //upnp.getPositionInfoJsonAsync()
                 break
             }
 
@@ -893,14 +886,16 @@ Page {
                 }
 
                 // detect lost connection
-                failedAttempts++
-                if(failedAttempts > 3) {
-                    reset()
-                    var errTxt = "Lost connection with Renderer."
-                    app.error(errTxt)
-                    app.showErrorDialog(errTxt)
-                    refreshState = 128
-                }
+                //if(transportState !== -1) {
+                    if(failedAttempts <= 3)
+                        failedAttempts++
+                    if(failedAttempts == 3) {
+                        reset()
+                        var errTxt = "Lost connection with Renderer."
+                        app.error(errTxt)
+                        app.showErrorDialog(errTxt)
+                    }
+                //}
 
                 return
 
@@ -914,20 +909,20 @@ Page {
             var tracktime = parseInt(pinfo["reltime"])
             var abstime = parseInt(pinfo["abstime"])
 
-            // track meta data
-            if(pinfo.trackmeta
-               && pinfo.trackmeta.title
-               && pinfo.trackmeta.title.length > 0)
-                trackMetaText1 = pinfo.trackmeta.title
-            else
-                trackMetaText1 = getCurrentTitleText()
-
-            if(pinfo.trackmeta
-               && pinfo.trackmeta.properties["upnp:artist"]
-               && pinfo.trackmeta.properties["upnp:artist"].length > 0)
-                trackMetaText2 = pinfo.trackmeta.properties["upnp:artist"]
-            else
-                trackMetaText2 = getCurrentMetaText()
+            // track meta data. for now only when playing internet radio
+            var currentTrack = getCurrentTrack()
+            if(currentTrack !== undefined) {
+                if(currentTrack.upnpclass === "object.item.audioItem.audioBroadcast") {
+                    if(pinfo.trackmeta
+                       && pinfo.trackmeta.title
+                       && pinfo.trackmeta.title.length > 0)
+                        trackMetaText1 = pinfo.trackmeta.title
+                    if(pinfo.trackmeta
+                       && pinfo.trackmeta.properties["upnp:artist"]
+                       && pinfo.trackmeta.properties["upnp:artist"].length > 0)
+                        trackMetaText2 = pinfo.trackmeta.properties["upnp:artist"]
+                }
+            }
 
             // track duration
             timeSliderLabel = UPnP.formatDuration(trackduration)
