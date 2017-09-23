@@ -18,12 +18,12 @@ Note that it is still fresh and under development so things might not work as ex
 
 
 ### Issues
-  * Sometimes not all UPnP devices are discovered. Refresh the list.
+  * Sometimes not all UPnP devices are discovered. Refresh the list might help.
   * Donnie will probably fail if another control point interferes.
   * When the same track appears twice in the list and next to each other a
     track change will not be detected and the next track will not be started.
   * When wlan is turned on after Donnie is started it will not use it. Donnie has to be restarted.
-    this is caused by one of the underlying libraries.
+    This is caused by one of the underlying libraries.
 
 ### Future
 There are already a lot of Audio Player for Sailfish. Many of which look and work better then Donnie. It is a lot of work to come at the same level as those. Hopefully  one of those players will integrate the UPnP functionality Donnie has.
