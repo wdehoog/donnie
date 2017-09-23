@@ -215,7 +215,7 @@ Page {
         // When available set next track but not for internet radio streams.
         if(useNextURI
            && trackListModel.count > (currentItem+1)
-           && track.upnpclass !== "object.item.audioItem.audioBroadcast") {
+           && isBroadcast(track)) {
             track = trackListModel.get(currentItem+1);
             console.log("onChangedTrack setNextTrack "+track.uri);
             upnp.setNextTrackAsync(track.uri, track.didl);
@@ -253,6 +253,9 @@ Page {
         cover.coverProgressBar.label = "";
     }
 
+    function isBroadcast(track) {
+        return track && track.upnpclass === "object.item.audioItem.audioBroadcast"
+    }
 
     SilicaListView {
 
@@ -347,7 +350,7 @@ Page {
                 property int position: timeSliderValue
                 property string positionText: timeSliderValueText
 
-                enabled: true
+                enabled: !isBroadcast(getCurrentTrack())
                 anchors.left: parent.left
                 anchors.right: parent.right
                 handleVisible: false;
@@ -656,7 +659,7 @@ Page {
                 // When available set next track but not for internet radio streams
                 if(useNextURI
                    && trackListModel.count > (currentItem+1)
-                   && track.upnpclass !== "object.item.audioItem.audioBroadcast") {
+                   && isBroadcast(track)) {
                     track = trackListModel.get(currentItem+1)
                     console.log("loadTrack setNextTrack "+track.uri)
                     rendererBusy = true;
@@ -918,7 +921,7 @@ Page {
             // track meta data. for now only when playing internet radio
             var currentTrack = getCurrentTrack()
             if(currentTrack !== undefined) {
-                if(currentTrack.upnpclass === "object.item.audioItem.audioBroadcast") {
+                if(isBroadcast(currentTrack)) {
                     if(pinfo.trackmeta
                        && pinfo.trackmeta.title
                        && pinfo.trackmeta.title.length > 0)
