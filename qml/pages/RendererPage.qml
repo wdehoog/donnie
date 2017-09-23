@@ -51,8 +51,8 @@ Page {
     property bool canPause: transportState == 1
 
 
-    // state initiated by the app. not the actual state
     property bool playing : false
+    property bool rendererConnected: false
 
     // -1 initial, 1 playing, 2 paused, 3 stopped the rest inactive
     property int transportState : -1
@@ -97,7 +97,7 @@ Page {
     }
 
     function pause() {
-        if(transportInfo["tpstate"] === "Playing") {
+        if(transportState == 1) {
             var r;
             if((r = upnp.pause()) !== 0) {
                 app.showErrorDialog("Failed to Pause the Renderer");
@@ -119,14 +119,10 @@ Page {
                 return;
             }
         }
+        rendererConnected = true
         playing = true;
-        // VISIT we also get "Stopped" here
-        //var tstate = getTransportState();
-        //if(tstate === "Playing" || tstate === "Transitioning" ) {
-            playIconSource = "image://theme/icon-l-pause";
-            cover.playIconSource = "image://theme/icon-cover-pause";
-        //} else
-        //    console.log("play() unexpected tstate: "+tstate);
+        playIconSource = "image://theme/icon-l-pause";
+        cover.playIconSource = "image://theme/icon-cover-pause";
     }
 
     function stop() {
@@ -187,8 +183,8 @@ Page {
         albumText = track.metaText;
     }
 
+    // update mpris with track info from media server
     function updateMprisForTrack(track) {
-        // mpris
         var meta = {};
         meta.Title = track.title;
         meta.Artist = track.artist;
@@ -199,14 +195,27 @@ Page {
         app.updateMprisMetaData(meta);
     }
 
+    // update mpris with track info from stream
+    function updateMprisForTrackMetaData(track) {
+        var meta = {};
+        meta.Title = trackMetaText1;
+        meta.Artist = trackMetaText2;
+        meta.Album = track.album;
+        meta.Length = 0;
+        meta.ArtUrl = track.albumArtURI;
+        app.updateMprisMetaData(meta);
+    }
+
     function onChangedTrack(trackIndex) {
         currentItem = trackIndex;
         var track = trackListModel.get(currentItem);
         updateUIForTrack(track);
         updateMprisForTrack(track);
 
-        // if available set next track
-        if(useNextURI && trackListModel.count > (currentItem+1)) {
+        // When available set next track but not for internet radio streams.
+        if(useNextURI
+           && trackListModel.count > (currentItem+1)
+           && track.upnpclass !== "object.item.audioItem.audioBroadcast") {
             track = trackListModel.get(currentItem+1);
             console.log("onChangedTrack setNextTrack "+track.uri);
             upnp.setNextTrackAsync(track.uri, track.didl);
@@ -528,6 +537,7 @@ Page {
         onTransportInfo: {
             //console.log("onTransportInfo: " + transportInfoJson)
             if(error === 0) {
+                rendererConnected = true
                 try {
                     transportInfo = JSON.parse(transportInfoJson)
                     refreshTransportState(transportInfo["tpstate"])
@@ -560,6 +570,7 @@ Page {
                 refreshState = 4
                 return
             }
+            rendererConnected = true
 
             // ignore first positionInfo after a seek
             if(refreshState == 5) {
@@ -595,6 +606,7 @@ Page {
         onMediaInfo: {
             //console.log("onMediaInfo: " + mediaInfoJson)
             if(error === 0) {
+                rendererConnected = true
                 try {
                     mediaInfo = JSON.parse(mediaInfoJson)
                 } catch(err) {
@@ -606,7 +618,7 @@ Page {
         }
 
         onTrackSet: {
-            rendererBusy = false;
+            rendererBusy = false
             console.log("RenderPage::onTrackSet error=" + error + ", uri=" + uri)
 
             var trackIndex = getTrackIndexForURI(uri)
@@ -615,15 +627,15 @@ Page {
             var track = trackListModel.get(trackIndex)
 
             if(error > 0) {
-                var errMsg = UPnP.getUPNPErrorString(status)
+                var errMsg = UPnP.getUPNPErrorString(error)
                 if(errMsg.length > 0)
                     errMsg = "Failed to set track to play on Renderer:"
-                             + "\n\n" + status + ": " + errMsg
+                             + "\n\n" + error + ": " + errMsg
                              + "\n\n" +  track.title
                              + "\n\n" +  track.uri
                 else
                     errMsg = "Failed to set track to play on Renderer" +
-                             + "\n\nError code: " + status
+                             + "\n\nError code: " + error
                              + "\n\n" +  track.title
                              + "\n\n" +  track.uri
 
@@ -632,14 +644,17 @@ Page {
                 console.log(errMsg)
                 app.showErrorDialog(errMsg)
             } else {
+                rendererConnected = true
                 updateUIForTrack(track)
                 updateMprisForTrack(track)
 
                 if(!playing)
                     play()
 
-                // if available set next track
-                if(useNextURI && trackListModel.count > (currentItem+1)) {
+                // When available set next track but not for internet radio streams
+                if(useNextURI
+                   && trackListModel.count > (currentItem+1)
+                   && track.upnpclass !== "object.item.audioItem.audioBroadcast") {
                     track = trackListModel.get(currentItem+1)
                     console.log("loadTrack setNextTrack "+track.uri)
                     rendererBusy = true;
@@ -659,15 +674,15 @@ Page {
                 return
             var track = trackListModel.get(trackIndex)
 
-            var errMsg = UPnP.getUPNPErrorString(status)
+            var errMsg = UPnP.getUPNPErrorString(error)
             if(errMsg.length > 0)
                 errMsg = "Failed to set next track to play on Renderer:"
-                         + "\n\n" + status + ": " + errMsg
+                         + "\n\n" + error + ": " + errMsg
                          + "\n\n" +  track.title
                          + "\n\n" +  track.uri
             else
                 errMsg = "Failed to set next track to play on Renderer" +
-                         + "\n\nError code: " + status
+                         + "\n\nError code: " + error
                          + "\n\n" +  track.title
                          + "\n\n" +  track.uri
             console.log(errMsg)
@@ -734,10 +749,9 @@ Page {
             // if the last track is playing there is no nexturi
             // but now it can be set
             var track = trackListModel.get(currentItem+1)
+            rendererBusy = true;
             upnp.setNextTrackAsync(track.uri, track.didl);
         }
-
-        //rendererPageActive = true;
     }
 
     onStatusChanged: {
@@ -886,16 +900,17 @@ Page {
                 }
 
                 // detect lost connection
-                //if(transportState !== -1) {
+                if(rendererConnected) {
                     if(failedAttempts <= 3)
                         failedAttempts++
                     if(failedAttempts == 3) {
+                        rendererConnected = false
                         reset()
                         var errTxt = "Lost connection with Renderer."
                         app.error(errTxt)
                         app.showErrorDialog(errTxt)
                     }
-                //}
+                }
 
                 return
 
@@ -921,6 +936,7 @@ Page {
                        && pinfo.trackmeta.properties["upnp:artist"]
                        && pinfo.trackmeta.properties["upnp:artist"].length > 0)
                         trackMetaText2 = pinfo.trackmeta.properties["upnp:artist"]
+                    updateMprisForTrackMetaData(currentTrack)
                 }
             }
 
