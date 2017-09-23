@@ -1,8 +1,8 @@
 ## Donnie
 
-A UPnP Control Point and Audio Player for SailfishOS. It is written in QML and C++. For UPnP it relies on [libupnpp](https://github.com/medoc92/libupnpp).
+A UPnP Control Point and Audio Player for SailfishOS. It is written in QML and C++. For UPnP it relies on [libupnpp](https://opensourceprojects.eu/p/libupnpp/).
 
-I use it on my Oneplus One running it's SailfishOS port. For Content Server I use `minidlna` and `minimserver` and for Renderer `mopidy/upmpdcli` on a computer and `rygel` on my phone.
+I use it on my Oneplus One running it's SailfishOS port. For Content Server I use `minidlna` and `minimserver` and for Renderer `mopidy/upmpdcli` on a Pi and `rygel` on my phone.
 
 See the [screenshots](https://github.com/wdehoog/donnie/tree/master/screenshots) directory for how it looks.
 
@@ -18,10 +18,12 @@ Note that it is still fresh and under development so things might not work as ex
 
 
 ### Issues
-  * Sometimes not all UPnP devices are discovered. A restart of the app can help.
+  * Sometimes not all UPnP devices are discovered. Refresh the list.
   * Donnie will probably fail if another control point interferes.
   * When the same track appears twice in the list and next to each other a
     track change will not be detected and the next track will not be started.
+  * When wlan is turned on after Donnie is started it will not use it. Donnie has to be restarted.
+    this is caused by one of the underlying libraries.
 
 ### Future
 There are already a lot of Audio Player for Sailfish. Many of which look and work better then Donnie. It is a lot of work to come at the same level as those. Hopefully  one of those players will integrate the UPnP functionality Donnie has.
@@ -41,6 +43,12 @@ Then install with
 ```
 devel-su pkcon ref
 devel-su pkcon install donnie
+```
+
+Maybe you also need to restart pulse audio to have it load the policy file for Donnie.
+
+```
+systemctl --user restart pulseaudio
 ```
 
 ###  Usage
