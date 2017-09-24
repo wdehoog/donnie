@@ -206,18 +206,20 @@ Page {
     }
 
     function onChangedTrack(trackIndex) {
+        // if already known ignore (could be due to loadTrack)
+        if(currentItem === trackIndex)
+            return;
+
         currentItem = trackIndex;
         var track = trackListModel.get(currentItem);
         updateUIForTrack(track);
         updateMprisForTrack(track);
 
-        // When available set next track but not for internet radio streams.
-        if(useNextURI
-           && trackListModel.count > (currentItem+1)
-           && UPnP.isBroadcast(track)) {
+        // When available set next track
+        if(trackListModel.count > (currentItem+1)) {
             track = trackListModel.get(currentItem+1);
             console.log("onChangedTrack setNextTrack "+track.uri);
-            upnp.setNextTrackAsync(track.uri, track.didl);
+            setNextTrack(track);
         }
         console.log("onChangedTrack: index="+trackIndex);
     }
@@ -227,6 +229,13 @@ Page {
         console.log("loadTrack trying item " + currentItem + ": "+track.uri)
         rendererBusy = true;
         upnp.setTrackAsync(track.uri, track.didl)
+    }
+
+    function setNextTrack(track) {
+        if(!useNextURI || UPnP.isBroadcast(track))
+            return
+        rendererBusy = true;
+        upnp.setNextTrackAsync(track.uri, track.didl)
     }
 
     function clearList() {
@@ -666,13 +675,10 @@ Page {
                     play()
 
                 // When available set next track but not for internet radio streams
-                if(useNextURI
-                   && trackListModel.count > (currentItem+1)
-                   && UPnP.isBroadcast(track)) {
+                if(trackListModel.count > (currentItem+1)) {
                     track = trackListModel.get(currentItem+1)
                     console.log("loadTrack setNextTrack "+track.uri)
-                    rendererBusy = true;
-                    upnp.setNextTrackAsync(track.uri, track.didl)
+                    setNextTrack(track)
                 }
             }
         }
@@ -754,17 +760,16 @@ Page {
 
     function addTracks(tracks) {
         var wasAtLastTrack = currentItem == (trackListModel.count-1);
-        addTracksNoStart(tracks);
+        addTracksNoStart(tracks)
         if(currentItem == -1 && trackListModel.count > 0) {
             // start playing
-            currentItem = 0;
-            loadTrack();
+            currentItem = 0
+            loadTrack()
         } else if(wasAtLastTrack) {
             // if the last track is playing there is no nexturi
-            // but now it can be set
+            // but now new ones have been added it can be set
             var track = trackListModel.get(currentItem+1)
-            rendererBusy = true;
-            upnp.setNextTrackAsync(track.uri, track.didl);
+            setNextTrack(track)
         }
     }
 
@@ -776,7 +781,7 @@ Page {
             }
 
             if(!hasTracks) {
-                var minfo = getMediaInfo();
+                var minfo = getMediaInfo()
                 if(minfo !== undefined) {
                     var track
                     if(minfo["curmeta"] !== undefined
@@ -927,10 +932,10 @@ Page {
             var tracktime = parseInt(pinfo["reltime"])
             var abstime = parseInt(pinfo["abstime"])
 
-            // track meta data. for now only when playing internet radio
+            // update track meta data. for now only when playing internet radio
             var currentTrack = getCurrentTrack()
             if(currentTrack !== undefined) {
-                if(UPnP.isBroadcast(currentTrack)) {
+                if(skipNextPositionInfoForURI === "" && UPnP.isBroadcast(currentTrack)) {
                     if(pinfo.trackmeta
                        && pinfo.trackmeta.title
                        && pinfo.trackmeta.title.length > 0)
