@@ -23,8 +23,6 @@ Page {
     property string playIconSource : "image://theme/icon-l-play"
     property int currentItem: -1
     property bool metaShown : false
-    property string trackText : ""
-    property string albumText : ""
 
     property string trackMetaText1 : ""
     property string trackMetaText2 : ""
@@ -179,8 +177,8 @@ Page {
             imageItemSource = defaultImageSource;
             cover.imageSource = cover.defaultImageSource;
         }
-        trackText = track.titleText;
-        albumText = track.metaText;
+        trackMetaText1 = track.titleText;
+        trackMetaText2 = track.metaText;
     }
 
     // update mpris with track info from media server
@@ -243,8 +241,8 @@ Page {
         //rendererPageActive = false;
         stop();
         listView.model.clear();
-        trackText = "";
-        albumText = "";
+        trackMetaText1 = "";
+        trackMetaText2 = "";
         currentItem = -1;
         transportState = -1
         imageItemSource = defaultImageSource;
@@ -431,7 +429,6 @@ Page {
             Separator {
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.bottomMargin: Theme.paddingMedium
                 color: "white"
             }
         }
