@@ -21,9 +21,10 @@ Page {
     property string playIconSource : "image://theme/icon-l-play"
     property int currentItem: -1
     property bool metaShown : false
-    property string trackText
-    property string albumText
     property string trackClass
+
+    property string trackMetaText1 : ""
+    property string trackMetaText2 : ""
 
     property bool hasTracks : listView.model.count > 0
     property bool canNext: hasTracks && (currentItem < (listView.model.count - 1))
@@ -121,8 +122,8 @@ Page {
             cover.playIconSource = "image://theme/icon-cover-pause";
         }
 
-        trackText = track.titleText;
-        albumText = track.metaText;
+        trackMetaText1 = track.titleText
+        trackMetaText2 = track.metaText
         trackClass = track.upnpclass;
 
         updateMprisForTrack(track);
@@ -133,8 +134,8 @@ Page {
         stop();
         audio.source = "";
         listView.model.clear();
-        trackText = "";
-        albumText = "";
+        trackMetaText1 = "";
+        trackMetaText2 = "";
         trackClass = "";
         currentItem = -1;
         imageItemSource = defaultImageSource;
@@ -244,32 +245,6 @@ Page {
                 opacity: 0
             }
 
-            Label {
-                anchors {
-                    left: parent.left
-                    leftMargin: Theme.horizontalPageMargin
-                    right: parent.right
-                    rightMargin: Theme.horizontalPageMargin
-                }
-                color: Theme.primaryColor
-                textFormat: Text.StyledText
-                horizontalAlignment: Text.AlignHCenter
-                text: trackText
-            }
-            Label {
-                anchors {
-                    left: parent.left
-                    leftMargin: Theme.horizontalPageMargin
-                    right: parent.right
-                    rightMargin: Theme.horizontalPageMargin
-                    bottomMargin: Theme.paddingLarge
-                }
-                color: Theme.primaryColor
-                textFormat: Text.StyledText
-                horizontalAlignment: Text.AlignHCenter
-                text: albumText
-            }
-
             Slider { // for tracks
                 id: timeSlider
                 maximumValue: 1
@@ -347,6 +322,33 @@ Page {
 //              }
 //            }
 
+            Column {
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                Text {
+                    width: parent.width
+                    font.pixelSize: Theme.fontSizeMedium
+                    color:  Theme.highlightColor
+                    textFormat: Text.StyledText
+                    wrapMode: Text.Wrap
+                    text: trackMetaText1
+                }
+                Text {
+                    width: parent.width
+                    font.pixelSize: Theme.fontSizeMedium
+                    color: Theme.secondaryHighlightColor
+                    textFormat: Text.StyledText
+                    wrapMode: Text.Wrap
+                    text: trackMetaText2
+                }
+            }
+
+            Separator {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                color: "white"
+            }
         }
 
         VerticalScrollDecorator {}
@@ -434,7 +436,7 @@ Page {
         repeat: true
         onTriggered: {
             var title = audio.metaData.title
-            var publisher = audio.metaData.publisher;
+            var publisher = audio.metaData.publisher
 
             /*if(title !== undefined)
                 albumText = title;
@@ -442,18 +444,13 @@ Page {
                 trackText = publisher;*/
 
             if(title === undefined)
-                return;
-            var delim = title.indexOf(" - ");
-            if(delim > -1) {
-                trackText = title.substr(0,delim);
-                albumText = title.substr(delim+2);
-                updateMprisForRadio({
-                  artist: trackText,
-                  title: albumText,
-                  station: publisher
-                });
-            } else
-                console.log("could not parse title "+title);
+                return
+            trackMetaText1 = title
+            trackMetaText2 = publisher;
+            updateMprisForRadio({
+              title: trackMetaText1,
+              artist: trackMetaText2,
+            });
         }
     }
 
