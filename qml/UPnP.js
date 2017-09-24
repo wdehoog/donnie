@@ -356,3 +356,8 @@ function getUPNPErrorString(errorCode) {
     default: return "";
     }
 }
+
+function isBroadcast(track) {
+    return track && track.upnpclass === "object.item.audioItem.audioBroadcast"
+}
+

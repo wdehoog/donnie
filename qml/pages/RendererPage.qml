@@ -184,12 +184,12 @@ Page {
     // update mpris with track info from media server
     function updateMprisForTrack(track) {
         var meta = {};
-        meta.Title = track.title;
-        meta.Artist = track.artist;
+        meta.Title = trackMetaText1;
+        meta.Artist = trackMetaText2;
         meta.Album = track.album;
         meta.Length = track.duration * 1000000; // s -> us
         meta.ArtUrl = track.albumArtURI;
-        //meta.TrackNumber = track.???;
+        meta.TrackNumber = currentItem;
         app.updateMprisMetaData(meta);
     }
 
@@ -201,6 +201,7 @@ Page {
         meta.Album = track.album;
         meta.Length = 0;
         meta.ArtUrl = track.albumArtURI;
+        meta.TrackNumber = currentItem;
         app.updateMprisMetaData(meta);
     }
 
@@ -213,7 +214,7 @@ Page {
         // When available set next track but not for internet radio streams.
         if(useNextURI
            && trackListModel.count > (currentItem+1)
-           && isBroadcast(track)) {
+           && UPnP.isBroadcast(track)) {
             track = trackListModel.get(currentItem+1);
             console.log("onChangedTrack setNextTrack "+track.uri);
             upnp.setNextTrackAsync(track.uri, track.didl);
@@ -222,18 +223,9 @@ Page {
     }
 
     function loadTrack() {
-        var track
-
-        prevTrackURI = ""
-        prevTrackDuration = -1
-        prevTrackTime = -1
-
-        var loaded = false
-        track = trackListModel.get(currentItem)
+        var track = trackListModel.get(currentItem)
         console.log("loadTrack trying item " + currentItem + ": "+track.uri)
         rendererBusy = true;
-        trackMetaText1 = track.titleText
-        trackMetaText2 = track.metaText
         upnp.setTrackAsync(track.uri, track.didl)
     }
 
@@ -249,10 +241,6 @@ Page {
 
         cover.imageSource = cover.defaultImageSource;
         cover.coverProgressBar.label = "";
-    }
-
-    function isBroadcast(track) {
-        return track && track.upnpclass === "object.item.audioItem.audioBroadcast"
     }
 
     SilicaListView {
@@ -348,7 +336,7 @@ Page {
                 property int position: timeSliderValue
                 property string positionText: timeSliderValueText
 
-                enabled: !isBroadcast(getCurrentTrack())
+                enabled: !UPnP.isBroadcast(getCurrentTrack())
                 anchors.left: parent.left
                 anchors.right: parent.right
                 handleVisible: false;
@@ -513,6 +501,7 @@ Page {
     property var mediaInfo
     property var positionInfo
     property int skipNextPositionInfo: 0 // after seek
+    property string skipNextPositionInfoForURI: "" // after loadTrack
 
     Connections {
         target: upnp
@@ -591,20 +580,29 @@ Page {
             if(skipNextPositionInfo == 1) {
                 // ignore positionInfo after a seek having abs/reltime == 0
                 // the value is useless and it would make the slider jump back and forth
-                if(pInfo["reltime"] == 0
-                   && pInfo["abstime"] == 0
-                   && pInfo["trackuri"] === prevTrackURI) {
+                if(pInfo.reltime == 0
+                   && pInfo.abstime == 0
+                   && pInfo.trackuri === prevTrackURI) {
                     upnp.getPositionInfoJsonAsync()
                     return
                 } else
                     skipNextPositionInfo = 0
             }
+
+            // ignore after loadTrack
+            if(pInfo.trackuri === skipNextPositionInfoForURI) {
+                upnp.getPositionInfoJsonAsync()
+                return;
+            }
+            skipNextPositionInfoForURI = ""
+
             positionInfo = pInfo
             refreshState = 4
         }
 
 
         // "nrtracks" "mduration" "cururi" "curmeta" "nexturi" "nextmeta"
+        // currently no used
         onMediaInfo: {
             //console.log("onMediaInfo: " + mediaInfoJson)
             if(error === 0) {
@@ -646,6 +644,20 @@ Page {
                 console.log(errMsg)
                 app.showErrorDialog(errMsg)
             } else {
+
+                // there will be a notification of a postion of the previous URI
+                // we want to skip that one
+                skipNextPositionInfoForURI = prevTrackURI
+
+                // used to detect uri change by the renderer itself
+                prevTrackURI = ""
+                prevTrackDuration = -1
+                prevTrackTime = -1
+
+                // used to display information
+                trackMetaText1 = track.titleText
+                trackMetaText2 = track.metaText
+
                 rendererConnected = true
                 updateUIForTrack(track)
                 updateMprisForTrack(track)
@@ -656,7 +668,7 @@ Page {
                 // When available set next track but not for internet radio streams
                 if(useNextURI
                    && trackListModel.count > (currentItem+1)
-                   && isBroadcast(track)) {
+                   && UPnP.isBroadcast(track)) {
                     track = trackListModel.get(currentItem+1)
                     console.log("loadTrack setNextTrack "+track.uri)
                     rendererBusy = true;
@@ -918,7 +930,7 @@ Page {
             // track meta data. for now only when playing internet radio
             var currentTrack = getCurrentTrack()
             if(currentTrack !== undefined) {
-                if(isBroadcast(currentTrack)) {
+                if(UPnP.isBroadcast(currentTrack)) {
                     if(pinfo.trackmeta
                        && pinfo.trackmeta.title
                        && pinfo.trackmeta.title.length > 0)

@@ -144,18 +144,21 @@ Page {
         cover.coverProgressBar.label = "";
     }
 
-    function updateMprisForRadio(radio) {
+    function updateMprisForTrackMetaData(track) {
         var meta = {};
-        meta.Title = radio.title;
-        meta.Artist = radio.artist;
-        meta.Album = radio.station;
+        meta.Title = trackMetaText1;
+        meta.Artist = trackMetaText2;
+        meta.Album = track.album;
+        meta.Length = 0;
+        meta.ArtUrl = track.albumArtURI;
+        meta.TrackNumber = currentItem;
         app.updateMprisMetaData(meta);
     }
 
     function updateMprisForTrack(track) {
         var meta = {};
-        meta.Title = track.title;
-        meta.Artist = track.artist;
+        meta.Title = trackMetaText1;
+        meta.Artist = trackMetaText2;
         meta.Album = track.album;
         meta.Length = track.duration * 1000; // ms -> us
         meta.ArtUrl = track.albumArtURI;
@@ -249,6 +252,7 @@ Page {
                 id: timeSlider
                 maximumValue: 1
                 handleVisible: false
+                enabled: !UPnP.isBroadcast(getCurrentTrack())
 
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -447,10 +451,7 @@ Page {
                 return
             trackMetaText1 = title
             trackMetaText2 = publisher;
-            updateMprisForRadio({
-              title: trackMetaText1,
-              artist: trackMetaText2,
-            });
+            updateMprisForTrackMetaData(getCurrentTrack());
         }
     }
 
@@ -495,6 +496,12 @@ Page {
         if(currentItem == -1 && trackListModel.count>0)
             next();        
         playerPageActive = true;
+    }
+
+    function getCurrentTrack() {
+        if(currentItem < 0 || currentItem >= trackListModel.count)
+            return undefined
+        return trackListModel.get(currentItem)
     }
 
     // Format track duration to format like HH:mm:ss / m:ss / 0:ss
