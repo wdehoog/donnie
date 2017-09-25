@@ -643,7 +643,7 @@ Page {
                              + "\n\n" +  track.title
                              + "\n\n" +  track.uri
                 else
-                    errMsg = "Failed to set track to play on Renderer" +
+                    errMsg = "Failed to set track to play on Renderer"
                              + "\n\nError code: " + error
                              + "\n\n" +  track.title
                              + "\n\n" +  track.uri
