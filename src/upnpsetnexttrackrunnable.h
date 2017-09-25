@@ -24,7 +24,7 @@ public:
     }
 
 signals:
-    void nextTrackSet(unsigned int status, QString uri);
+    void nextTrackSet(int status, QString uri);
 
 public slots:
     void run() {

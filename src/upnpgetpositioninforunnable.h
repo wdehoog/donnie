@@ -24,7 +24,7 @@ public:
     }
 
 signals:
-    void positionInfo(unsigned int error, QString positionInfoJson);
+    void positionInfo(int error, QString positionInfoJson);
 
 public slots:
     void run() {

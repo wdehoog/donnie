@@ -24,7 +24,7 @@ public:
     }
 
 signals:
-    void mediaInfo(unsigned int error, QString mediaInfoJson);
+    void mediaInfo(int error, QString mediaInfoJson);
 
 public slots:
     void run() {

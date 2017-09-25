@@ -95,11 +95,11 @@ signals:
     void searchDone(QString searchResultsJson);
     void error(QString msg);
     void mprisControl(QString action);
-    void transportInfo(unsigned int error, QString transportInfoJson);
-    void mediaInfo(unsigned int error, QString mediaInfoJson);
-    void positionInfo(unsigned int error, QString positionInfoJson);
-    void trackSet(unsigned int error, QString uri);
-    void nextTrackSet(unsigned int error, QString uri);
+    void transportInfo(int error, QString transportInfoJson);
+    void mediaInfo(int error, QString mediaInfoJson);
+    void positionInfo(int error, QString positionInfoJson);
+    void trackSet(int error, QString uri);
+    void nextTrackSet(int error, QString uri);
 
 public slots:
     void onGetRendererDone(QString rendererJson);
@@ -108,11 +108,11 @@ public slots:
     void onBrowseDone(QString contentsJson);
     void onSearchDone(QString searchResultsJson);
     void onError(QString msg);
-    void onTransportInfo(unsigned int error, QString transportInfoJson);
-    void onMediaInfo(unsigned int error, QString mediaInfoJson);
-    void onPositionInfo(unsigned int error, QString positionInfoJson);
-    void onTrackSet(unsigned int error, QString uri);
-    void onNextTrackSet(unsigned int error, QString uri);
+    void onTransportInfo(int error, QString transportInfoJson);
+    void onMediaInfo(int error, QString mediaInfoJson);
+    void onPositionInfo(int error, QString positionInfoJson);
+    void onTrackSet(int error, QString uri);
+    void onNextTrackSet(int error, QString uri);
 
 protected:
     UPnPP::LibUPnP * libUPnP;

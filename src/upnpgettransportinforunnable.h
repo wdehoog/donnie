@@ -22,7 +22,7 @@ public:
     }
 
 signals:
-    void transportInfo(unsigned int error, QString transportInfoJson);
+    void transportInfo(int error, QString transportInfoJson);
 
 public slots:
     void run() {
