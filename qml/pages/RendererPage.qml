@@ -206,10 +206,6 @@ Page {
     }
 
     function onChangedTrack(trackIndex) {
-        // if already known ignore (could be due to loadTrack)
-        if(currentItem === trackIndex)
-            return;
-
         currentItem = trackIndex;
         var track = trackListModel.get(currentItem);
         updateUIForTrack(track);
@@ -897,21 +893,21 @@ Page {
             positionInfo = undefined   // use it only once
             if(pinfo === undefined) {  // if no new info
 
-                // if positionInfo is skipped on purpose
-                if(skipNextPositionInfo > 0)
-                    return
-
                 // pretend progress
                 if(transportState === 1 && timeSliderValue > 0) {
                     updateSlidersProgress(timeSliderValue + 1)
                     updateCoverProgress()
                 }
 
+                // if positionInfo is skipped on purpose
+                if(skipNextPositionInfo > 0)
+                    return
+
                 // detect lost connection
                 if(rendererConnected) {
-                    if(failedAttempts <= 3)
+                    if(failedAttempts <= 4)
                         failedAttempts++
-                    if(failedAttempts == 3) {
+                    if(failedAttempts == 4) {
                         rendererConnected = false
                         reset()
                         var errTxt = "Lost connection with Renderer."
@@ -969,10 +965,11 @@ Page {
 
                 if(prevTrackURI !== "" && prevTrackURI !== trackuri) {
 
-                    // track changed
+                    // track changed?
                     console.log("uri changed from ["+prevTrackURI + "] to [" + trackuri + "]");
                     var trackIndex = getTrackIndexForURI(trackuri)
-                    if(trackIndex >= 0)
+                    if(trackIndex >= 0                // known track
+                       && trackIndex !== currentItem) // changed externally
                         onChangedTrack(trackIndex)
                     else if(trackuri === "") { // no setNextAVTransportURI support?
                         if(transportInfo["tpstate"] === "Stopped")
