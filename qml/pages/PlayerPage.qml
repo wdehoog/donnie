@@ -436,7 +436,7 @@ Page {
     // for internet radio the QT Audio object seems to support some metadata
     Timer {
         interval: 5000;
-        running: audio.hasAudio && trackClass === "object.item.audioItem.audioBroadcast"
+        running: useBuiltInPlayer && audio.hasAudio && trackClass === "object.item.audioItem.audioBroadcast"
         repeat: true
         onTriggered: {
             var title = audio.metaData.title
@@ -452,27 +452,6 @@ Page {
             trackMetaText1 = title
             trackMetaText2 = publisher;
             updateMprisForTrackMetaData(getCurrentTrack());
-        }
-    }
-
-    Connections {
-        target: upnp
-        onMprisControl: {
-            console.log("onMprisControl: " + action);
-            switch(action) {
-            case "Play":
-                pause();
-                break;
-            case "Pause":
-                pause();
-                break;
-            case "Next":
-                next();
-                break;
-            case "Previous":
-                prev();
-                break;
-            }
         }
     }
 

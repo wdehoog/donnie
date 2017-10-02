@@ -387,6 +387,25 @@ Page {
             app.error(msg);
             showBusy = false; // VISIT only one could fail
         }
+
+        onMprisControl: {
+            console.log("onMprisControl: " + action);
+            switch(action) {
+            case "Play":
+                app.getPlayerPage().pause();
+                break;
+            case "Pause":
+                app.getPlayerPage().pause();
+                break;
+            case "Next":
+                app.getPlayerPage().next();
+                break;
+            case "Previous":
+                app.getPlayerPage().prev();
+                break;
+            }
+        }
+
     }
 
     ConfigurationValue {

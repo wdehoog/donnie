@@ -510,23 +510,6 @@ Page {
 
     Connections {
         target: upnp
-        onMprisControl: {
-            console.log("onMprisControl: " + action);
-            switch(action) {
-            case "Play":
-                pause();
-                break;
-            case "Pause":
-                pause();
-                break;
-            case "Next":
-                next();
-                break;
-            case "Previous":
-                prev();
-                break;
-            }
-        }
 
         // {"curspeed":"1","tpstate":"Playing","tpstatus":"OK"}
         onTransportInfo: {
