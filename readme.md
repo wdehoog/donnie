@@ -24,18 +24,19 @@ Note that it is still fresh and under development so things might not work as ex
     track change will not be detected and the next track will not be started.
   * When wlan is turned on after Donnie is started it will not use it. Donnie has to be restarted.
     This is caused by one of the underlying libraries.
+  * When Donnie crashes it can happen that the MPRIS registration cannot be done again or by another app. A reboot seems required.
 
 ### Future
 There are already a lot of Audio Player for Sailfish. Many of which look and work better then Donnie. It is a lot of work to come at the same level as those. Hopefully  one of those players will integrate the UPnP functionality Donnie has.
 
 
 ### Installation
-Packages of Donnie and some libraries it needs can be installed from my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog/sailfish_latest_armv7hl/).
+Packages of Donnie and some libraries it needs can be installed from my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog:/donnie/sailfish_latest_armv7hl/).
 
 To add this repo:
 
 ```
-devel-su ssu ar wdehoog http://repo.merproject.org/obs/home:/wdehoog/sailfish_latest_armv7hl/
+devel-su ssu ar wdehoog http://repo.merproject.org/obs/home:/wdehoog:/donnie/sailfish_latest_armv7hl/
 ```
 
 Then install with
@@ -98,7 +99,7 @@ Gives access to the player controls. You can:
 A Pully menu allows to Empty the list.
 
 ### Development
-This project is developed with the Sailfish OS IDE (QT Creator). It needs libupnpp, libupnp and libmpdclient to be installed on the Build Target (VM) and the Deploy Target (phone). All three can be found in my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog/sailfish_latest_armv7hl/).
+This project is developed with the Sailfish OS IDE (QT Creator). It needs libupnpp, libupnp and libmpdclient to be installed on the Build Target (VM) and the Deploy Target (phone). All three can be found in my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog:/donnie/sailfish_latest_armv7hl/).
 
 
 
