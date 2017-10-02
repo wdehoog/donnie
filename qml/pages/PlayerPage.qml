@@ -51,7 +51,8 @@ Page {
     Audio {
         id: audio
 
-        autoPlay: true;
+        autoLoad: true;
+        autoPlay: false;
 
         onStatusChanged: {
             if(audio.status == Audio.Loaded && audio.position == 0) {
@@ -66,6 +67,12 @@ Page {
 
         onPlaybackStateChanged: refreshTransportState()
         onSourceChanged: refreshTransportState()
+        onBufferProgressChanged: {
+            if(bufferProgress == 1.0) {
+                play()
+                updateIcons()
+            }
+        }
     }
 
     function next() {
@@ -84,43 +91,34 @@ Page {
 
     function pause() {
         if(audio.playbackState == Audio.PlayingState) {
-            audio.pause();
-            playIconSource =  "image://theme/icon-l-play";
-            cover.playIconSource = "image://theme/icon-cover-play";
+            audio.pause()
+            updateIcons()
         } else {
-            play();
+            play()
         }
     }
 
     function play() {
-        audio.play();
-        if(audio.playbackState == Audio.PlayingState) {
-            playIconSource = "image://theme/icon-l-pause";
-            cover.playIconSource = "image://theme/icon-cover-pause";
-        }
+        audio.play()
+        updateIcons()
     }
 
     function stop() {
-        audio.stop();
-        playIconSource =  "image://theme/icon-l-play";
-        cover.playIconSource = "image://theme/icon-cover-play";
+        audio.stop()
+        updateIcons()
     }
 
     function loadTrack(track) {
         //audio.stop();
-        audio.source = track.uri;
+        audio.source = track.uri
         if(track.albumArtURI) {
-            imageItemSource = track.albumArtURI;
-            cover.imageSource = track.albumArtURI;
+            imageItemSource = track.albumArtURI
+            cover.imageSource = track.albumArtURI
         } else {
-            imageItemSource = defaultImageSource;
-            cover.imageSource = cover.defaultImageSource;
+            imageItemSource = defaultImageSource
+            cover.imageSource = cover.defaultImageSource
         }
-        //audio.play();
-        if(audio.playbackState == Audio.PlayingState) {
-            playIconSource = "image://theme/icon-l-pause";
-            cover.playIconSource = "image://theme/icon-cover-pause";
-        }
+        updateIcons()
 
         trackMetaText1 = track.titleText
         trackMetaText2 = track.metaText
@@ -130,18 +128,28 @@ Page {
     }
 
     function clearList() {
-        playerPageActive = false;
-        stop();
-        audio.source = "";
-        listView.model.clear();
-        trackMetaText1 = "";
-        trackMetaText2 = "";
-        trackClass = "";
-        currentItem = -1;
-        imageItemSource = defaultImageSource;
+        playerPageActive = false
+        stop()
+        audio.source = ""
+        listView.model.clear()
+        trackMetaText1 = ""
+        trackMetaText2 = ""
+        trackClass = ""
+        currentItem = -1
+        imageItemSource = defaultImageSource
 
-        cover.imageSource = cover.defaultImageSource;
-        cover.coverProgressBar.label = "";
+        cover.imageSource = cover.defaultImageSource
+        cover.coverProgressBar.label = ""
+    }
+
+    function updateIcons() {
+        if(audio.playbackState == Audio.PlayingState) {
+            playIconSource = "image://theme/icon-l-pause";
+            cover.playIconSource = "image://theme/icon-cover-pause";
+        } else {
+            playIconSource =  "image://theme/icon-l-play";
+            cover.playIconSource = "image://theme/icon-cover-play";
+        }
     }
 
     function updateMprisForTrackMetaData(track) {
