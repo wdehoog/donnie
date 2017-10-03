@@ -30,6 +30,7 @@ ApplicationWindow
 
     property int playerState: -1
     property int mprisStateMask: 0
+    property alias last_playing_info: last_playing_info
 
     initialPage: mainPage
 
@@ -189,6 +190,12 @@ ApplicationWindow
     function updateMprisMetaData(meta) {
         var jsonString= JSON.stringify(meta);
         upnp.mprisSetMetaData(jsonString);
+    }
+
+    ConfigurationValue {
+            id: last_playing_info
+            key: "/donnie/last_playing_info"
+            defaultValue: ""
     }
 }
 

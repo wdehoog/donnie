@@ -430,5 +430,4 @@ Page {
             key: "/donnie/show_open_logpage"
             defaultValue: "false"
     }
-
 }
