@@ -35,6 +35,20 @@ public:
     //Q_INVOKABLE QVariantMap getRenderers(QString adapter);
     //Q_INVOKABLE QVariantMap getContentDirectories(QString adapter);
 
+    //
+    //
+    //
+    Q_INVOKABLE void getRendererJson(QString friendlyName, int search_window = 10);
+    Q_INVOKABLE void getServerJson(QString friendlyName, int search_window = 10);
+    Q_INVOKABLE bool setCurrentRenderer(QString name, bool isfriendlyname);
+    Q_INVOKABLE bool setCurrentServer(QString name, bool isfriendlyname);
+
+    UPnPClient::MRDH getRenderer(QString name, bool isfriendlyname);
+    UPnPClient::CDSH getServer(QString name, bool isfriendlyname);
+
+    //
+    // for content server
+    //
     Q_INVOKABLE void discover(int search_window = 10);
     Q_INVOKABLE void browse(QString cid);
     Q_INVOKABLE void browse(QString cid, int startIndex, int maxCount);
@@ -43,18 +57,13 @@ public:
     Q_INVOKABLE QString getParentID(QString id);
     Q_INVOKABLE QString getPathJson(QString id);
 
-    Q_INVOKABLE void getRendererJson(QString friendlyName, int search_window = 10);
-    Q_INVOKABLE void getServerJson(QString friendlyName, int search_window = 10);
+    // async
+    Q_INVOKABLE void getMetaData(QString id);
 
-    //UPnPP::LibUPnP * getLibUPnP();
 
-    Q_INVOKABLE bool setCurrentRenderer(QString name, bool isfriendlyname);
-    Q_INVOKABLE bool setCurrentServer(QString name, bool isfriendlyname);
-
-    UPnPClient::MRDH getRenderer(QString name, bool isfriendlyname);
-    UPnPClient::CDSH getServer(QString name, bool isfriendlyname);
-
+    //
     // for renderer
+    //
     Q_INVOKABLE int play();
     Q_INVOKABLE int pause();
     Q_INVOKABLE int stop();
@@ -100,6 +109,7 @@ signals:
     void positionInfo(int error, QString positionInfoJson);
     void trackSet(int error, QString uri);
     void nextTrackSet(int error, QString uri);
+    void metaData(int error, QString metaDataJson);
 
 public slots:
     void onGetRendererDone(QString rendererJson);
@@ -113,6 +123,7 @@ public slots:
     void onPositionInfo(int error, QString positionInfoJson);
     void onTrackSet(int error, QString uri);
     void onNextTrackSet(int error, QString uri);
+    void onMetaData(int error, QString metaDataJson);
 
 protected:
     UPnPP::LibUPnP * libUPnP;

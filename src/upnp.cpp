@@ -19,6 +19,7 @@
 #include "upnpgetserverworker.h"
 #include "upnpgettransportinforunnable.h"
 #include "upnpgetmediainforunnable.h"
+#include "upnpgetmetadatarunnable.h"
 #include "upnpgetpositioninforunnable.h"
 #include "upnpsettrackrunnable.h"
 #include "upnpsetnexttrackrunnable.h"
@@ -1019,5 +1020,29 @@ void UPNP::setNextTrackAsync(QString uri, QString didl) {
 
 void UPNP::onNextTrackSet(int error, QString uri) {
     emit nextTrackSet(error, uri);
+}
+
+void UPNP::getMetaData(QString id) {
+    if(currentServer == nullptr) {
+        emit error("UPNP::getMetadata: No Current Server");
+        return;
+    }
+
+    QThread* thread = new QThread;
+    UPnPGetMetaDataRunnable * worker = new UPnPGetMetaDataRunnable(currentServer, id);
+    worker->moveToThread(thread);
+
+    connect(worker, SIGNAL (error(QString)), this, SLOT (onError(QString)));
+    connect(worker, SIGNAL (metaData(int, QString)), this, SLOT (onMetaData(int, QString)));
+
+    connect(thread, SIGNAL (started()), worker, SLOT (process()));
+    connect(worker, SIGNAL (finished()), thread, SLOT (quit()));
+    connect(worker, SIGNAL (finished()), worker, SLOT (deleteLater()));
+    connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
+    thread->start();
+}
+
+void UPNP::onMetaData(int error, QString metaDataJson) {
+    emit metaData(error, metaDataJson);
 }
 
