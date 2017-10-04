@@ -31,7 +31,9 @@ There are already a lot of Audio Player for Sailfish. Many of which look and wor
 
 
 ### Installation
-Packages of Donnie and some libraries it needs can be installed from my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog:/donnie/sailfish_latest_armv7hl/).
+Donnie is available through [OpenRepos](https://openrepos.net/content/wdehoog/donnie).
+
+Packages of Donnie and some libraries it needs also can be installed from my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog:/donnie/sailfish_latest_armv7hl/). 
 
 To add this repo:
 
@@ -46,11 +48,6 @@ devel-su pkcon ref
 devel-su pkcon install donnie
 ```
 
-Maybe you also need to restart pulse audio to have it load the policy file for Donnie.
-
-```
-systemctl --user restart pulseaudio
-```
 
 ###  Usage
 #### Main page
