@@ -507,23 +507,29 @@ Page {
         return UPnP.formatDuration(Math.round(parseInt(trackDuration) / 1000));
     }
 
-    /*function loadLastPlayingJSON(trackListModel, currentBrowseStack) {
+    function loadLastPlayingJSON() { //trackListModel, currentBrowseStack) {
         var i
         try {
             var lastPlayingInfo = JSON.parse(app.last_playing_info.value);
 
-            currentBrowseStack.empty()
-            for(i=0;i<lastPlayingInfo.browseStackIds.count;i++)
-                currentBrowseStack.push(lastPlayingInfo.browseStackIds[i])
+            //currentBrowseStack.empty()
+            //for(i=0;i<lastPlayingInfo.browseStackIds.count;i++)
+            //    currentBrowseStack.push(lastPlayingInfo.browseStackIds[i])
 
-            upnp.browse()
+            return lastPlayingInfo
         } catch( err ) {
             app.error("Exception in loadLastPlayingJSON: " + err);
             app.error("json: " + app.last_playing_info.value);
         }
-    }*/
+        return undefined
+    }
 
     function saveLastPlayingJSON(currentTrack, trackListModel, currentBrowseStack) {
+        /*
+          info.currentTrackId
+          info.queueTrackIds[]
+          info.browseStackIds[]
+         */
         var i
         var lastPlayingInfo = {}
 

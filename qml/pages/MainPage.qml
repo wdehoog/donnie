@@ -380,6 +380,13 @@ Page {
             }
 
             showBusy = false; // VISIT both should be done
+
+            try {
+            var linfo = app.getPlayerPage().loadLastPlayingJSON()
+            if(linfo && linfo)
+                upnp.getMetaData(linfo.currentTrackId)
+            } catch(err) {
+            }
         }
 
         onError: {
@@ -406,7 +413,18 @@ Page {
             }
         }
 
+        onMetaData: {
+            console.log("onMetaData: " + metaDataJson);
+            try {
+                var metaData = JSON.parse(metaDataJson);
+            } catch(err) {
+                app.error("Exception in onMetaData: "+err);
+                app.error("json: " + metaDataJson);
+
+            }
+        }
     }
+
 
     ConfigurationValue {
             id: search_window
