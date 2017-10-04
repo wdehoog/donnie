@@ -1028,18 +1028,12 @@ void UPNP::getMetaData(QString id) {
         return;
     }
 
-    QThread* thread = new QThread;
-    UPnPGetMetaDataRunnable * worker = new UPnPGetMetaDataRunnable(currentServer, id);
-    worker->moveToThread(thread);
+    UPnPGetMetaDataRunnable * runnable = new UPnPGetMetaDataRunnable(currentServer, id);
+    runnable->setAutoDelete(true);
 
-    connect(worker, SIGNAL (error(QString)), this, SLOT (onError(QString)));
-    connect(worker, SIGNAL (metaData(int, QString)), this, SLOT (onMetaData(int, QString)));
+    connect(runnable, SIGNAL (metaData(int, QString)), this, SLOT (onMetaData(int, QString)));
 
-    connect(thread, SIGNAL (started()), worker, SLOT (process()));
-    connect(worker, SIGNAL (finished()), thread, SLOT (quit()));
-    connect(worker, SIGNAL (finished()), worker, SLOT (deleteLater()));
-    connect(thread, SIGNAL (finished()), thread, SLOT (deleteLater()));
-    thread->start();
+    QThreadPool::globalInstance()->start(runnable);
 }
 
 void UPNP::onMetaData(int error, QString metaDataJson) {
