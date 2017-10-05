@@ -659,6 +659,7 @@ Page {
                     console.log("loadTrack setNextTrack "+track.uri)
                     setNextTrack(track)
                 }
+                app.saveLastPlayingJSON(track, trackListModel)
             }
         }
 
@@ -742,7 +743,10 @@ Page {
         addTracksNoStart(tracks)
         if(currentItem == -1 && trackListModel.count > 0) {
             // start playing
-            currentItem = 0
+            if(arguments.length >= 2 && arguments[1] > -1)
+                currentItem = arguments[1]
+            else
+                currentItem = 0
             loadTrack()
         } else if(wasAtLastTrack) {
             // if the last track is playing there is no nexturi

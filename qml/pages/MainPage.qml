@@ -9,6 +9,8 @@ import QtQuick 2.2
 import Sailfish.Silica 1.0
 import org.nemomobile.configuration 1.0
 
+import "../UPnP.js" as UPnP
+
 Page {
     property bool showBusy : false
 
@@ -334,6 +336,17 @@ Page {
         return app.hasCurrentServer() ? true : false
     }
 
+    function loadLastPlayingJSON() {
+        try {
+            var lastPlayingInfo = JSON.parse(app.last_playing_info.value);
+            return lastPlayingInfo
+        } catch( err ) {
+            app.error("Exception in loadLastPlayingJSON: " + err);
+            app.error("json: " + app.last_playing_info.value);
+        }
+        return undefined
+    }
+
     Component.onCompleted: {
         // check if configured renderer and server can be reached
         showBusy = true;
@@ -344,6 +357,8 @@ Page {
         if(server_friendlyname.value)
             upnp.getServerJson(server_friendlyname.value, search_window.value);
     }
+
+    property string metaDataCurrentTrackId
 
     Connections {
         target: upnp
@@ -376,22 +391,30 @@ Page {
             } catch(err) {
                 app.error("Exception in onGetServerDone: "+err);
                 app.error("json: " + serverJson);
-
             }
 
             showBusy = false; // VISIT both should be done
 
-            try {
-                var linfo = app.getPlayerPage().loadLastPlayingJSON()
-                if(linfo && linfo) {
-                    var pos = 0
-                    var ids = []
-                    ids[pos++] = linfo.currentTrackId
-                    for(i=0;i<linfo.queueTrackIds.length;i++)
-                        ids[pos++] = linfo.queueTrackIds[i]
-                    upnp.getMetaData(ids)
+            if(resume_saved_info.value) {
+                try {
+                    var linfo = loadLastPlayingJSON()
+                    if(linfo && linfo) {
+                        var pos = 0
+                        var ids = []
+
+                        metaDataCurrentTrackId = linfo.currentTrackId
+
+                        for(i=0;i<linfo.queueTrackIds.length;i++)
+                            ids[pos++] = linfo.queueTrackIds[i]
+
+                        for(i=0;i<linfo.browseStackIds.length;i++)
+                            ids[pos++] = linfo.browseStackIds[i]
+
+                        upnp.getMetaData(ids)
+                    }
+                } catch(err) {
+                    app.error("Exception in onGetServerDone: "+err);
                 }
-            } catch(err) {
             }
         }
 
@@ -423,6 +446,34 @@ Page {
             console.log("onMetaData: " + metaDataJson);
             try {
                 var metaData = JSON.parse(metaDataJson);
+
+                // restore browse stack
+                var index = 0
+                browsePage.reset()
+                browsePage.pushOnBrowseStack("0", "-1", "[Top Level]", -1);
+                for(var i=0;i<metaData.length;i++) {
+                    if(metaData[i].containers && metaData[i].containers.length>0) {
+                        var item = metaData[i].containers[0]
+                        browsePage.pushOnBrowseStack(item.id, item.pid, item.title, index);
+                        index++
+                    }
+                }
+                browsePage.cid = app.currentBrowseStack.peek().id
+
+                // restore queue and current track
+                var currentTrackIndex = -1;
+                var tracks = [];
+                for(var i=0;i<metaData.length;i++) {
+                    if(metaData[i].items && metaData[i].items.length>0) {
+                        var track = UPnP.createListItem(metaData[i].items[0]);
+                        tracks.push(track);
+                        if(track.id === metaDataCurrentTrackId)
+                            currentTrackIndex = tracks.length - 1
+                    }
+                }
+                metaDataCurrentTrackId = ""
+                getPlayerPage().addTracks(tracks, currentTrackIndex);
+
             } catch(err) {
                 app.error("Exception in onMetaData: "+err);
                 app.error("json: " + metaDataJson);
@@ -453,5 +504,10 @@ Page {
             id: show_open_logpage
             key: "/donnie/show_open_logpage"
             defaultValue: "false"
+    }
+    ConfigurationValue {
+            id: resume_saved_info
+            key: "/donnie/resume_saved_info"
+            defaultValue: false
     }
 }

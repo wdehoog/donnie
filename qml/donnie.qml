@@ -192,6 +192,29 @@ ApplicationWindow
         upnp.mprisSetMetaData(jsonString);
     }
 
+    function saveLastPlayingJSON(currentTrack, trackListModel) {
+        /*
+          info.currentTrackId
+          info.queueTrackIds[]
+          info.browseStackIds[]
+         */
+        var i
+        var lastPlayingInfo = {}
+
+        lastPlayingInfo.currentTrackId = currentTrack.id
+
+        lastPlayingInfo.queueTrackIds = []
+        for(i=0;i<trackListModel.count;i++)
+            lastPlayingInfo.queueTrackIds[i] = trackListModel.get(i).id
+
+        lastPlayingInfo.browseStackIds = []
+        for(i=1;i<currentBrowseStack.length();i++)
+            lastPlayingInfo.browseStackIds[i] = currentBrowseStack.elements()[i].id
+
+        app.last_playing_info.value = JSON.stringify(lastPlayingInfo)
+    }
+
+
     ConfigurationValue {
             id: last_playing_info
             key: "/donnie/last_playing_info"

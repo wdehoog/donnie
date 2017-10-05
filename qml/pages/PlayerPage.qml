@@ -125,7 +125,7 @@ Page {
         trackClass = track.upnpclass;
 
         updateMprisForTrack(track);
-        saveLastPlayingJSON(track, trackListModel, app.currentBrowseStack)
+        app.saveLastPlayingJSON(track, trackListModel)
     }
 
     function clearList() {
@@ -479,20 +479,15 @@ Page {
         //    return;
     //}
 
-    /*function dumpTracklist() {
-        var i;
-        for(i=0;i<trackListModel.count;i++) {
-            var track = trackListModel.get(i);
-            console.log(""+i+": "+track.uri);
-        }
-    }*/
-
     function addTracks(tracks) {
         var i;
         for(i=0;i<tracks.length;i++)
             trackListModel.append(tracks[i])
-        if(currentItem == -1 && trackListModel.count>0)
+        if(currentItem == -1 && trackListModel.count>0) {
+            if(arguments.length >= 2 && arguments[1] > -1)
+                currentItem = arguments[1] - 1 // next will do +1
             next();        
+        }
         playerPageActive = true;
     }
 
@@ -505,45 +500,6 @@ Page {
     // Format track duration to format like HH:mm:ss / m:ss / 0:ss
     function formatTrackDuration(trackDuration /* track duration in milliseconds */) {
         return UPnP.formatDuration(Math.round(parseInt(trackDuration) / 1000));
-    }
-
-    function loadLastPlayingJSON() { //trackListModel, currentBrowseStack) {
-        var i
-        try {
-            var lastPlayingInfo = JSON.parse(app.last_playing_info.value);
-
-            //currentBrowseStack.empty()
-            //for(i=0;i<lastPlayingInfo.browseStackIds.count;i++)
-            //    currentBrowseStack.push(lastPlayingInfo.browseStackIds[i])
-
-            return lastPlayingInfo
-        } catch( err ) {
-            app.error("Exception in loadLastPlayingJSON: " + err);
-            app.error("json: " + app.last_playing_info.value);
-        }
-        return undefined
-    }
-
-    function saveLastPlayingJSON(currentTrack, trackListModel, currentBrowseStack) {
-        /*
-          info.currentTrackId
-          info.queueTrackIds[]
-          info.browseStackIds[]
-         */
-        var i
-        var lastPlayingInfo = {}
-
-        lastPlayingInfo.currentTrackId = currentTrack.id
-
-        lastPlayingInfo.queueTrackIds = []
-        for(i=0;i<trackListModel.count;i++)
-            lastPlayingInfo.queueTrackIds[i] = trackListModel.get(i).id
-
-        lastPlayingInfo.browseStackIds = []
-        for(i=0;i<currentBrowseStack.length();i++)
-            lastPlayingInfo.browseStackIds[i] = currentBrowseStack.elements()[i].id
-
-        app.last_playing_info.value = JSON.stringify(lastPlayingInfo)
     }
 
 }
