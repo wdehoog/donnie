@@ -382,9 +382,15 @@ Page {
             showBusy = false; // VISIT both should be done
 
             try {
-            var linfo = app.getPlayerPage().loadLastPlayingJSON()
-            if(linfo && linfo)
-                upnp.getMetaData(linfo.currentTrackId)
+                var linfo = app.getPlayerPage().loadLastPlayingJSON()
+                if(linfo && linfo) {
+                    var pos = 0
+                    var ids = []
+                    ids[pos++] = linfo.currentTrackId
+                    for(i=0;i<linfo.queueTrackIds.length;i++)
+                        ids[pos++] = linfo.queueTrackIds[i]
+                    upnp.getMetaData(ids)
+                }
             } catch(err) {
             }
         }

@@ -1022,13 +1022,13 @@ void UPNP::onNextTrackSet(int error, QString uri) {
     emit nextTrackSet(error, uri);
 }
 
-void UPNP::getMetaData(QString id) {
+void UPNP::getMetaData(QStringList ids) {
     if(currentServer == nullptr) {
         emit error("UPNP::getMetadata: No Current Server");
         return;
     }
 
-    UPnPGetMetaDataRunnable * runnable = new UPnPGetMetaDataRunnable(currentServer, id);
+    UPnPGetMetaDataRunnable * runnable = new UPnPGetMetaDataRunnable(currentServer, ids);
     runnable->setAutoDelete(true);
 
     connect(runnable, SIGNAL (metaData(int, QString)), this, SLOT (onMetaData(int, QString)));

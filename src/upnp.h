@@ -58,7 +58,7 @@ public:
     Q_INVOKABLE QString getPathJson(QString id);
 
     // async
-    Q_INVOKABLE void getMetaData(QString id);
+    Q_INVOKABLE void getMetaData(QStringList ids);
 
 
     //
