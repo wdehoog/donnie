@@ -68,6 +68,17 @@ Page {
                 }
             }
 
+            TextSwitch {
+                id: loadSavedInfo
+                text: "Resume"
+                description: "Load saved track queue at startup and resume playing"
+                checked: resume_saved_info.value
+                onCheckedChanged: {
+                    resume_saved_info.value = checked;
+                    resume_saved_info.sync();
+                }
+            }
+
             /*TextSwitch {
                 id: useNextURI
                 text: "Gapless"
@@ -119,6 +130,12 @@ Page {
     ConfigurationValue {
             id: search_allow_containers
             key: "/donnie/search_allow_containers"
+            defaultValue: false
+    }
+
+    ConfigurationValue {
+            id: resume_saved_info
+            key: "/donnie/resume_saved_info"
             defaultValue: false
     }
 }
