@@ -360,6 +360,9 @@ Page {
 
     property string metaDataCurrentTrackId
 
+    //property bool rendererDone: false
+    //property bool serverDone: false
+
     Connections {
         target: upnp
 
@@ -410,10 +413,12 @@ Page {
                         for(i=0;i<linfo.browseStackIds.length;i++)
                             ids[pos++] = linfo.browseStackIds[i]
 
-                        upnp.getMetaData(ids)
+                        if(ids.length > 0)
+                            upnp.getMetaData(ids)
                     }
                 } catch(err) {
                     app.error("Exception in onGetServerDone: "+err);
+                    app.showErrorDialog("Failed to load previously saved Ids.\nCan not Resume.")
                 }
             }
         }
@@ -443,7 +448,12 @@ Page {
         }
 
         onMetaData: {
-            console.log("onMetaData: " + metaDataJson);
+            //console.log("onMetaData: " + metaDataJson);
+            if(error !== 0) {
+                app.showErrorDialog("Failed to retrieve metadata for previously saved Ids.\nCan not Resume.")
+                return
+            }
+
             try {
                 var metaData = JSON.parse(metaDataJson);
 
@@ -477,7 +487,7 @@ Page {
             } catch(err) {
                 app.error("Exception in onMetaData: "+err);
                 app.error("json: " + metaDataJson);
-
+                app.showErrorDialog("Failed to parse previously saved Ids.\nCan not Resume.")
             }
         }
     }

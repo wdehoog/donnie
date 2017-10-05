@@ -23,14 +23,18 @@ ApplicationWindow
     property var currentServer
     property var currentRenderer
     property var currentServerSearchCapabilities
-
     property bool useBuiltInPlayer: false;
 
     property var errorLog : new UPnP.dataStructures.Fifo();
 
     property int playerState: -1
     property int mprisStateMask: 0
+
     property alias last_playing_info: last_playing_info
+
+    //Component.onDestruction: app.last_playing_position.value = position
+    //property alias last_playing_position: last_playing_position
+    property int lastPlayingPosition: 0
 
     initialPage: mainPage
 
@@ -205,15 +209,27 @@ ApplicationWindow
 
         lastPlayingInfo.queueTrackIds = []
         for(i=0;i<trackListModel.count;i++)
-            lastPlayingInfo.queueTrackIds[i] = trackListModel.get(i).id
+            lastPlayingInfo.queueTrackIds.push(trackListModel.get(i).id)
 
         lastPlayingInfo.browseStackIds = []
         for(i=1;i<currentBrowseStack.length();i++)
-            lastPlayingInfo.browseStackIds[i] = currentBrowseStack.elements()[i].id
+            lastPlayingInfo.browseStackIds.push(currentBrowseStack.elements()[i].id)
 
         app.last_playing_info.value = JSON.stringify(lastPlayingInfo)
     }
 
+    //Component.onDestruction: { nothing happens
+        //console.log("lastPlayingPosition:") //+lastPlayingPosition)
+        //last_playing_position.value = lastPlayingPosition
+        //last_playing_position.sync()
+    //}
+
+    ConfigurationValue {
+            id: last_playing_position
+            key: "/donnie/last_playing_position"
+            defaultValue: 0
+            //Component.onDestruction: sync()
+    }
 
     ConfigurationValue {
             id: last_playing_info

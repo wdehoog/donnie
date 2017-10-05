@@ -8,6 +8,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtMultimedia 5.5
+import org.nemomobile.configuration 1.0
 
 import "../UPnP.js" as UPnP
 
@@ -31,6 +32,7 @@ Page {
     property bool canPrevious: hasTracks && (currentItem > 0)
     property bool canPlay: hasTracks && (audio.playbackState != audio.PlayingState)
     property bool canPause: audio.playbackState == audio.PlayingState
+    //property int audioPosition : audio.position
 
     // 1 playing, 2 paused, the rest inactive
     property int transportState : -1
@@ -61,8 +63,7 @@ Page {
 
             if(audio.status == Audio.EndOfMedia) {
                 next();
-            }
-
+            }            
         }
 
         onPlaybackStateChanged: refreshTransportState()
@@ -285,9 +286,9 @@ Page {
 
                         // slider on this page and progress bar on cover page
                         if(timeSlider.maximumValue != audio.duration) {
-                            timeSlider.maximumValue = audio.duration;
+                            timeSlider.maximumValue = audio.duration
                             timeSlider.label = formatTrackDuration(audio.duration)
-                            cover.coverProgressBar.maximumValue = audio.duration;
+                            cover.coverProgressBar.maximumValue = audio.duration
                         }
 
                         timeSlider.valueText = formatTrackDuration(timeSlider.value);
@@ -298,12 +299,12 @@ Page {
                           cover.coverProgressBar.label = ""
 
                         // User is using the slider, don't update the value
-                        if(timeSlider.down) {
-                            return;
-                        }
+                        if(timeSlider.down)
+                            return
 
-                        timeSlider.value = audio.position;
-                        cover.coverProgressBar.value = audio.position;
+                        timeSlider.value = audio.position
+                        cover.coverProgressBar.value = audio.position
+                        app.lastPlayingPosition = audio.position
                     }
                 }
 
@@ -467,12 +468,12 @@ Page {
     /*Component.onDestruction: {
         console.debug("Destruction of PlayerPage")
         safeLastPlayingInfo()
-    }*/
+    }
 
     function safeLastPlayingInfo() {
         console.debug("PlayerPage safeLastPlayingInfo")
         //mainPage.saveLastPlayingJSON(getCurrentTrack(), audio.position, trackListModel)
-    }
+    }*/
 
     //onStatusChanged: {
         //if(status !== PageStatus.Active)
