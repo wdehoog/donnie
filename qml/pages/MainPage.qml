@@ -373,11 +373,11 @@ Page {
         showBusy = true
         try {
             var linfo = loadLastBrowsingJSON()
-            if(linfo !== null && linfo.browseStackIds) {
+            if(linfo !== null && linfo.length > 0) {
                 var pos = 0
                 var ids = []
-                for(i=0;i<linfo.browseStackIds.length;i++)
-                    ids[pos++] = linfo.browseStackIds[i]
+                for(i=0;i<linfo.length;i++)
+                    ids[pos++] = linfo[i]
                 if(ids.length > 0) {
                     resumeState = 2
                     upnp.getMetaData(ids)
