@@ -77,6 +77,8 @@ Page {
                     listView.positionViewAtIndex(cScrollIndex, ListView.Center)
                 }
 
+                app.saveLastBrowsingJSON()
+
             } catch( err ) {
                 app.error("Exception in onBrowseDone: " + err);
                 app.error("json: " + contentsJson);

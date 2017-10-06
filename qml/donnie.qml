@@ -31,6 +31,7 @@ ApplicationWindow
     property int mprisStateMask: 0
 
     property alias last_playing_info: last_playing_info
+    property alias last_browsing_info: last_browsing_info
 
     //Component.onDestruction: app.last_playing_position.value = position
     //property alias last_playing_position: last_playing_position
@@ -196,26 +197,26 @@ ApplicationWindow
         upnp.mprisSetMetaData(jsonString);
     }
 
+    function saveLastBrowsingJSON() {
+        var i
+        var browseStackIds = []
+        for(i=1;i<currentBrowseStack.length();i++)
+            browseStackIds.push(currentBrowseStack.elements()[i].id)
+        last_browsing_info.value = JSON.stringify(browseStackIds)
+    }
+
     function saveLastPlayingJSON(currentTrack, trackListModel) {
         /*
           info.currentTrackId
           info.queueTrackIds[]
-          info.browseStackIds[]
          */
         var i
         var lastPlayingInfo = {}
-
         lastPlayingInfo.currentTrackId = currentTrack.id
-
         lastPlayingInfo.queueTrackIds = []
         for(i=0;i<trackListModel.count;i++)
             lastPlayingInfo.queueTrackIds.push(trackListModel.get(i).id)
-
-        lastPlayingInfo.browseStackIds = []
-        for(i=1;i<currentBrowseStack.length();i++)
-            lastPlayingInfo.browseStackIds.push(currentBrowseStack.elements()[i].id)
-
-        app.last_playing_info.value = JSON.stringify(lastPlayingInfo)
+        last_playing_info.value = JSON.stringify(lastPlayingInfo)
     }
 
     //Component.onDestruction: { nothing happens
@@ -228,7 +229,12 @@ ApplicationWindow
             id: last_playing_position
             key: "/donnie/last_playing_position"
             defaultValue: 0
-            //Component.onDestruction: sync()
+    }
+
+    ConfigurationValue {
+            id: last_browsing_info
+            key: "/donnie/last_browsing_info"
+            defaultValue: ""
     }
 
     ConfigurationValue {
