@@ -81,4 +81,5 @@ HEADERS += \
     src/upnpgetmediainforunnable.h \
     src/upnpgetpositioninforunnable.h \
     src/upnpsettrackrunnable.h \
-    src/upnpsetnexttrackrunnable.h
+    src/upnpsetnexttrackrunnable.h \
+    src/upnpgetmetadatarunnable.h
