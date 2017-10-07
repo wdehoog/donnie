@@ -57,10 +57,10 @@ Page {
         autoPlay: false;
 
         onStatusChanged: {
-            console.log("Audio.onStatusChanged: " + audio.status + ", " + requestedAudioPosition )
-            //if(audio.status == Audio.Loaded && requestedAudioPosition != -1) {
-            if(requestedAudioPosition != -1) {
-                position = requestedAudioPosition
+            if((audio.status == Audio.Loading
+                || audio.status == Audio.Loaded)
+               && requestedAudioPosition != -1) {
+                 audio.seek(requestedAudioPosition)
                 requestedAudioPosition = -1
             }
 
