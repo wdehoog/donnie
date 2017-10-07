@@ -471,7 +471,7 @@ Page {
 
             if(app.hasCurrentServer()) {
                 if(resume_saved_info.value === 1) // 0: never, 1: ask, 2:always
-                    app.showConfirmDialog("Load previously saved queue?", function() {
+                    app.showConfirmDialog("Load previously saved queue?", "Load", function() {
                         loadResumeMetaData()
                     })
                 else if(resume_saved_info.value === 2)

@@ -82,9 +82,9 @@ ApplicationWindow
         }*/
     }
 
-    function showConfirmDialog(text, acceptCallback) {
+    function showConfirmDialog(text, title, acceptCallback) {
         var dialog = pageStack.push(Qt.resolvedUrl("components/ConfirmDialog.qml"),
-                                                   {confirmMessageText: text})
+                                                   {confirmMessageText: text, titleText: title})
         if(acceptCallback !== null)
             dialog.accepted.connect(function() {
                 acceptCallback()

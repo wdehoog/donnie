@@ -3,6 +3,7 @@ import Sailfish.Silica 1.0
 
 Dialog {
     property string confirmMessageText : ""
+    property string titleText : "Confirm"
 
     id: confirmDialog
     canAccept: true
@@ -15,7 +16,7 @@ Dialog {
             id: column
             width: parent.width
 
-            PageHeader { title: "Confirm" }
+            PageHeader { title: titleText }
 
             TextArea {
                 id: msgTextArea
