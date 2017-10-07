@@ -68,7 +68,7 @@ Page {
                 }
             }
 
-            TextSwitch {
+            /*TextSwitch {
                 id: loadSavedInfo
                 text: "Resume"
                 description: "Load saved track queue at startup and resume playing"
@@ -77,7 +77,29 @@ Page {
                     resume_saved_info.value = checked;
                     resume_saved_info.sync();
                 }
-            }
+            }*/
+
+            ComboBox {
+                 label: "Resume"
+                 description: "Load saved track queue at startup and resume playing"
+
+                 currentIndex: resume_saved_info.value
+
+                 menu: ContextMenu {
+                     MenuItem {
+                         text: "Never"
+                         onClicked: resume_saved_info.value = 0
+                     }
+                     MenuItem {
+                         text: "Ask"
+                         onClicked: resume_saved_info.value = 1
+                     }
+                     MenuItem {
+                         text: "Always"
+                         onClicked: resume_saved_info.value = 2
+                     }
+                 }
+             }
 
             /*TextSwitch {
                 id: useNextURI
@@ -136,7 +158,7 @@ Page {
     ConfigurationValue {
             id: resume_saved_info
             key: "/donnie/resume_saved_info"
-            defaultValue: false
+            defaultValue: 0
     }
 }
 

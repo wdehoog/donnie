@@ -67,7 +67,8 @@ DISTFILES += \
     qml/components/MultiItemPicker.qml \
     license/License.txt \
     qml/components/Messagebox.qml \
-    qml/components/ErrorDialog.qml
+    qml/components/ErrorDialog.qml \
+    qml/components/ConfirmDialog.qml
 
 HEADERS += \
     src/upnp.h \

@@ -72,13 +72,22 @@ ApplicationWindow
 
     function showErrorDialog(text) { //, showCancelAll, cancelAll) {
         var dialog = pageStack.push(Qt.resolvedUrl("components/ErrorDialog.qml"),
-                                    {errorMessageText: text}); //, showCancelAll: showCancelAll});
+                                    {errorMessageText: text}) //, showCancelAll: showCancelAll});
         /*if(showCancelAll) {
           dialog.accepted.connect(function() {
               if(dialog.cancelAll)
                 cancelAll()
           })
         }*/
+    }
+
+    function showConfirmDialog(text, acceptCallback) {
+        var dialog = pageStack.push(Qt.resolvedUrl("components/ConfirmDialog.qml"),
+                                                   {confirmMessageText: text})
+        if(acceptCallback !== null)
+            dialog.accepted.connect(function() {
+                acceptCallback()
+            })
     }
 
     function hasCurrentServer() {

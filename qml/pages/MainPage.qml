@@ -469,8 +469,14 @@ Page {
 
             showBusy = false; // VISIT both should be done
 
-            if(resume_saved_info.value)
-                loadResumeMetaData()
+            if(app.hasCurrentServer()) {
+                if(resume_saved_info.value === 1) // 0: never, 1: ask, 2:always
+                    app.showConfirmDialog("Load previously saved queue?", function() {
+                        loadResumeMetaData()
+                    })
+                else if(resume_saved_info.value === 2)
+                    loadResumeMetaData()
+            }
         }
 
         onError: {
@@ -582,6 +588,6 @@ Page {
     ConfigurationValue {
             id: resume_saved_info
             key: "/donnie/resume_saved_info"
-            defaultValue: false
+            defaultValue: 0
     }
 }
