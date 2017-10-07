@@ -5,104 +5,104 @@
     <name>AboutPage</name>
     <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Over</translation>
     </message>
     <message>
         <source>UPnP control point and player for Sailfish OS</source>
-        <translation type="unfinished"></translation>
+        <translation>UPnP control point en speler voor Sailfish OS</translation>
     </message>
     <message>
         <source>Thanks to</source>
-        <translation type="unfinished"></translation>
+        <translation>Met dank aan</translation>
     </message>
 </context>
 <context>
     <name>Browse</name>
     <message>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>Bladeren</translation>
     </message>
     <message>
         <source>Load Previous Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorige Set Laden</translation>
     </message>
     <message>
         <source>Load Next Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Volgende Set Laden</translation>
     </message>
     <message>
         <source>Load More</source>
-        <translation type="unfinished"></translation>
+        <translation>Meer Laden</translation>
     </message>
 </context>
 <context>
     <name>CoverPage</name>
     <message>
         <source>Donnie</source>
-        <translation type="unfinished"></translation>
+        <translation>Donnie</translation>
     </message>
 </context>
 <context>
     <name>DiscoveryPage</name>
     <message>
         <source>Discover UPnP Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>UPnP Apparaten</translation>
     </message>
     <message>
         <source>UPnP Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoek UPnP Apparaten</translation>
     </message>
 </context>
 <context>
     <name>MainPage</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Over</translation>
     </message>
     <message>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Verdergaan</translation>
     </message>
     <message>
         <source>Donnie</source>
-        <translation type="unfinished"></translation>
+        <translation>Donnie</translation>
     </message>
 </context>
 <context>
     <name>PlayerPage</name>
     <message>
         <source>Empty List</source>
-        <translation type="unfinished"></translation>
+        <translation>Lijst Leeg Maken</translation>
     </message>
 </context>
 <context>
     <name>RendererPage</name>
     <message>
         <source>Empty List</source>
-        <translation type="unfinished"></translation>
+        <translation>Lijst Leeg Maken</translation>
     </message>
 </context>
 <context>
     <name>Search</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoeken</translation>
     </message>
     <message>
         <source>Load More</source>
-        <translation type="unfinished"></translation>
+        <translation>Meer Laden</translation>
     </message>
     <message>
         <source>Load Next Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Laad Volgende Set</translation>
     </message>
     <message>
         <source>Load Previous Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Laad Vorige Set</translation>
     </message>
 </context>
 </TS>

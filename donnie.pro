@@ -42,7 +42,7 @@ CONFIG += sailfishapp_i18n
 # planning to localize your app, remember to comment out the
 # following TRANSLATIONS line. And also do not forget to
 # modify the localized app name in the the .desktop file.
-# TRANSLATIONS += translations/donnie-de.ts
+TRANSLATIONS += translations/donnie-nl.ts
 
 INCLUDEPATH += /usr/include/qt5/MprisQt
 INCLUDEPATH += /usr/include/qt5/QtDBus
@@ -68,7 +68,8 @@ DISTFILES += \
     license/License.txt \
     qml/components/Messagebox.qml \
     qml/components/ErrorDialog.qml \
-    qml/components/ConfirmDialog.qml
+    qml/components/ConfirmDialog.qml \
+    translations/donnie-nl.ts
 
 HEADERS += \
     src/upnp.h \
