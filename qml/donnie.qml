@@ -30,6 +30,7 @@ ApplicationWindow
     property int playerState: -1
     property int mprisStateMask: 0
 
+    property alias last_playing_position: last_playing_position
     property alias last_playing_info: last_playing_info
     property alias last_browsing_info: last_browsing_info
 

@@ -51,6 +51,7 @@ Page {
 
     property bool playing : false
     property bool rendererConnected: false
+    property int requestedAudioPosition : -1
 
     // -1 initial, 1 playing, 2 paused, 3 stopped the rest inactive
     property int transportState : -1
@@ -103,6 +104,7 @@ Page {
             }
             playIconSource =  "image://theme/icon-l-play";
             cover.playIconSource = "image://theme/icon-cover-play";
+            app.last_playing_position.value = timeSliderValue
         } else {
             play();
         }
@@ -132,6 +134,7 @@ Page {
         playing = false;
         playIconSource =  "image://theme/icon-l-play";
         cover.playIconSource = "image://theme/icon-cover-play";
+        app.last_playing_position.value = timeSliderValue
     }
 
     function reset() {
@@ -206,31 +209,31 @@ Page {
     }
 
     function onChangedTrack(trackIndex) {
-        currentItem = trackIndex;
-        var track = trackListModel.get(currentItem);
-        updateUIForTrack(track);
-        updateMprisForTrack(track);
+        currentItem = trackIndex
+        var track = trackListModel.get(currentItem)
+        updateUIForTrack(track)
+        updateMprisForTrack(track)
 
         // When available set next track
         if(trackListModel.count > (currentItem+1)) {
-            track = trackListModel.get(currentItem+1);
-            console.log("onChangedTrack setNextTrack "+track.uri);
-            setNextTrack(track);
+            track = trackListModel.get(currentItem+1)
+            console.log("onChangedTrack setNextTrack "+track.uri)
+            setNextTrack(track)
         }
-        console.log("onChangedTrack: index="+trackIndex);
+        console.log("onChangedTrack: index="+trackIndex)
     }
 
     function loadTrack() {
         var track = trackListModel.get(currentItem)
         console.log("loadTrack trying item " + currentItem + ": "+track.uri)
-        rendererBusy = true;
+        rendererBusy = true
         upnp.setTrackAsync(track.uri, track.didl)
     }
 
     function setNextTrack(track) {
         if(!useNextURI || UPnP.isBroadcast(track))
             return
-        rendererBusy = true;
+        rendererBusy = true
         upnp.setNextTrackAsync(track.uri, track.didl)
     }
 
@@ -666,8 +669,13 @@ Page {
         onNextTrackSet : {
             rendererBusy = false;
             console.log("RenderPage::onNextTrackSet error=" + error + ", uri=" + uri)
-            if(error === 0) // success
-                return
+            if(error === 0) { // success
+                if(requestedAudioPosition != -1) {
+                    upnp.seek(requestedAudioPosition)
+                    requestedAudioPosition = -1
+                    return
+                }
+            }
 
             var trackIndex = getTrackIndexForURI(uri)
             if(trackIndex < 0) // unknown track
@@ -743,10 +751,12 @@ Page {
         addTracksNoStart(tracks)
         if(currentItem == -1 && trackListModel.count > 0) {
             // start playing
-            if(arguments.length >= 2 && arguments[1] > -1)
+            if(arguments.length >= 2 && arguments[1] > -1) // is index passed?
                 currentItem = arguments[1]
             else
                 currentItem = 0
+            if(arguments.length >= 3) // is position passed?
+                requestedAudioPosition = arguments[2]
             loadTrack()
         } else if(wasAtLastTrack) {
             // if the last track is playing there is no nexturi

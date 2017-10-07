@@ -533,7 +533,7 @@ Page {
                         }
                     }
                     metaDataCurrentTrackId = ""
-                    getPlayerPage().addTracks(tracks, currentTrackIndex);
+                    getPlayerPage().addTracks(tracks, currentTrackIndex, app.last_playing_position.value);
                     loadBrowseStackMetaData()
                     break;
 

@@ -32,7 +32,7 @@ Page {
     property bool canPrevious: hasTracks && (currentItem > 0)
     property bool canPlay: hasTracks && (audio.playbackState != audio.PlayingState)
     property bool canPause: audio.playbackState == audio.PlayingState
-    //property int audioPosition : audio.position
+    property int requestedAudioPosition : -1
 
     // 1 playing, 2 paused, the rest inactive
     property int transportState : -1
@@ -57,8 +57,11 @@ Page {
         autoPlay: false;
 
         onStatusChanged: {
-            if(audio.status == Audio.Loaded && audio.position == 0) {
-                //updateTrackInformation()
+            console.log("Audio.onStatusChanged: " + audio.status + ", " + requestedAudioPosition )
+            //if(audio.status == Audio.Loaded && requestedAudioPosition != -1) {
+            if(requestedAudioPosition != -1) {
+                position = requestedAudioPosition
+                requestedAudioPosition = -1
             }
 
             if(audio.status == Audio.EndOfMedia) {
@@ -94,6 +97,7 @@ Page {
         if(audio.playbackState == Audio.PlayingState) {
             audio.pause()
             updateIcons()
+            app.last_playing_position.value = audio.position
         } else {
             play()
         }
@@ -107,6 +111,7 @@ Page {
     function stop() {
         audio.stop()
         updateIcons()
+        app.last_playing_position.value = audio.position
     }
 
     function loadTrack(track) {
@@ -485,9 +490,11 @@ Page {
         for(i=0;i<tracks.length;i++)
             trackListModel.append(tracks[i])
         if(currentItem == -1 && trackListModel.count>0) {
-            if(arguments.length >= 2 && arguments[1] > -1)
+            if(arguments.length >= 2 && arguments[1] > -1) // is index passed?
                 currentItem = arguments[1] - 1 // next will do +1
-            next();        
+            if(arguments.length >= 3) // is positiom passed?
+                requestedAudioPosition = arguments[2]
+            next();
         }
         playerPageActive = true;
     }
