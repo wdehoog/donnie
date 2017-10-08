@@ -89,6 +89,23 @@ Page {
             }
 
             SectionHeader {
+                text: qsTr("Translations")
+            }
+
+            Label {
+                anchors {
+                    left: parent.left
+                    leftMargin: Theme.horizontalPageMargin
+                    right: parent.right
+                    rightMargin: Theme.horizontalPageMargin
+                }
+                font.pixelSize: Theme.fontSizeSmall
+                wrapMode: Text.WordWrap
+                text:
+"Carlos Gonzalez"
+            }
+
+            SectionHeader {
                 text: qsTr("Thanks to")
             }
 
