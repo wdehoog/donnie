@@ -83,30 +83,30 @@ Page {
 
     function next() {
         if(currentItem >= (trackListModel.count-1))
-            return;
-        currentItem++;
-        loadTrack();
+            return
+        currentItem++
+        loadTrack()
     }
 
     function prev() {
         if(currentItem <= 0)
-            return;
-        currentItem--;
-        loadTrack();
+            return
+        currentItem--
+        loadTrack()
     }
 
     function pause() {
         if(transportState == 1) {
-            var r;
+            var r
             if((r = upnp.pause()) !== 0) {
-                app.showErrorDialog("Failed to Pause the Renderer");
+                app.showErrorDialog(qsTr("Failed to Pause the Renderer"))
                 return;
             }
-            playIconSource =  "image://theme/icon-l-play";
-            cover.playIconSource = "image://theme/icon-cover-play";
+            playIconSource =  "image://theme/icon-l-play"
+            cover.playIconSource = "image://theme/icon-cover-play"
             app.last_playing_position.value = timeSliderValue
         } else {
-            play();
+            play()
         }
     }
 
@@ -115,97 +115,97 @@ Page {
         if((r = upnp.play()) !== 0) {
             // rygel: 701 means not "Stopped" nor "Paused" so assume already playing
             if(r !== 701) {
-                app.showErrorDialog("Failed to Start the Renderer");
+                app.showErrorDialog(qsTr("Failed to Start the Renderer"))
                 return;
             }
         }
         rendererConnected = true
-        playing = true;
-        playIconSource = "image://theme/icon-l-pause";
-        cover.playIconSource = "image://theme/icon-cover-pause";
+        playing = true
+        playIconSource = "image://theme/icon-l-pause"
+        cover.playIconSource = "image://theme/icon-cover-pause"
     }
 
     function stop() {
-        var r;
+        var r
         if((r = upnp.stop()) !== 0) {
-            app.showErrorDialog("Failed to Stop the Renderer");
-            //return;
+            app.showErrorDialog(qsTr("Failed to Stop the Renderer"))
+            //return
         }
-        playing = false;
-        playIconSource =  "image://theme/icon-l-play";
-        cover.playIconSource = "image://theme/icon-cover-play";
+        playing = false
+        playIconSource =  "image://theme/icon-l-play"
+        cover.playIconSource = "image://theme/icon-cover-play"
         app.last_playing_position.value = timeSliderValue
     }
 
     function reset() {
-        playing = false;
+        playing = false
         transportState = -1
-        playIconSource =  "image://theme/icon-l-play";
-        cover.playIconSource = "image://theme/icon-cover-play";
+        playIconSource =  "image://theme/icon-l-play"
+        cover.playIconSource = "image://theme/icon-cover-play"
     }
 
     function setVolume(volume) {
-        var r;
+        var r
         if((r = upnp.setVolume(volume)) !== 0) {
-            app.showErrorDialog("Failed to set volume on Renderer");
+            app.showErrorDialog(qsTr("Failed to set volume on Renderer"))
         }
     }
 
     function setMute(mute) {
-        var r;
+        var r
         if((r = upnp.setMute(mute)) !== 0) {
-            app.showErrorDialog("Failed to mute/unmute Renderer");
+            app.showErrorDialog(qsTr("Failed to mute/unmute Renderer"))
         }
     }
 
     property int prevVolume;
     function toggleMute() {
-        var mute = !upnp.getMute();
+        var mute = !upnp.getMute()
         if(mute)
-            prevVolume = upnp.getVolume();
-        setMute(mute);
+            prevVolume = upnp.getVolume()
+        setMute(mute)
         if(mute)
-            muteIconSource =  "image://theme/icon-m-speaker-mute";
+            muteIconSource =  "image://theme/icon-m-speaker-mute"
         else {
-            setVolume(prevVolume);
-            muteIconSource =  "image://theme/icon-m-speaker";
+            setVolume(prevVolume)
+            muteIconSource =  "image://theme/icon-m-speaker"
         }
     }
 
     function updateUIForTrack(track) {
         if(track.albumArtURI) {
-            imageItemSource = track.albumArtURI;
-            cover.imageSource = track.albumArtURI;
+            imageItemSource = track.albumArtURI
+            cover.imageSource = track.albumArtURI
         } else {
-            imageItemSource = defaultImageSource;
-            cover.imageSource = cover.defaultImageSource;
+            imageItemSource = defaultImageSource
+            cover.imageSource = cover.defaultImageSource
         }
-        trackMetaText1 = track.titleText;
-        trackMetaText2 = track.metaText;
+        trackMetaText1 = track.titleText
+        trackMetaText2 = track.metaText
     }
 
     // update mpris with track info from media server
     function updateMprisForTrack(track) {
-        var meta = {};
-        meta.Title = trackMetaText1;
-        meta.Artist = trackMetaText2;
-        meta.Album = track.album;
-        meta.Length = track.duration * 1000000; // s -> us
-        meta.ArtUrl = track.albumArtURI;
-        meta.TrackNumber = currentItem;
-        app.updateMprisMetaData(meta);
+        var meta = {}
+        meta.Title = trackMetaText1
+        meta.Artist = trackMetaText2
+        meta.Album = track.album
+        meta.Length = track.duration * 1000000 // s -> us
+        meta.ArtUrl = track.albumArtURI
+        meta.TrackNumber = currentItem
+        app.updateMprisMetaData(meta)
     }
 
     // update mpris with track info from stream
     function updateMprisForTrackMetaData(track) {
-        var meta = {};
-        meta.Title = trackMetaText1;
-        meta.Artist = trackMetaText2;
-        meta.Album = track.album;
-        meta.Length = 0;
-        meta.ArtUrl = track.albumArtURI;
-        meta.TrackNumber = currentItem;
-        app.updateMprisMetaData(meta);
+        var meta = {}
+        meta.Title = trackMetaText1
+        meta.Artist = trackMetaText2
+        meta.Album = track.album
+        meta.Length = 0
+        meta.ArtUrl = track.albumArtURI
+        meta.TrackNumber = currentItem
+        app.updateMprisMetaData(meta)
     }
 
     function onChangedTrack(trackIndex) {
@@ -239,16 +239,16 @@ Page {
 
     function clearList() {
         //rendererPageActive = false;
-        stop();
-        listView.model.clear();
-        trackMetaText1 = "";
-        trackMetaText2 = "";
-        currentItem = -1;
+        stop()
+        listView.model.clear()
+        trackMetaText1 = ""
+        trackMetaText2 = ""
+        currentItem = -1
         transportState = -1
-        imageItemSource = defaultImageSource;
+        imageItemSource = defaultImageSource
 
-        cover.imageSource = cover.defaultImageSource;
-        cover.coverProgressBar.label = "";
+        cover.imageSource = cover.defaultImageSource
+        cover.coverProgressBar.label = ""
     }
 
     SilicaListView {
@@ -263,7 +263,7 @@ Page {
             MenuItem {
                 text: qsTr("Empty List")
                 onClicked: {
-                    clearList();
+                    clearList()
                 }
             }
         }
@@ -483,7 +483,7 @@ Page {
                 id: contextMenu
                 ContextMenu {
                     MenuItem {
-                        text: "Remove"
+                        text: qsTr("Remove")
                         onClicked: {
                             var saveIndex = index;
                             trackListModel.remove(index);
@@ -620,12 +620,12 @@ Page {
             if(error > 0) {
                 var errMsg = UPnP.getUPNPErrorString(error)
                 if(errMsg.length > 0)
-                    errMsg = "Failed to set track to play on Renderer:"
+                    errMsg = qsTr("Failed to set track to play on Renderer:")
                              + "\n\n" + error + ": " + errMsg
                              + "\n\n" +  track.title
                              + "\n\n" +  track.uri
                 else
-                    errMsg = "Failed to set track to play on Renderer"
+                    errMsg = qsTr("Failed to set track to play on Renderer")
                              + "\n\nError code: " + error
                              + "\n\n" +  track.title
                              + "\n\n" +  track.uri
@@ -684,12 +684,12 @@ Page {
 
             var errMsg = UPnP.getUPNPErrorString(error)
             if(errMsg.length > 0)
-                errMsg = "Failed to set next track to play on Renderer:"
+                errMsg = qsTr("Failed to set next track to play on Renderer:")
                          + "\n\n" + error + ": " + errMsg
                          + "\n\n" +  track.title
                          + "\n\n" +  track.uri
             else
-                errMsg = "Failed to set next track to play on Renderer" +
+                errMsg = qsTr("Failed to set next track to play on Renderer") +
                          + "\n\nError code: " + error
                          + "\n\n" +  track.title
                          + "\n\n" +  track.uri
@@ -879,7 +879,7 @@ Page {
                     stoppedPlayingDetection = 0
                     // for now stopped at the last track is considered normal
                     if(currentItem < (trackListModel.count-1))
-                        app.showErrorDialog("The renderer has stopped playing unexpectedly.")
+                        app.showErrorDialog(qsTr("The renderer has stopped playing unexpectedly."))
                     return
                 }
             } else
@@ -907,7 +907,7 @@ Page {
                     if(failedAttempts == 4) {
                         rendererConnected = false
                         reset()
-                        var errTxt = "Lost connection with Renderer."
+                        var errTxt = qsTr("Lost connection with Renderer.")
                         app.error(errTxt)
                         app.showErrorDialog(errTxt)
                     }

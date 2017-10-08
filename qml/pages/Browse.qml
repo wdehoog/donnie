@@ -281,19 +281,19 @@ Page {
                 ContextMenu {
                     enabled: (listView.model.get(index).type === "Item")
                     MenuItem {
-                        text: "Add To Player"
+                        text: qsTr("Add To Player")
                         onClicked: addToPlayer(listView.model.get(index));
                     }
                     MenuItem {
-                        text: "Replace In Player"
+                        text: qsTr("Replace In Player")
                         onClicked: replaceInPlayer(listView.model.get(index));
                     }
                     MenuItem {
-                        text: "Add All To Player"
+                        text: qsTr("Add All To Player")
                         onClicked: addAllToPlayer();
                     }
                     MenuItem {
-                        text: "Replace All In Player"
+                        text: qsTr("Replace All In Player")
                         onClicked: replaceAllInPlayer();
                     }
                 }
@@ -346,7 +346,7 @@ Page {
                 model: items
 
                 header: PageHeader {
-                    title: "Choose Path"
+                    title: qsTr("Choose Path")
                 }
 
                 delegate: BackgroundItem {
@@ -385,7 +385,7 @@ Page {
 
         if(app.currentBrowseStack.empty()) {
             if(cid === "0") { // root
-                pushOnBrowseStack(cid, "-1", "[Top Level]", -1);
+                pushOnBrowseStack(cid, "-1", qsTr("[Top Level]"), -1);
             } /*else {
                 // probably arrived here from search page
                 // so we have to 'create' a browse stack

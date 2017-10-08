@@ -197,7 +197,7 @@ Page {
             SearchField {
                 id: searchField
                 width: parent.width
-                placeholderText: "Search text"
+                placeholderText: qsTr("Search text")
                 Binding {
                     target: searchPage
                     property: "searchString"
@@ -210,7 +210,7 @@ Page {
                 property var indexes: []
                 width: parent.width
 
-                label: "Search In"
+                label: qsTr("Search In")
 
                 ListModel {
                     id: items
@@ -218,7 +218,7 @@ Page {
 
                 Component.onCompleted: {
                     var c = 0;
-                    value = "None"
+                    value = qsTr("None")
                     indexes = []
                     items.clear()
 
@@ -251,7 +251,7 @@ Page {
                         indexes = ms.indexes.sort(function (a, b) { return a - b });
                         selectedSearchCapabilitiesMask = 0;
                         if (indexes.length == 0) {
-                            value = "None";
+                            value = qsTr("None");
                         } else {
                             value = "";
                             var tmp = [];
@@ -272,7 +272,7 @@ Page {
             ComboBox {
                 id: groupBy
                 width: parent.width
-                label: "Group By"
+                label: qsTr("Group By")
                 currentIndex: {
                     if(groupby_search_results.value === "album")
                         return 0;
@@ -284,21 +284,21 @@ Page {
                 }
                 menu: ContextMenu {
                     MenuItem {
-                        text: "Album"
+                        text: qsTr("Album")
                         onClicked: {
                             groupby_search_results.value = "album";
                             groupby_search_results.sync();
                         }
                     }
                     MenuItem {
-                        text: "Artist"
+                        text: qsTr("Artist")
                         onClicked: {
                             groupby_search_results.value = "artist";
                             groupby_search_results.sync();
                         }
                     }
                     MenuItem {
-                        text: "Title"
+                        text: qsTr("Title")
                         onClicked: {
                             groupby_search_results.value = "title";
                             groupby_search_results.sync();
@@ -373,17 +373,17 @@ Page {
                 id: contextMenu
                 ContextMenu {
                     MenuItem {
-                        text: "Add To Player"
+                        text: qsTr("Add To Player")
                         visible: listView.model.get(index).type === "Item"
                         onClicked: addToPlayer(listView.model.get(index));
                     }
                     MenuItem {
-                        text: "Add Group To Player"
+                        text: qsTr("Add Group To Player")
                         visible: listView.model.get(index).type === "Item"
                         onClicked: addGroupToPlayer(groupByField, listView.model.get(index)[groupByField]);
                     }
                     MenuItem {
-                        text: "Add All To Player"
+                        text: qsTr("Add All To Player")
                         visible: listView.model.get(index).type === "Item"
                         onClicked: addAllToPlayer();
                     }

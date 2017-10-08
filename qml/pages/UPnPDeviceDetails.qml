@@ -32,7 +32,7 @@ Page {
             width: parent.width
             //height: childRect.height
 
-            PageHeader { title: "Device Details" }
+            PageHeader { title: qsTr("Device Details") }
 
             Text {
                 x: Theme.horizontalPageMargin
@@ -44,14 +44,14 @@ Page {
             }
             Text {
                 x: Theme.horizontalPageMargin
-                text: "model: " + modelName
+                text: qsTr("model: ") + modelName
                 color: Theme.secondaryHighlightColor
                 font.pixelSize: Theme.fontSizeMedium
                 wrapMode: Text.Wrap
             }
             Text {
                 x: Theme.horizontalPageMargin
-                text: "manufacturer: " + manufacturer
+                text: qsTr("manufacturer: ") + manufacturer
                 color: Theme.secondaryHighlightColor
                 font.pixelSize: Theme.fontSizeMedium
                 wrapMode: Text.Wrap
@@ -72,7 +72,7 @@ Page {
             }
             Text {
                 x: Theme.horizontalPageMargin
-                text: "deviceType: " + deviceType
+                text: qsTr("Device Type: ") + deviceType
                 color: Theme.secondaryHighlightColor
                 font.pixelSize: Theme.fontSizeMedium
                 wrapMode: Text.Wrap

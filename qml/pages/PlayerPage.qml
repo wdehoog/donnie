@@ -425,7 +425,7 @@ Page {
                 id: contextMenu
                 ContextMenu {
                     MenuItem {
-                        text: "Remove"
+                        text: qsTr("Remove")
                         onClicked: {
                             var saveIndex = index;
                             trackListModel.remove(index);

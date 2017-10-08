@@ -181,7 +181,7 @@ Page {
 
         ViewPlaceholder {
             enabled: devicesList.count == 0;
-            text: "No Devices"
+            text: qsTr("No Devices")
         }
 
         VerticalScrollDecorator {}
@@ -234,12 +234,12 @@ Page {
                 devicesModel.append({
                     type: "Renderer",
                     discoveryIndex: app.discoveredRenderers.length,
-                    friendlyName: "Built-in Player",
+                    friendlyName: qsTr("Built-in Player"),
                     manufacturer: "donnie",
-                    modelName: "Sailfish QTAudio Player",
+                    modelName: qsTr("Sailfish QTAudio Player"),
                     UDN: "donnie-player-udn",
                     URLBase: "",
-                    deviceType: "a page with audio player controls and list of tracks",
+                    deviceType: qsTr("a page with audio player controls and list of tracks"),
                     selected: selected
                 });
 

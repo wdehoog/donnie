@@ -33,11 +33,11 @@ Page {
             width: parent.width
             //height: childRect.height
 
-            PageHeader { title: "Settings" }
+            PageHeader { title: qsTr("Settings") }
 
             TextField {
                 id: swField
-                label: "How long to search for UPnp Devices (sec)"
+                label: qsTr("How long to search for UPnp Devices (sec)")
                 inputMethodHints: Qt.ImhDigitsOnly
                 width: parent.width
                 onTextChanged: {
@@ -48,7 +48,7 @@ Page {
 
             TextField {
                 id: msrField
-                label: "Maximum number of results per request"
+                label: qsTr("Maximum number of results per request")
                 inputMethodHints: Qt.ImhDigitsOnly
                 width: parent.width
                 onTextChanged: {
@@ -59,8 +59,8 @@ Page {
 
             TextSwitch {
                 id: allowContainers
-                text: "Allow Containers"
-                description: "Also show Containers in search results"
+                text: qsTr("Allow Containers")
+                description: qsTr("Also show Containers in search results")
                 checked: search_allow_containers.value
                 onCheckedChanged: {
                     search_allow_containers.value = checked;
@@ -80,22 +80,22 @@ Page {
             }*/
 
             ComboBox {
-                 label: "Resume"
-                 description: "Load saved track queue at startup and resume playing"
+                 label: qsTr("Resume")
+                 description: qsTr("Load saved track queue at startup and resume playing")
 
                  currentIndex: resume_saved_info.value
 
                  menu: ContextMenu {
                      MenuItem {
-                         text: "Never"
+                         text: qsTr("Never")
                          onClicked: resume_saved_info.value = 0
                      }
                      MenuItem {
-                         text: "Ask"
+                         text: qsTr("Ask")
                          onClicked: resume_saved_info.value = 1
                      }
                      MenuItem {
-                         text: "Always"
+                         text: qsTr("Always")
                          onClicked: resume_saved_info.value = 2
                      }
                  }
@@ -114,8 +114,8 @@ Page {
 
             TextSwitch {
                 id: logPage
-                text: "Log Page"
-                description: "Show Open Log Page button"
+                text: qsTr("Log Page")
+                description: qsTr("Show Open Log Page button")
                 checked: show_open_logpage.value === "true"
                 onCheckedChanged: {
                     show_open_logpage.value = checked ? "true" : "false";

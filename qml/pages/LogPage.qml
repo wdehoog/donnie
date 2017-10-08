@@ -26,7 +26,7 @@ Page {
             width: parent.width
             //height: childRect.height
 
-            PageHeader { title: "Log" }
+            PageHeader { title: qsTr("Log") }
 
             TextArea {
                 id: logTextArea

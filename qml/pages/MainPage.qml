@@ -98,7 +98,7 @@ Page {
                                     wrapMode: Text.Wrap
                                     width: parent.width - anchors.leftMargin - rendererIcon.width
 
-                                    text: "Renderer";
+                                    text: qsTr("Renderer");
                                 }
                                 IconButton {
                                     id: rendererIcon
@@ -120,7 +120,7 @@ Page {
 
                                 text: renderer_friendlyname.value
                                       ? renderer_friendlyname.value
-                                      : "[Click to select one]"
+                                      : qsTr("[Click to select one]")
                             }
                         }
 
@@ -144,7 +144,7 @@ Page {
                                     wrapMode: Text.Wrap
                                     width: parent.width - anchors.leftMargin - serverIcon.width
 
-                                    text: "Content Server"
+                                    text: qsTr("Content Server")
                                 }
                                 IconButton {
                                     id: serverIcon
@@ -166,7 +166,7 @@ Page {
 
                                 text: server_friendlyname.value
                                          ? server_friendlyname.value
-                                         : "[Click to select one]";
+                                         : qsTr("[Click to select one]")
                             }
                         }
                         MouseArea {
@@ -192,7 +192,7 @@ Page {
                             onClicked: gotoBrowsePage();
                         }
                         Button {
-                            text: "Browser"
+                            text: qsTr("Browser")
                             enabled: !showBusy && isServerOK()
                             onClicked: gotoBrowsePage();
                         }
@@ -207,7 +207,7 @@ Page {
                             onClicked: gotoSearchPage();
                         }
                         Button {
-                            text: "Search"
+                            text: qsTr("Search")
                             enabled: !showBusy && isServerOK()
                             onClicked: gotoSearchPage();
                         }
@@ -221,7 +221,7 @@ Page {
                             onClicked: gotoPlayerPage();
                         }
                         Button {
-                            text: "Player"
+                            text: qsTr("Player")
                             enabled: isRendererOK()
                             onClicked: gotoPlayerPage();
                         }
@@ -385,7 +385,7 @@ Page {
             }
         } catch(err) {
             app.error("Exception in loadBrowseStackMetaData: "+err);
-            app.showErrorDialog("Failed to load previously saved Browse Stack Ids.")
+            app.showErrorDialog(qsTr("Failed to load previously saved Browse Stack Ids."))
             showBusy = false
         }
     }
@@ -411,7 +411,7 @@ Page {
             }
         } catch(err) {
             app.error("Exception in loadResumeMetaData: "+err);
-            app.showErrorDialog("Failed to load previously saved Queue Ids.\nCan not Resume.")
+            app.showErrorDialog(qsTr("Failed to load previously saved Queue Ids.\nCan not Resume."))
             showBusy = false
         }
         if(resumeState == 0) // not loading the queue
@@ -471,7 +471,7 @@ Page {
 
             if(app.hasCurrentServer()) {
                 if(resume_saved_info.value === 1) // 0: never, 1: ask, 2:always
-                    app.showConfirmDialog("Load previously saved queue?", "Load", function() {
+                    app.showConfirmDialog(qsTr("Load previously saved queue?"), qsTr("Load"), function() {
                         loadResumeMetaData()
                     })
                 else if(resume_saved_info.value === 2)
@@ -506,7 +506,7 @@ Page {
         onMetaData: {
             //console.log("onMetaData: " + metaDataJson);
             if(error !== 0) {
-                app.showErrorDialog("Failed to retrieve metadata for previously saved Ids.\nCan not Resume.")
+                app.showErrorDialog(qsTr("Failed to retrieve metadata for previously saved Ids.\nCan not Resume."))
                 showBusy = false
                 if(resumeState == 1)
                     loadBrowseStackMetaData()
@@ -541,7 +541,7 @@ Page {
                     // restore browse stack
                     var index = 0
                     browsePage.reset()
-                    browsePage.pushOnBrowseStack("0", "-1", "[Top Level]", -1);
+                    browsePage.pushOnBrowseStack("0", "-1", qsTr("[Top Level]"), -1);
                     for(var i=0;i<metaData.length;i++) {
                         if(metaData[i].containers && metaData[i].containers.length>0) {
                             var item = metaData[i].containers[0]
@@ -557,7 +557,7 @@ Page {
             } catch(err) {
                 app.error("Exception in onMetaData: "+err);
                 app.error("json: " + metaDataJson);
-                app.showErrorDialog("Failed to parse previously saved Ids.\nCan not Resume.")
+                app.showErrorDialog(qsTr("Failed to parse previously saved Ids.\nCan not Resume."))
                 showBusy = false
             }
         }
