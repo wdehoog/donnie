@@ -151,10 +151,8 @@
         <translation>Laden van opgeslagen bladerlijst is mislukt.</translation>
     </message>
     <message>
-        <source>Failed to load previously saved Queue Ids.
-Can not Resume.</source>
-        <translation>Laden van opgeslagen speellijst is mislukt.
-Kan niet Verdergaan.</translation>
+        <source>Failed to load previously saved Queue Ids. Can not Resume.</source>
+        <translation>Laden van opgeslagen speellijst is mislukt. Kan niet Verdergaan.</translation>
     </message>
     <message>
         <source>Load previously saved queue?</source>
@@ -165,20 +163,16 @@ Kan niet Verdergaan.</translation>
         <translation>Laden</translation>
     </message>
     <message>
-        <source>Failed to retrieve metadata for previously saved Ids.
-Can not Resume.</source>
-        <translation>Ophalen van meta-gegevens is mislukt.
-Kan niet Verdergaan.</translation>
+        <source>Failed to retrieve metadata for previously saved Ids. Can not Resume.</source>
+        <translation>Ophalen van meta-gegevens is mislukt. Kan niet Verdergaan.</translation>
     </message>
     <message>
         <source>[Top Level]</source>
         <translation>[Topniveau]</translation>
     </message>
     <message>
-        <source>Failed to parse previously saved Ids.
-Can not Resume.</source>
-        <translation>Inlezen van opgeslagen lijsten is mislukt.
-        Kan niet Verdergaan.</translation>
+        <source>Failed to parse previously saved Ids. Can not Resume.</source>
+        <translation>Inlezen van opgeslagen lijsten is mislukt. Kan niet Verdergaan.</translation>
     </message>
 </context>
 <context>
