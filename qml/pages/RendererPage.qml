@@ -52,6 +52,7 @@ Page {
     property bool playing : false
     property bool rendererConnected: false
     property int requestedAudioPosition : -1
+    property int requestedAudioPositionRetryCount : -1
 
     // -1 initial, 1 playing, 2 paused, 3 stopped the rest inactive
     property int transportState : -1
@@ -653,8 +654,15 @@ Page {
                 updateUIForTrack(track)
                 updateMprisForTrack(track)
 
-                if(!playing)
+                if(!playing) {
                     play()
+                    if(requestedAudioPosition != -1) {
+                        var r = upnp.seek(requestedAudioPosition)
+                        if(r === 0) // rygel returns 711 (needs time to start playing?)
+                            requestedAudioPosition = -1
+                    }
+                }
+                app.saveLastPlayingJSON(track, trackListModel)
 
                 // When available set next track but not for internet radio streams
                 if(trackListModel.count > (currentItem+1)) {
@@ -662,20 +670,14 @@ Page {
                     console.log("loadTrack setNextTrack "+track.uri)
                     setNextTrack(track)
                 }
-                app.saveLastPlayingJSON(track, trackListModel)
             }
         }
 
         onNextTrackSet : {
             rendererBusy = false;
             console.log("RenderPage::onNextTrackSet error=" + error + ", uri=" + uri)
-            if(error === 0) { // success
-                if(requestedAudioPosition != -1) {
-                    upnp.seek(requestedAudioPosition)
-                    requestedAudioPosition = -1
-                    return
-                }
-            }
+            if(error === 0)  // success
+                return
 
             var trackIndex = getTrackIndexForURI(uri)
             if(trackIndex < 0) // unknown track
@@ -689,7 +691,7 @@ Page {
                          + "\n\n" +  track.title
                          + "\n\n" +  track.uri
             else
-                errMsg = qsTr("Failed to set next track to play on Renderer") +
+                errMsg = qsTr("Failed to set next track to play on Renderer")
                          + "\n\nError code: " + error
                          + "\n\n" +  track.title
                          + "\n\n" +  track.uri
@@ -755,8 +757,10 @@ Page {
                 currentItem = arguments[1]
             else
                 currentItem = 0
-            if(arguments.length >= 3) // is position passed?
+            if(arguments.length >= 3) { // is position passed?
                 requestedAudioPosition = arguments[2]
+                requestedAudioPositionRetryCount = 3
+            }
             loadTrack()
         } else if(wasAtLastTrack) {
             // if the last track is playing there is no nexturi
@@ -838,6 +842,22 @@ Page {
         running: handleRendererInfo.running && rendererConnected
         repeat: true
         onTriggered: {
+
+            // for Resume
+            if(requestedAudioPosition != -1) {
+                var r = upnp.seek(requestedAudioPosition)
+                if(r === 0) {
+                    requestedAudioPosition = -1
+                    requestedAudioPositionRetryCount = -1
+                } else {
+                    requestedAudioPositionRetryCount--
+                    if(requestedAudioPositionRetryCount == 0) {
+                        requestedAudioPosition = -1
+                        requestedAudioPositionRetryCount = -1
+                    }
+                }
+            }
+
             // check and trigger update of transport state and position info
             switch(refreshState) {
             case 0:
