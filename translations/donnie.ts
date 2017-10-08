@@ -151,8 +151,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to load previously saved Queue Ids.
-Can not Resume.</source>
+        <source>Failed to load previously saved Queue Ids. Can not Resume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -164,8 +163,7 @@ Can not Resume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to retrieve metadata for previously saved Ids.
-Can not Resume.</source>
+        <source>Failed to retrieve metadata for previously saved Ids. Can not Resume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -173,8 +171,7 @@ Can not Resume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to parse previously saved Ids.
-Can not Resume.</source>
+        <source>Failed to parse previously saved Ids. Can not Resume.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
