@@ -336,11 +336,20 @@ function getAudioType(item) {
 function getUPNPErrorString(errorCode) {
     // 2.4.1.4. Errors
     switch(errorCode) {
-    case 402:
-        return "Invalid Args";
+    case 402: return "Invalid Args";
         // Could be any of the following: not enough in args, too many in
         // args, no in arg by that name, one or more in args are of the wrong
         // data type.
+    case 701: return "Transition not available";
+        //The immediate transition from current transport state to desired
+        //transport state is not supported by this device.
+    case 705: return "Transport is locked";
+        // The transport is “hold locked”.
+    case 710: return "Seek mode not supported";
+        // The specified seek mode is not supported by the device.
+    case 711: return "Illegal seek target";
+        // The specified seek target is not specified in terms of the seek
+        // mode, or is not present on the media.
     case 714: return "Illegal MIME-type";
         // The specified resource has a MIME-type which is not supported
         // by the AVTransport service
