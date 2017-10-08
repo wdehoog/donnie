@@ -15,7 +15,7 @@ Note that it is still fresh and under development so things might not work as ex
   * Album Art
   * Gapless (setNextAVTransportURI)
   * MPris support (Lock Screen and Gestures)
-
+  * Resume 
 
 ### Issues
   * Sometimes not all UPnP devices are discovered. Refresh the list might help.
@@ -60,6 +60,8 @@ Pully menus give access to:
   * Settings Page
   * About Page
 
+Push menu gives access to the Resume option
+
 #### Browser
 Will browse the Content Server. 
 
@@ -95,12 +97,45 @@ Gives access to the player controls. You can:
 
 A Pully menu allows to Empty the list.
 
+#### Settings
+Donnie has the following configuration settings:
+
+  * How long to search for UPnp Devices (sec). This setting specifies how long the      
+    app is looking for devices during startup or a refresh.
+  * Maximum number of results per request. A media server can return huge lists
+    which can slow done donnie. This setting allows to handle this.
+  * Also show Containers in search results. A media server can return both the album
+    as well as the folder (both Containers and all the tracks (Items). This setting
+    allows to restrict the results.
+  * Resume. Load saved track queue at startup and resume playing. This setting
+    can be set to 'Never', 'Ask' or 'Always'.
+  * Show Log Page button. Show or hide the button that gives access to the Log Page.
+
+Settings are stored using DConf. To list them:
+
+```
+dconf list /donnie/
+```
+
+To delete one:
+
+```
+dconf reset /donnie/last_playing_info
+```
+
+### Resume Option
+When browsing Donnie stores the current 'path', when switching track it saves the current queue and on Pause or Stop it stores the current position. At startup these can be restored so Donnie can 'resume'.Of course this only works with the same media server.
+
+Unfortunately I did not manage to catch the close event so if you close the app without Pause or Stop the position is not stored.
+
 ### Development
-This project is developed with the Sailfish OS IDE (QT Creator). It needs libupnpp, libupnp and libmpdclient to be installed on the Build Target (VM) and the Deploy Target (phone). All three can be found in my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog:/donnie/sailfish_latest_armv7hl/).
+This project is developed with the Sailfish OS IDE (QT Creator). It needs libupnpp, libupnp6 and libupnp-devel to be installed on the Build Target (VM) and the Deploy Target (phone). All three can be found in my [OBS repository]( http://repo.merproject.org/obs/home:/wdehoog:/donnie/sailfish_latest_armv7hl/).
 
-
+#### Translations
+Translation is done using Qt Quick Internationalisation. If you want to contribute a translation take donnie.ts and create a version for your locale.
 
 ### Thanks
+  * Carlos Gonzalez for 'es' translation
   * J.F.Dockes for upplay + libupnpp, amazing UPnP support 
   * equeim for unplayer
   * jabbounet for upnpplayer 
