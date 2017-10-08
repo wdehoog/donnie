@@ -289,15 +289,15 @@
     </message>
     <message>
         <source>Add To Player</source>
-        <translation>Agregar para reproductor</translation>
+        <translation>Agregar al reproductor</translation>
     </message>
     <message>
         <source>Add Group To Player</source>
-        <translation>Agregar grupo para reproductor</translation>
+        <translation>Agregar grupo al reproductor</translation>
     </message>
     <message>
         <source>Add All To Player</source>
-        <translation>Agregar todo para reproductor</translation>
+        <translation>Agregar todo al reproductor</translation>
     </message>
 </context>
 <context>
