@@ -17,7 +17,7 @@
     </message>
     <message>
         <source>Translations</source>
-        <translation type="unfinished"></translation>
+        <translation>Traducciones</translation>
     </message>
 </context>
 <context>
@@ -40,27 +40,27 @@
     </message>
     <message>
         <source>Add To Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar al reproductor</translation>
     </message>
     <message>
         <source>Replace In Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Reponer al reproductor</translation>
     </message>
     <message>
         <source>Add All To Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar todos al reproductor</translation>
     </message>
     <message>
         <source>Replace All In Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Reponer todos al reproductor</translation>
     </message>
     <message>
         <source>Choose Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Elegir ruta</translation>
     </message>
     <message>
         <source>[Top Level]</source>
-        <translation type="unfinished"></translation>
+        <translation>[Nivel Superior]</translation>
     </message>
 </context>
 <context>
@@ -82,26 +82,26 @@
     </message>
     <message>
         <source>No Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>No hay dispositivos</translation>
     </message>
     <message>
         <source>Built-in Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Reproductor incorporado</translation>
     </message>
     <message>
         <source>Sailfish QTAudio Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Reproductor Sailfish QTAudio</translation>
     </message>
     <message>
         <source>a page with audio player controls and list of tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>una página con controles del reproductor de audio y una lista de pistas</translation>
     </message>
 </context>
 <context>
     <name>LogPage</name>
     <message>
         <source>Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Registro</translation>
     </message>
 </context>
 <context>
@@ -120,62 +120,59 @@
     </message>
     <message>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Resumir</translation>
     </message>
     <message>
         <source>Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Renderizar</translation>
     </message>
     <message>
         <source>[Click to select one]</source>
-        <translation type="unfinished"></translation>
+        <translation>[Clic para seleccionar uno]</translation>
     </message>
     <message>
         <source>Content Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor de contenido</translation>
     </message>
     <message>
         <source>Browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Navegar</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Buscar</translation>
+        <translation>Buscar</translation>
     </message>
     <message>
         <source>Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Reproductor</translation>
     </message>
     <message>
         <source>Failed to load previously saved Browse Stack Ids.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to load previously saved Queue Ids.
-Can not Resume.</source>
-        <translation type="unfinished"></translation>
+        <source>Failed to load previously saved Queue Ids. Can not Resume.</source>
+        <translation>Error al cargar el Id previamente guardado en cola. No se puede reanudar</translation>
     </message>
     <message>
         <source>Load previously saved queue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Cargar la cola previamente guardada?</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Cargar</translation>
     </message>
     <message>
-        <source>Failed to retrieve metadata for previously saved Ids.
-Can not Resume.</source>
-        <translation type="unfinished"></translation>
+        <source>Failed to retrieve metadata for previously saved Ids. Can not Resume. No se puede reanudar</source>
+        <translation>Error al recuperar metadatos Ids previamente guardados. No se puede reanudar</translation>
     </message>
     <message>
         <source>[Top Level]</source>
-        <translation type="unfinished"></translation>
+        <translation>[Nivel Superior]</translation>
     </message>
     <message>
-        <source>Failed to parse previously saved Ids.
-Can not Resume.</source>
-        <translation type="unfinished"></translation>
+        <source>Failed to parse previously saved Ids. Can not Resume.</source>
+        <translation>Error al analizar los Ids guardado anteriormente. No se puede reanudar</translation>
     </message>
 </context>
 <context>
@@ -186,7 +183,7 @@ Can not Resume.</source>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Resumir</translation>
     </message>
 </context>
 <context>
@@ -197,51 +194,51 @@ Can not Resume.</source>
     </message>
     <message>
         <source>Failed to Pause the Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al pausar el renderizador</translation>
     </message>
     <message>
         <source>Failed to Start the Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al empezar el renderizador</translation>
     </message>
     <message>
         <source>Failed to Stop the Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al detener el renderizador</translation>
     </message>
     <message>
         <source>Failed to set volume on Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al ajustar volumen en renderizador</translation>
     </message>
     <message>
         <source>Failed to mute/unmute Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al silenciar/reanudar el renderizador</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover</translation>
     </message>
     <message>
         <source>Failed to set track to play on Renderer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al ajustar la pista para reproducir en Rendererizador</translation>
     </message>
     <message>
         <source>Failed to set track to play on Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al ajustar la pista para reproducir en Rendererizador</translation>
     </message>
     <message>
         <source>Failed to set next track to play on Renderer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al ajustar la pista siguiente para reproducir en Rendererizador</translation>
     </message>
     <message>
         <source>Failed to set next track to play on Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al ajustar la pista siguiente para reproducir en Rendererizador</translation>
     </message>
     <message>
         <source>The renderer has stopped playing unexpectedly.</source>
-        <translation type="unfinished"></translation>
+        <translation>El renderizador a dejado de reproducir inesperadamente</translation>
     </message>
     <message>
         <source>Lost connection with Renderer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Conexión perdida con Rendererizador</translation>
     </message>
 </context>
 <context>
@@ -264,113 +261,113 @@ Can not Resume.</source>
     </message>
     <message>
         <source>Search text</source>
-        <translation type="unfinished"></translation>
+        <translation>Buscar texto</translation>
     </message>
     <message>
         <source>Search In</source>
-        <translation type="unfinished"></translation>
+        <translation>Buscar en</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Ninguno</translation>
     </message>
     <message>
         <source>Group By</source>
-        <translation type="unfinished"></translation>
+        <translation>Por grupo</translation>
     </message>
     <message>
         <source>Album</source>
-        <translation type="unfinished"></translation>
+        <translation ty></translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished"></translation>
+        <translation>Artista</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Título</translation>
     </message>
     <message>
         <source>Add To Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar al reproductor</translation>
     </message>
     <message>
         <source>Add Group To Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar grupo al reproductor</translation>
     </message>
     <message>
         <source>Add All To Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar todo al reproductor</translation>
     </message>
 </context>
 <context>
     <name>SettingsPage</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Ajustes</translation>
+        <translation>Ajustes</translation>
     </message>
     <message>
         <source>How long to search for UPnp Devices (sec)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuánto tiempo para buscar dispositivos UPnp (seg)</translation>
     </message>
     <message>
         <source>Maximum number of results per request</source>
-        <translation type="unfinished"></translation>
+        <translation>Número máximo de resultados por solicitud</translation>
     </message>
     <message>
         <source>Allow Containers</source>
-        <translation type="unfinished"></translation>
+        <translation>Permitir contenedores</translation>
     </message>
     <message>
         <source>Also show Containers in search results</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar también Contenedores en los resultados de búsqueda</translation>
     </message>
     <message>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Resumir</translation>
     </message>
     <message>
         <source>Load saved track queue at startup and resume playing</source>
-        <translation type="unfinished"></translation>
+        <translation>Cargar la cola de pistas guardadas al inicio y reanudar la reproducción</translation>
     </message>
     <message>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Nunca</translation>
     </message>
     <message>
         <source>Ask</source>
-        <translation type="unfinished"></translation>
+        <translation>Reproductor</translation>
     </message>
     <message>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation>Siempre</translation>
     </message>
     <message>
         <source>Log Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Página de registro</translation>
     </message>
     <message>
         <source>Show Open Log Page button</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar botón Abrir página de registro</translation>
     </message>
 </context>
 <context>
     <name>UPnPDeviceDetails</name>
     <message>
         <source>Device Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Detalles del dispositivo</translation>
     </message>
     <message>
         <source>model: </source>
-        <translation type="unfinished"></translation>
+        <translation>modelo:</translation>
     </message>
     <message>
         <source>manufacturer: </source>
-        <translation type="unfinished"></translation>
+        <translation>fabricante:</translation>
     </message>
     <message>
         <source>Device Type: </source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de dispositivo:</translation>
     </message>
 </context>
 </TS>
