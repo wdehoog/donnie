@@ -759,7 +759,7 @@ Page {
                 currentItem = 0
             if(arguments.length >= 3) { // is position passed?
                 requestedAudioPosition = arguments[2]
-                requestedAudioPositionRetryCount = 3
+                requestedAudioPositionRetryCount = 5
             }
             loadTrack()
         } else if(wasAtLastTrack) {
