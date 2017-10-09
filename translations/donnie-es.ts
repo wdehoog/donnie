@@ -151,8 +151,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to load previously saved Queue Ids. Can not Resume.</source>
-        <translation>Error al cargar el Id previamente guardado en cola. No se puede reanudar</translation>
+        <source>Failed to load previously saved Queue Ids. 
+Can not Resume.</source>
+        <translation>Error al cargar el Id previamente guardado en cola. 
+No se puede reanudar</translation>
     </message>
     <message>
         <source>Load previously saved queue?</source>
@@ -163,16 +165,20 @@
         <translation>Cargar</translation>
     </message>
     <message>
-        <source>Failed to retrieve metadata for previously saved Ids. Can not Resume. No se puede reanudar</source>
-        <translation>Error al recuperar metadatos Ids previamente guardados. No se puede reanudar</translation>
+        <source>Failed to retrieve metadata for previously saved Ids.  
+Can not Resume. No se puede reanudar</source>
+        <translation>Error al recuperar metadatos Ids previamente guardados.
+No se puede reanudar</translation>
     </message>
     <message>
         <source>[Top Level]</source>
         <translation>[Nivel Superior]</translation>
     </message>
     <message>
-        <source>Failed to parse previously saved Ids. Can not Resume.</source>
-        <translation>Error al analizar los Ids guardado anteriormente. No se puede reanudar</translation>
+        <source>Failed to parse previously saved Ids. 
+Can not Resume.</source>
+        <translation>Error al analizar los Ids guardado anteriormente. 
+No se puede reanudar</translation>
     </message>
 </context>
 <context>
