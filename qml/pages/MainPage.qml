@@ -523,7 +523,7 @@ Page {
                     // restore queue and current track
                     var currentTrackIndex = -1;
                     var tracks = [];
-                    //getPlayerPage().reset() does not exist
+                    // todo: getPlayerPage().reset() but does not exist
                     for(var i=0;i<metaData.length;i++) {
                         if(metaData[i].items && metaData[i].items.length>0) {
                             var track = UPnP.createListItem(metaData[i].items[0]);
@@ -533,7 +533,9 @@ Page {
                         }
                     }
                     metaDataCurrentTrackId = ""
-                    getPlayerPage().addTracks(tracks, currentTrackIndex, app.last_playing_position.value);
+                    getPlayerPage().addTracks(tracks,
+                                              currentTrackIndex,
+                                              UPnP.isBroadcast(track) ? -1 : app.last_playing_position.value)
                     loadBrowseStackMetaData()
                     break;
 
