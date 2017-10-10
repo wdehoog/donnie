@@ -11,7 +11,9 @@
 #include <QQuickView>
 #include <QQmlContext>
 #include <QGuiApplication>
+#include <QTranslator>
 #endif
+
 
 #include <sailfishapp.h>
 
