@@ -151,12 +151,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to load previously saved Queue Ids. 
-Can not Resume.</source>
-        <translation>Error al cargar el Id previamente guardado en cola. 
-No se puede reanudar</translation>
-    </message>
-    <message>
         <source>Load previously saved queue?</source>
         <translation>Cargar la cola previamente guardada?</translation>
     </message>
@@ -165,17 +159,23 @@ No se puede reanudar</translation>
         <translation>Cargar</translation>
     </message>
     <message>
-        <source>Failed to retrieve metadata for previously saved Ids.  
-Can not Resume. No se puede reanudar</source>
-        <translation>Error al recuperar metadatos Ids previamente guardados.
-No se puede reanudar</translation>
-    </message>
-    <message>
         <source>[Top Level]</source>
         <translation>[Nivel Superior]</translation>
     </message>
     <message>
-        <source>Failed to parse previously saved Ids. 
+        <source>Failed to load previously saved Queue Ids.
+Can not Resume.</source>
+        <translation>Error al cargar el Id previamente guardado en cola. 
+No se puede reanudar</translation>
+    </message>
+    <message>
+        <source>Failed to retrieve metadata for previously saved Ids.
+Can not Resume.</source>
+        <translation>Error al recuperar metadatos Ids previamente guardados.
+No se puede reanudar</translation>
+    </message>
+    <message>
+        <source>Failed to parse previously saved Ids.
 Can not Resume.</source>
         <translation>Error al analizar los Ids guardado anteriormente. 
 No se puede reanudar</translation>
@@ -283,7 +283,7 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>Album</source>
-        <translation ty></translation>
+        <translation>Album</translation>
     </message>
     <message>
         <source>Artist</source>
