@@ -29,7 +29,6 @@ OTHER_FILES += qml/donnie.qml \
     rpm/donnie.changes.in \
     rpm/donnie.spec \
     rpm/donnie.yaml \
-    translations/*.ts \
     donnie.desktop
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 256x256
@@ -62,8 +61,7 @@ DISTFILES += \
     license/License.txt \
     qml/components/Messagebox.qml \
     qml/components/ErrorDialog.qml \
-    qml/components/ConfirmDialog.qml \
-    translations/donnie-nl.ts
+    qml/components/ConfirmDialog.qml
 
 HEADERS += \
     src/upnp.h \
@@ -84,3 +82,4 @@ HEADERS += \
     translations/donnie-es.ts \
     translations/donnie-nl.ts \
     translations/donnie.ts 
+
