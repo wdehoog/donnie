@@ -12,6 +12,7 @@
 #include <QQmlContext>
 #include <QGuiApplication>
 #include <QTranslator>
+#include <QDebug>
 #endif
 
 
