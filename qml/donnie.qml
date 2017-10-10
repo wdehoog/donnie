@@ -8,6 +8,10 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import org.nemomobile.configuration 1.0
+import org.freedesktop.contextkit 1.0
+import org.nemomobile.connectivity 1.0
+import Nemo.DBus 2.0
+
 import "pages"
 import "cover"
 import "UPnP.js" as UPnP
@@ -33,6 +37,11 @@ ApplicationWindow
     property alias last_playing_position: last_playing_position
     property alias last_playing_info: last_playing_info
     property alias last_browsing_info: last_browsing_info
+    property alias wlanDetectState: wlanDetectState
+    property alias wlanDetectType: wlanDetectType
+    property alias connectionHelper: connectionHelper
+    property alias connman: connman
+    //property alias dbusFlight: dbusFlight
 
     //Component.onDestruction: app.last_playing_position.value = position
     //property alias last_playing_position: last_playing_position
@@ -82,13 +91,16 @@ ApplicationWindow
         }*/
     }
 
+    /**
+     * can have a 4th param: rejectCallback
+     */
     function showConfirmDialog(text, title, acceptCallback) {
-        var dialog = pageStack.push(Qt.resolvedUrl("components/ConfirmDialog.qml"),
+        var dialog = pageStack.push (Qt.resolvedUrl("components/ConfirmDialog.qml"),
                                                    {confirmMessageText: text, titleText: title})
         if(acceptCallback !== null)
-            dialog.accepted.connect(function() {
-                acceptCallback()
-            })
+            dialog.accepted.connect(acceptCallback)
+        if(arguments.length >= 4 && arguments[3] !== null)
+            dialog.rejected.connect(arguments[3])
     }
 
     function hasCurrentServer() {
@@ -234,6 +246,80 @@ ApplicationWindow
         //last_playing_position.value = lastPlayingPosition
         //last_playing_position.sync()
     //}
+
+    ContextProperty {
+        id: wlanDetectState
+        key: "Internet.NetworkState"
+        // "connected" or "disconnected"
+        onValueChanged: console.log(key + "->" + value + "/" + typeof(value))
+    }
+
+    ContextProperty {
+        id: wlanDetectType
+        key: "Internet.NetworkType"
+        onValueChanged: console.log(key + "->" + value + "/" + typeof(value))
+    }
+
+    // this seems to work
+    property bool connectedToNetwork: false
+    ConnectionHelper {
+         id: connectionHelper
+         onNetworkConnectivityEstablished: {
+             connectedToNetwork = true
+         }
+         onNetworkConnectivityUnavailable: {
+             connectedToNetwork = false
+         }
+    }
+
+    /*DBusInterface {
+        id : dbusFlight
+        bus: DBus.SystemBus
+        service: "com.nokia.mce"
+        path: "/com/nokia/mce/signal"
+        iface: "com.nokia.mce.signal"
+
+        // Signals
+        signalsEnabled: true
+
+        function radio_states_ind (state) {
+          console.log(JSON.stringify( "MCE radio state= "+ state))
+        }
+
+        function display_status_ind (state) {
+            console.log(JSON.stringify("MCE display state= " + state))
+        }
+
+    }*/
+
+    // this seems to work
+    property int connmanConnected: UPnP.NetworkState.Unknown
+    onConnmanConnectedChanged: {
+        mainPage.networkStateChange(connmanConnected)
+    }
+
+    DBusInterface {
+             id: connman
+
+             bus:DBus.SystemBus
+             service: 'net.connman'
+             iface: 'net.connman.Technology'
+             path: '/net/connman/technology/wifi'
+             signalsEnabled: true
+             function propertyChanged (name,value) {
+                 //console.log("WiFi changed name=%1, value=%2".arg(name).arg(value))
+                 if(name === "Connected")
+                     connmanConnected = value ? UPnP.NetworkState.Connected : UPnP.NetworkState.Disconnected
+             }
+             Component.onCompleted: {
+                 // result. Connected|Name|Powered|Tethering|TetheringIdentifier|Type
+                 //         true      "WiFi" true  false     "One"               "wifi"
+                 connman.typedCall('GetProperties', [], function (result) {
+                     console.log('Got properties: ' + result);
+                     connmanConnected = result.Connected ? UPnP.NetworkState.Connected : UPnP.NetworkState.Disconnected
+                 });
+             }
+    }
 
     ConfigurationValue {
             id: last_playing_position

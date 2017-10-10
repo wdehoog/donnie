@@ -418,7 +418,7 @@ Page {
             loadBrowseStackMetaData()
     }
 
-    Component.onCompleted: {
+    function searchForRendererAndServer() {
         // check if configured renderer and server can be reached
         showBusy = true;
         if(renderer_friendlyname.value && renderer_udn.value !== "donnie-player-udn")
@@ -428,6 +428,31 @@ Page {
         if(server_friendlyname.value)
             upnp.getServerJson(server_friendlyname.value, search_window.value);
     }
+
+    property bool startUp: false
+    signal networkStateChange(int connected)
+    onNetworkStateChange: {
+        if(connected === UPnP.NetworkState.Unknown)
+            return
+        if(!startUp) {
+            startUp = true
+            if(connected !== UPnP.NetworkState.Connected) {
+                app.showConfirmDialog("There seems to be no internet connection (wifi off). Your Renderer and Media Server might not be reachable.",
+                                      "Continue",
+                                      function() { searchForRendererAndServer() },
+                                      function() { Qt.quit() }
+                )
+            } else
+                searchForRendererAndServer()
+        } else {
+            // ToDo
+        }
+    }
+
+    //Component.onCompleted: {
+        // check wlan
+        //console.log("state: " + app.wlanDetectState.value + ", type: " + app.wlanDetectType.value)
+    //}
 
     property string metaDataCurrentTrackId
 
@@ -566,30 +591,30 @@ Page {
     }
 
     ConfigurationValue {
-            id: search_window
-            key: "/donnie/search_window"
-            defaultValue: 2
+        id: search_window
+        key: "/donnie/search_window"
+        defaultValue: 2
     }
     ConfigurationValue {
-            id: renderer_friendlyname
-            key: "/donnie/renderer_friendlyname"
+        id: renderer_friendlyname
+        key: "/donnie/renderer_friendlyname"
     }
     ConfigurationValue {
-            id: renderer_udn
-            key: "/donnie/renderer_udn"
+        id: renderer_udn
+        key: "/donnie/renderer_udn"
     }
     ConfigurationValue {
-            id: server_friendlyname
-            key: "/donnie/server_friendlyname"
+        id: server_friendlyname
+        key: "/donnie/server_friendlyname"
     }
     ConfigurationValue {
-            id: show_open_logpage
-            key: "/donnie/show_open_logpage"
-            defaultValue: "false"
+        id: show_open_logpage
+        key: "/donnie/show_open_logpage"
+        defaultValue: "false"
     }
     ConfigurationValue {
-            id: resume_saved_info
-            key: "/donnie/resume_saved_info"
-            defaultValue: 0
+        id: resume_saved_info
+        key: "/donnie/resume_saved_info"
+        defaultValue: 0
     }
 }

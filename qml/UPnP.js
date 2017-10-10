@@ -7,6 +7,12 @@
 
 .pragma library
 
+var NetworkState = {
+    Unknown: 1,
+    Connected: 2,
+    Disconnected: 3
+}
+
 var dataStructures = {
     Stack : function() {
         var elements = [];
