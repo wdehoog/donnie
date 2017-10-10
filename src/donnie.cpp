@@ -32,8 +32,16 @@ int main(int argc, char *argv[])
     QGuiApplication * app = SailfishApp::application(argc,argv);
     QQuickView * view = SailfishApp::createView();
 
+    // custom icon loader
     QQmlEngine *engine = view->engine();
     engine->addImageProvider(QLatin1String("donnie-icons"), new IconProvider);
+
+    // translations
+    QTranslator translator;
+    translator.load("donnie-" + QLocale::system().name(),
+                        "/usr/share/donnie/translations");
+    app->installTranslator(&translator);
+    qDebug() << "Locale: " << QLocale::system().name();
 
     UPNP upnp;
     view->rootContext()->setContextProperty("upnp", &upnp);
