@@ -42,7 +42,8 @@ int main(int argc, char *argv[])
     // translations
     QTranslator translator;
     translator.load("donnie-" + QLocale::system().name(),
-                        "/usr/share/donnie/translations");
+                    SailfishApp::pathTo(QString("translations")).toLocalFile());
+                    //"/usr/share/donnie/translations");
     app->installTranslator(&translator);
     qDebug() << "Locale: " << QLocale::system().name();
 
