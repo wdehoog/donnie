@@ -437,8 +437,8 @@ Page {
         if(!startUp) {
             startUp = true
             if(connected !== UPnP.NetworkState.Connected) {
-                app.showConfirmDialog("There seems to be no internet connection (wifi off). Your Renderer and Media Server might not be reachable.",
-                                      "Continue",
+                app.showConfirmDialog(qsTr("There seems to be no internet connection (wifi off). Your Renderer and Media Server might not be reachable."),
+                                      qsTr("Continue"),
                                       function() { searchForRendererAndServer() },
                                       function() { Qt.quit() }
                 )
