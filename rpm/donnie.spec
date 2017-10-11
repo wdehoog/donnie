@@ -29,7 +29,6 @@ BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  libupnpp >= 0.15.1
 BuildRequires:  mpris-qt5-devel
-BuildRequires:  qtchooser
 BuildRequires:  desktop-file-utils
 
 %description
