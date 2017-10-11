@@ -82,26 +82,26 @@
     </message>
     <message>
         <source>No Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen Apparaten</translation>
     </message>
     <message>
         <source>Built-in Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingebouwde Speler</translation>
     </message>
     <message>
         <source>Sailfish QTAudio Player</source>
-        <translation type="unfinished"></translation>
+        <translation>SAlifish QT Audio Speler</translation>
     </message>
     <message>
         <source>a page with audio player controls and list of tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Een pagina met audio speler bediening en een lijst van nummers</translation>
     </message>
 </context>
 <context>
     <name>LogPage</name>
     <message>
         <source>Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Log</translation>
     </message>
 </context>
 <context>
@@ -124,7 +124,7 @@
     </message>
     <message>
         <source>Renderer</source>
-        <translation>Weergever</translation>
+        <translation>Afspeler</translation>
     </message>
     <message>
         <source>[Click to select one]</source>
@@ -148,12 +148,12 @@
     </message>
     <message>
         <source>Failed to load previously saved Browse Stack Ids.</source>
-        <translation>Laden van opgeslagen bladerlijst is mislukt.</translation>
+        <translation>Laden van opgeslagen bladerlijst is niet gelukt.</translation>
     </message>
     <message>
         <source>Failed to load previously saved Queue Ids.
 Can not Resume.</source>
-        <translation>Laden van opgeslagen speellijst is mislukt.
+        <translation>Laden van opgeslagen speellijst is niet gelukt.
 Kan niet Verdergaan.</translation>
     </message>
     <message>
@@ -167,7 +167,7 @@ Kan niet Verdergaan.</translation>
     <message>
         <source>Failed to retrieve metadata for previously saved Ids.
 Can not Resume.</source>
-        <translation>Ophalen van meta-gegevens is mislukt.
+        <translation>Ophalen van meta-gegevens is niet gelukt.
 Kan niet Verdergaan.</translation>
     </message>
     <message>
@@ -177,16 +177,16 @@ Kan niet Verdergaan.</translation>
     <message>
         <source>Failed to parse previously saved Ids.
 Can not Resume.</source>
-        <translation>Inlezen van opgeslagen lijsten is mislukt.
+        <translation>Inlezen van opgeslagen lijsten is niet gelukt.
         Kan niet Verdergaan.</translation>
     </message>
     <message>
         <source>There seems to be no internet connection (wifi off). Your Renderer and Media Server might not be reachable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen internet verbinding (wifi uit). De Afspeler of de Media Server zijn wellicht niet bereikbaar</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>Doorgaan</translation>
     </message>
 </context>
 <context>
@@ -197,7 +197,7 @@ Can not Resume.</source>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijderen</translation>
     </message>
 </context>
 <context>
@@ -208,51 +208,51 @@ Can not Resume.</source>
     </message>
     <message>
         <source>Failed to Pause the Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>De Afspeler pauzeren is niet gelukt</translation>
     </message>
     <message>
         <source>Failed to Start the Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>De Afspeler starten is niet gelukt</translation>
     </message>
     <message>
         <source>Failed to Stop the Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>De Afspeler stoppen is niet gelukt</translation>
     </message>
     <message>
         <source>Failed to set volume on Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Het volume instellen van de Afspeler is niet gelukt</translation>
     </message>
     <message>
         <source>Failed to mute/unmute Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Het geluid afzetten van de Afspeler is niet gelukt.</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <source>Failed to set track to play on Renderer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Instellen van het te spelen nummer is niet gelukt</translation>
     </message>
     <message>
         <source>Failed to set track to play on Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Instellen van het te spelen nummer is niet gelukt</translation>
     </message>
     <message>
         <source>Failed to set next track to play on Renderer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Instellen van het volgend te spelen nummer is niet gelukt</translation>
     </message>
     <message>
         <source>Failed to set next track to play on Renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Instellen van het volgend te spelen nummer is niet gelukt</translation>
     </message>
     <message>
         <source>The renderer has stopped playing unexpectedly.</source>
-        <translation type="unfinished"></translation>
+        <translation>De Afspeler is onverwacht gestopt</translation>
     </message>
     <message>
         <source>Lost connection with Renderer.</source>
-        <translation type="unfinished"></translation>
+        <translation>De verbinding met de Afspeler is verbroken</translation>
     </message>
 </context>
 <context>
@@ -275,113 +275,113 @@ Can not Resume.</source>
     </message>
     <message>
         <source>Add To Player</source>
-        <translation type="unfinished">Voeg Toe aan Speler</translation>
+        <translation>Voeg Toe aan Speler</translation>
     </message>
     <message>
         <source>Add All To Player</source>
-        <translation type="unfinished">Voeg Alles Toe aan Speler</translation>
+        <translation>Voeg Alles Toe aan Speler</translation>
     </message>
     <message>
         <source>Search text</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoek tekst</translation>
     </message>
     <message>
         <source>Search In</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoek in</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen</translation>
     </message>
     <message>
         <source>Group By</source>
-        <translation type="unfinished"></translation>
+        <translation>Groepeer Op</translation>
     </message>
     <message>
         <source>Album</source>
-        <translation type="unfinished"></translation>
+        <translation>Album</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished"></translation>
+        <translation>Artiest</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Titel</translation>
     </message>
     <message>
         <source>Add Group To Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Groep toevoegen aan de Speler</translation>
     </message>
 </context>
 <context>
     <name>SettingsPage</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Instellingen</translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <source>Resume</source>
-        <translation type="unfinished">Verdergaan</translation>
+        <translation>Verdergaan</translation>
     </message>
     <message>
         <source>How long to search for UPnp Devices (sec)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoe lang zoeken naar UPnP apparaten (sec)</translation>
     </message>
     <message>
         <source>Maximum number of results per request</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximum aantal resultaten per zoekopdracht</translation>
     </message>
     <message>
         <source>Allow Containers</source>
-        <translation type="unfinished"></translation>
+        <translation>Containers Toestaan</translation>
     </message>
     <message>
         <source>Also show Containers in search results</source>
-        <translation type="unfinished"></translation>
+        <translation>Ook Containers tonen in de zoekresultaten</translation>
     </message>
     <message>
         <source>Load saved track queue at startup and resume playing</source>
-        <translation type="unfinished"></translation>
+        <translation>Bij opstarten de opgeslagen nummerlijst laden en verdergaan</translation>
     </message>
     <message>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Nooit</translation>
     </message>
     <message>
         <source>Ask</source>
-        <translation type="unfinished"></translation>
+        <translation>Vragen</translation>
     </message>
     <message>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation>Altijd</translation>
     </message>
     <message>
         <source>Log Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Log Pagina</translation>
     </message>
     <message>
         <source>Show Open Log Page button</source>
-        <translation type="unfinished"></translation>
+        <translation>Toon knop om Log Pagina te openen</translation>
     </message>
 </context>
 <context>
     <name>UPnPDeviceDetails</name>
     <message>
         <source>Device Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Apparaat details</translation>
     </message>
     <message>
         <source>model: </source>
-        <translation type="unfinished"></translation>
+        <translation>model: </translation>
     </message>
     <message>
         <source>manufacturer: </source>
-        <translation type="unfinished"></translation>
+        <translation>fabrikant: </translation>
     </message>
     <message>
         <source>Device Type: </source>
-        <translation type="unfinished"></translation>
+        <translation>Type Apparaat: </translation>
     </message>
 </context>
 </TS>
