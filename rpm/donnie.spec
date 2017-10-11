@@ -13,7 +13,7 @@ Name:       donnie
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    UPnP Controller with built in Player
-Version:    0.7
+Version:    0.1
 Release:    1
 Group:      Applications/Music
 License:    GPLv2
@@ -29,6 +29,7 @@ BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  libupnpp >= 0.15.1
 BuildRequires:  mpris-qt5-devel
+BuildRequires:  qt5-qttools-linguist
 BuildRequires:  desktop-file-utils
 
 %description
