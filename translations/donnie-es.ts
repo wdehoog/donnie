@@ -147,10 +147,6 @@
         <translation>Reproductor</translation>
     </message>
     <message>
-        <source>Failed to load previously saved Browse Stack Ids.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Load previously saved queue?</source>
         <translation>Cargar la cola previamente guardada?</translation>
     </message>
@@ -179,6 +175,18 @@ No se puede reanudar</translation>
 Can not Resume.</source>
         <translation>Error al analizar los Ids guardado anteriormente. 
 No se puede reanudar</translation>
+    </message>
+    <message>
+        <source>Failed to load previously saved Browse Stack Ids.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There seems to be no internet connection (wifi off). Your Renderer and Media Server might not be reachable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

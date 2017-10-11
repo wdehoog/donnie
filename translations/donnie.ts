@@ -12,11 +12,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Thanks to</source>
+        <source>Translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Translations</source>
+        <source>Thanks to</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -156,6 +156,14 @@ Can not Resume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>There seems to be no internet connection (wifi off). Your Renderer and Media Server might not be reachable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Load previously saved queue?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -192,10 +200,6 @@ Can not Resume.</source>
 <context>
     <name>RendererPage</name>
     <message>
-        <source>Empty List</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Failed to Pause the Renderer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -213,6 +217,10 @@ Can not Resume.</source>
     </message>
     <message>
         <source>Failed to mute/unmute Renderer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Empty List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -251,7 +259,7 @@ Can not Resume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Load More</source>
+        <source>Load Previous Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -259,7 +267,7 @@ Can not Resume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Load Previous Set</source>
+        <source>Load More</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

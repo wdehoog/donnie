@@ -180,6 +180,14 @@ Can not Resume.</source>
         <translation>Inlezen van opgeslagen lijsten is mislukt.
         Kan niet Verdergaan.</translation>
     </message>
+    <message>
+        <source>There seems to be no internet connection (wifi off). Your Renderer and Media Server might not be reachable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlayerPage</name>
@@ -266,6 +274,14 @@ Can not Resume.</source>
         <translation>Laad Vorige Set</translation>
     </message>
     <message>
+        <source>Add To Player</source>
+        <translation type="unfinished">Voeg Toe aan Speler</translation>
+    </message>
+    <message>
+        <source>Add All To Player</source>
+        <translation type="unfinished">Voeg Alles Toe aan Speler</translation>
+    </message>
+    <message>
         <source>Search text</source>
         <translation type="unfinished"></translation>
     </message>
@@ -294,16 +310,8 @@ Can not Resume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add To Player</source>
-        <translation type="unfinished">Voeg Toe aan Speler</translation>
-    </message>
-    <message>
         <source>Add Group To Player</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add All To Player</source>
-        <translation type="unfinished">Voeg Alles Toe aan Speler</translation>
     </message>
 </context>
 <context>
@@ -311,6 +319,10 @@ Can not Resume.</source>
     <message>
         <source>Settings</source>
         <translation type="unfinished">Instellingen</translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation type="unfinished">Verdergaan</translation>
     </message>
     <message>
         <source>How long to search for UPnp Devices (sec)</source>
@@ -327,10 +339,6 @@ Can not Resume.</source>
     <message>
         <source>Also show Containers in search results</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Resume</source>
-        <translation type="unfinished">Verdergaan</translation>
     </message>
     <message>
         <source>Load saved track queue at startup and resume playing</source>
