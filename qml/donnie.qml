@@ -8,9 +8,10 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import org.nemomobile.configuration 1.0
-import org.freedesktop.contextkit 1.0
-import org.nemomobile.connectivity 1.0
-import Nemo.DBus 2.0
+//import org.freedesktop.contextkit 1.0
+//import org.nemomobile.connectivity 1.0
+//import Nemo.DBus 2.0
+import org.nemomobile.dbus 2.0
 
 import "pages"
 import "cover"
@@ -37,11 +38,13 @@ ApplicationWindow
     property alias last_playing_position: last_playing_position
     property alias last_playing_info: last_playing_info
     property alias last_browsing_info: last_browsing_info
-    property alias wlanDetectState: wlanDetectState
-    property alias wlanDetectType: wlanDetectType
-    property alias connectionHelper: connectionHelper
-    property alias connman: connman
+
+
+    //property alias wlanDetectState: wlanDetectState
+    //property alias wlanDetectType: wlanDetectType
+    //property alias connectionHelper: connectionHelper
     //property alias dbusFlight: dbusFlight
+    //property alias connman: connman
 
     //Component.onDestruction: app.last_playing_position.value = position
     //property alias last_playing_position: last_playing_position
@@ -247,6 +250,8 @@ ApplicationWindow
         //last_playing_position.sync()
     //}
 
+
+    /* Did not work
     ContextProperty {
         id: wlanDetectState
         key: "Internet.NetworkState"
@@ -258,9 +263,9 @@ ApplicationWindow
         id: wlanDetectType
         key: "Internet.NetworkType"
         onValueChanged: console.log(key + "->" + value + "/" + typeof(value))
-    }
+    }*/
 
-    // this seems to work
+    /*// this seems to work
     property bool connectedToNetwork: false
     ConnectionHelper {
          id: connectionHelper
@@ -270,7 +275,7 @@ ApplicationWindow
          onNetworkConnectivityUnavailable: {
              connectedToNetwork = false
          }
-    }
+    }*/
 
     /*DBusInterface {
         id : dbusFlight
