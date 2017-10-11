@@ -78,7 +78,7 @@ HEADERS += \
     src/upnpsetnexttrackrunnable.h \
     src/upnpgetmetadatarunnable.h
     
- TRANSLATIONS += \
+TRANSLATIONS += \
     translations/donnie-es.ts \
     translations/donnie-nl.ts \
     translations/donnie.ts 
