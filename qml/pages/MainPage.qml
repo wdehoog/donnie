@@ -419,14 +419,19 @@ Page {
     }
 
     function searchForRendererAndServer() {
+        var started = false
         // check if configured renderer and server can be reached
-        showBusy = true;
-        if(renderer_friendlyname.value && renderer_udn.value !== "donnie-player-udn")
-            upnp.getRendererJson(renderer_friendlyname.value, search_window.value);
+        if(renderer_friendlyname.value && renderer_udn.value !== "donnie-player-udn") {
+            upnp.getRendererJson(renderer_friendlyname.value, search_window.value)
+            started = true
+        }
         else if(renderer_friendlyname.value && renderer_udn.value === "donnie-player-udn")
-            app.useBuiltInPlayer = true;
-        if(server_friendlyname.value)
-            upnp.getServerJson(server_friendlyname.value, search_window.value);
+            app.useBuiltInPlayer = true
+        if(server_friendlyname.value) {
+            upnp.getServerJson(server_friendlyname.value, search_window.value)
+            started = true
+        }
+        showBusy = started
     }
 
     property bool startUp: false
