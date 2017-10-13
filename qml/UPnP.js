@@ -188,23 +188,23 @@ function createUPnPQuery(searchString, searchCapabilities, capabilitiesMask, all
 
 function geSearchCapabilityDisplayString(searchCapability) {
     if(searchCapability === "upnp:artist")
-        return "Artist";
+        return qsTr("Artist");
     if(searchCapability === "dc:title")
-        return "Title";
+        return qsTr("Title");
     if(searchCapability === "upnp:album")
-        return "Album";
+        return qsTr("Album");
     if(searchCapability === "upnp:genre")
-        return "Genre";
+        return qsTr("Genre");
     if(searchCapability === "dc:creator")
-        return "Creator";
+        return qsTr("Creator");
     if(searchCapability === "dc:publisher")
-        return "Publisher";
+        return qsTr("Publisher");
     if(searchCapability === "dc:description")
-        return "Description";
+        return qsTr("Description");
     if(searchCapability === "upnp:userAnnotation")
-        return "User Annotation";
+        return qsTr("User Annotation");
     if(searchCapability === "upnp:longDescription")
-        return "Long Description";
+        return qsTr("Long Description");
 
     return undefined;
 }

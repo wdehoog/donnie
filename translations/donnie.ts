@@ -363,6 +363,45 @@ Can not Resume.</source>
     </message>
 </context>
 <context>
+    <name>UPnP</name>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Album</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Genre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Creator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Publisher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User Annotation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Long Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UPnPDeviceDetails</name>
     <message>
         <source>Device Details</source>
