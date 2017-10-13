@@ -17,7 +17,7 @@
     </message>
     <message>
         <source>Translations</source>
-        <translation>Traducciones</translation>
+        <translation>Traductores</translation>
     </message>
 </context>
 <context>
@@ -124,7 +124,7 @@
     </message>
     <message>
         <source>Renderer</source>
-        <translation>Renderizar</translation>
+        <translation>Renderizador</translation>
     </message>
     <message>
         <source>[Click to select one]</source>
@@ -132,7 +132,7 @@
     </message>
     <message>
         <source>Content Server</source>
-        <translation>Servidor de contenido</translation>
+        <translation>Servidor</translation>
     </message>
     <message>
         <source>Browser</source>
@@ -178,15 +178,15 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>Failed to load previously saved Browse Stack Ids.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al cargar los Ids de pila de exploración, guardados previamente.</translation>
     </message>
     <message>
         <source>There seems to be no internet connection (wifi off). Your Renderer and Media Server might not be reachable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Parece que no hay conexión a internet (wifi apagado). Es posible que su Renderizador y el servidor de medios no sean accesibles.</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>Continuar</translation>
     </message>
 </context>
 <context>
@@ -322,7 +322,7 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>How long to search for UPnp Devices (sec)</source>
-        <translation>Cuánto tiempo para buscar dispositivos UPnp (seg)</translation>
+        <translation>Cuánto tiempo buscar dispositivos UPnP (seg)</translation>
     </message>
     <message>
         <source>Maximum number of results per request</source>
@@ -334,7 +334,7 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>Also show Containers in search results</source>
-        <translation>Mostrar también Contenedores en los resultados de búsqueda</translation>
+        <translation>Mostrar contenedores en los resultados de búsqueda</translation>
     </message>
     <message>
         <source>Resume</source>
