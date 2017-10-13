@@ -53,17 +53,23 @@ UPNP::UPNP(QObject *parent) :
 void UPNP::init(int search_window) {
 
     if(!libUPnP || !libUPnP->ok()) {
-        libUPnP = UPnPP::LibUPnP::getLibUPnP(false, 0, "wlan0"); //, "127.0.0.1");
+        libUPnP = UPnPP::LibUPnP::getLibUPnP(false, 0, "wlan0");
         if (!libUPnP || !libUPnP->ok()) {
             if (libUPnP)
                 std::cerr << libUPnP->errAsString("init", libUPnP->getInitError()) << std::endl;
             // try second time without specifying iface
             libUPnP = UPnPP::LibUPnP::getLibUPnP();
             if (!libUPnP || !libUPnP->ok()) {
-                if (!libUPnP)
-                    std::cerr << "init failed to create libUPnP 2nd try" << std::endl;
-                else
+                if (libUPnP)
                     std::cerr << libUPnP->errAsString("Error on init 2nd try: ", libUPnP->getInitError()) << std::endl;
+                // try third time with localhost
+                libUPnP = UPnPP::LibUPnP::getLibUPnP(false, 0, 0, "127.0.0.1");
+                if (!libUPnP || !libUPnP->ok()) {
+                    if (!libUPnP)
+                        std::cerr << "init failed to create libUPnP 3rd try" << std::endl;
+                    else
+                        std::cerr << libUPnP->errAsString("Error on init 3rd try: ", libUPnP->getInitError()) << std::endl;
+                }
             }
         }
         if (libUPnP && libUPnP->ok()) {
