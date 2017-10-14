@@ -369,39 +369,39 @@ No se puede reanudar</translation>
     <name>UPnP</name>
     <message>
         <source>Artist</source>
-        <translation type="unfinished">Artista</translation>
+        <translation>Artista</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation type="unfinished">Título</translation>
+        <translation>Título</translation>
     </message>
     <message>
         <source>Album</source>
-        <translation type="unfinished">Album</translation>
+        <translation>Album</translation>
     </message>
     <message>
         <source>Genre</source>
-        <translation type="unfinished"></translation>
+        <translation>Género</translation>
     </message>
     <message>
         <source>Creator</source>
-        <translation type="unfinished"></translation>
+        <translation>Creador</translation>
     </message>
     <message>
         <source>Publisher</source>
-        <translation type="unfinished"></translation>
+        <translation>Publicador</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descripción</translation>
     </message>
     <message>
         <source>User Annotation</source>
-        <translation type="unfinished"></translation>
+        <translation>Anotación de usuario</translation>
     </message>
     <message>
         <source>Long Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descripción larga</translation>
     </message>
 </context>
 <context>
