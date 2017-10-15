@@ -306,6 +306,42 @@ function createListItem(item) {
     return listItem;
 }
 
+var DIDL_FRAME_START = "<DIDL-Lite " +
+    "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " +
+    "xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " +
+    "xmlns:dlna=\"urn:schemas-dlna-org:metadata-1-0/\" " +
+    "xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">";
+var DIDL_FRAME_END = "</DIDL-Lite>";
+
+function createDIDL(id, pid, uri, title, protocolInfo, streamType) {
+    // TODO escaping
+    var fragment = "<item id=\"" + id + "\" parentID=\"" + pid +"\" restricted=\"1\">";
+    fragment += "<dc:title>" + title + "</dc:title><res protocolInfo=\"" + protocolInfo + "\">" + uri + "</res>";
+    fragment += "<upnp:class>" + streamType + "</upnp:class></item>";
+    return DIDL_FRAME_START + fragment + DIDL_FRAME_END;
+}
+
+var createdTrackId = 1;
+function createTrack(uri, label, streamType) {
+    var id = createdTrackId++;
+    var pid = id;
+    var protocolInfo = "http-get:*:*:*";
+    var title = label ? label : "URI[" + id + "]";
+    return {
+        type: "Item",
+        id: id,
+        pid: pid,
+        title: title,
+        titleText: title,
+        metaText: qsTr("User entered URI"),
+        uri: uri,
+        upnpclass: streamType,
+        protocolInfo: protocolInfo,
+        didl: createDIDL(id, pid, uri, label, protocolInfo, streamType)
+    }
+}
+
+
 function getAudioType(item) {
     var p;
     var t;
@@ -372,7 +408,12 @@ function getUPNPErrorString(errorCode) {
     }
 }
 
+var AudioItemType = {
+    MusicTrack: "object.item.audioItem.musicTrack",
+    AudioBroadcast: "object.item.audioItem.audioBroadcast"
+}
+
 function isBroadcast(track) {
-    return track && track.upnpclass === "object.item.audioItem.audioBroadcast"
+    return track && track.upnpclass === AudioItemType.AudioBroadcast
 }
 

@@ -106,6 +106,15 @@ ApplicationWindow
             dialog.rejected.connect(arguments[3])
     }
 
+    function showEditURIDialog(title, uri, label, streamType, editCallback) {
+        var dialog = pageStack.push (Qt.resolvedUrl("components/EditURIDialog.qml"),
+                                                   {titleText: title, uri: uri, label: label, streamType: streamType})
+        if(editCallback !== null)
+            dialog.accepted.connect(function() {
+                editCallback(dialog.label, dialog.uri, dialog.streamType)
+            })
+    }
+
     function hasCurrentServer() {
         return app.currentServer ? true : false;
     }

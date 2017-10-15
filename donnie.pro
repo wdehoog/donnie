@@ -61,7 +61,11 @@ DISTFILES += \
     license/License.txt \
     qml/components/Messagebox.qml \
     qml/components/ErrorDialog.qml \
-    qml/components/ConfirmDialog.qml
+    qml/components/ConfirmDialog.qml \
+    translations/donnie.ts \
+    translations/donnie-es.ts \
+    translations/donnie-nl.ts \
+    qml/components/EditURIDialog.qml
 
 HEADERS += \
     src/upnp.h \

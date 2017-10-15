@@ -98,6 +98,33 @@
     </message>
 </context>
 <context>
+    <name>EditURIDialog</name>
+    <message>
+        <source>Stream Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type of stream the URI referes to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Music Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Broadcast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>URI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">Titel</translation>
+    </message>
+</context>
+<context>
     <name>LogPage</name>
     <message>
         <source>Log</source>
@@ -198,6 +225,14 @@ Can not Resume.</source>
     <message>
         <source>Remove</source>
         <translation>Verwijderen</translation>
+    </message>
+    <message>
+        <source>Add URI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Stream</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
