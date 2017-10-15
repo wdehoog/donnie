@@ -123,17 +123,26 @@ ApplicationWindow
         app.currentServer = server;
         console.log("setCurrentServer to: "+ currentServer["friendlyName"]);
         var res = upnp.setCurrentServer(currentServer["friendlyName"], true);
+        currentServerSearchCapabilities = [];
         if(res) {
             try {
+                var i
                 var scapJson = upnp.getSearchCapabilitiesJson();
                 console.log(scapJson);
-                currentServerSearchCapabilities = JSON.parse(scapJson);
+                var allSearchCaps = JSON.parse(scapJson);
+                // minidlna worked well but minimserver returned some search capabilities that
+                // when used the query made it return an error
+                // things like: @refID, upnp:class, upnp:artist[@role="AlbumArtist"]
+                for(i=0;i<allSearchCaps.length;i++) {
+                    if(allSearchCaps[i] !== "upnp:class"
+                       && allSearchCaps[i].indexOf('@') < 0)
+                        currentServerSearchCapabilities.push(allSearchCaps[i]);
+                }
             } catch( err ) {
                 app.error("Exception while getting Search Capabilities: " + err);
                 app.error("json: " + scapJson);
             }
         } else {
-            currentServerSearchCapabilities = {};
             error("Failed to set Current Server to: "+ currentServer["friendlyName"]);
         }
         return res;
