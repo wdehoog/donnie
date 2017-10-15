@@ -127,6 +127,7 @@ Page {
 
             PageHeader {
                 id: pHeader
+                width: parent.width
                 title: qsTr("Search")
                 BusyIndicator {
                     id: busyThingy
@@ -315,7 +316,8 @@ Page {
         section.delegate : Component {
             id: sectionHeading
             Item {
-                width: parent.width
+                width: parent.width - 2*Theme.paddingMedium
+                x: Theme.paddingMedium
                 height: childrenRect.height
 
                 Text {
