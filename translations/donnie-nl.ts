@@ -226,14 +226,6 @@ Can not Resume.</source>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
-    <message>
-        <source>Add URI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Stream</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>RendererPage</name>
@@ -437,6 +429,10 @@ Can not Resume.</source>
     <message>
         <source>Long Description</source>
         <translation>Uitgebreide beschrijving</translation>
+    </message>
+    <message>
+        <source>User entered URI</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

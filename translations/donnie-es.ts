@@ -226,14 +226,6 @@ No se puede reanudar</translation>
         <source>Remove</source>
         <translation>Resumir</translation>
     </message>
-    <message>
-        <source>Add URI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Stream</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>RendererPage</name>
@@ -437,6 +429,10 @@ No se puede reanudar</translation>
     <message>
         <source>Long Description</source>
         <translation>Descripción larga</translation>
+    </message>
+    <message>
+        <source>User entered URI</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
