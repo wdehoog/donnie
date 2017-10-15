@@ -115,15 +115,13 @@ Page {
         anchors {
             topMargin: 0
             bottomMargin: 0
-            leftMargin: Theme.paddingMedium
-            rightMargin: Theme.paddingMedium
         }
 
         header: Column {
             id: lvColumn
 
-            width: parent.width
-            //height: pHeader.height + pathComboBox.height + Theme.paddingLarge * 2
+            width: parent.width - 2*Theme.paddingMedium
+            x: Theme.paddingMedium
             anchors.bottomMargin: Theme.paddingLarge
             spacing: Theme.paddingLarge
 
@@ -331,6 +329,8 @@ Page {
 
         delegate: ListItem {
             id: delegate
+            width: parent.width - 2*Theme.paddingMedium
+            x: Theme.paddingMedium
 
             Row {
                 spacing: Theme.paddingMedium

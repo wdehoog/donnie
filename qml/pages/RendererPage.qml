@@ -261,8 +261,6 @@ Page {
         anchors {
             topMargin: 0
             bottomMargin: 0
-            leftMargin: Theme.paddingMedium
-            rightMargin: Theme.paddingMedium
         }
 
         PullDownMenu {
@@ -275,9 +273,10 @@ Page {
         }
 
         header: Column {
-
-            width: parent.width
             id: headerColumn
+
+            width: parent.width - 2*Theme.paddingMedium
+            x: Theme.paddingMedium
 
             Rectangle {
                 width: parent.width
@@ -443,8 +442,9 @@ Page {
 
         delegate: ListItem {
             id: delegate
-            width: parent.width
-            anchors.margins: Theme.paddingMedium
+
+            width: parent.width - 2*Theme.paddingMedium
+            x: Theme.paddingMedium
 
             Column {
                 width: parent.width

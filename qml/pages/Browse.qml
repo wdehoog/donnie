@@ -121,15 +121,13 @@ Page {
         anchors {
             topMargin: 0
             bottomMargin: 0
-            leftMargin: Theme.paddingMedium
-            rightMargin: Theme.paddingMedium
         }
 
         header: Column {
             id: lvColumn
 
-            width: parent.width
-            //height: pHeader.height + pathComboBox.height + Theme.paddingLarge * 2
+            width: parent.width - 2*Theme.paddingMedium
+            x: Theme.paddingMedium
             anchors.bottomMargin: Theme.paddingLarge
             spacing: Theme.paddingLarge
 
@@ -149,7 +147,8 @@ Page {
                 id: path
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.margins: Theme.paddingMedium
+                anchors.topMargin: Theme.paddingMedium
+                anchors.bottomMargin: Theme.paddingMedium
                 horizontalAlignment: Text.AlignRight
                 font.pixelSize: Theme.fontSizeLarge
                 color: Theme.highlightColor
@@ -213,11 +212,12 @@ Page {
 
         delegate: ListItem {
             id: delegate
+            width: parent.width - 2*Theme.paddingMedium
+            x: Theme.paddingMedium
 
             Row {
                 spacing: Theme.paddingMedium
                 width: parent.width
-                anchors.rightMargin: Theme.paddingMedium
 
                 Image {
                   id: imageItem

@@ -119,7 +119,8 @@ Page {
                 font.pixelSize: Theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 text:
-"J.F.Dockes for upplay + libupnpp, amazing UPnP support
+"Carlos Gonzalez for testing and UI rigor
+J.F.Dockes for upplay + libupnpp, amazing UPnP support
 equeim for unplayer
 jabbounet for upnpplayer
 kimmoli for IconProvider and MultiItemPicker

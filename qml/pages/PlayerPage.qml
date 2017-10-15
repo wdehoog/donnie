@@ -186,12 +186,6 @@ Page {
         model: trackListModel
         width: parent.width
         anchors.fill: parent
-        anchors {
-            topMargin: 0
-            bottomMargin: 0
-            leftMargin: Theme.paddingMedium
-            rightMargin: Theme.paddingMedium
-        }
 
         PullDownMenu {
             /*MenuItem {
@@ -215,8 +209,13 @@ Page {
         }
 
         header: Column {
-            width: parent.width
-            anchors.bottomMargin: Theme.paddingLarge
+            width: parent.width - 2*Theme.paddingMedium
+            x: Theme.paddingMedium
+
+            anchors {
+                topMargin: 0
+                bottomMargin: Theme.paddingLarge
+            }
 
             Rectangle {
                 width: parent.width
@@ -396,8 +395,8 @@ Page {
 
         delegate: ListItem {
             id: delegate
-            width: parent.width
-            anchors.margins: Theme.paddingMedium
+            width: parent.width - 2*Theme.paddingMedium
+            x: Theme.paddingMedium
 
             Column {
                 width: parent.width
