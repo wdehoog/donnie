@@ -227,10 +227,6 @@ No se puede reanudar</translation>
         <translation>Resumir</translation>
     </message>
     <message>
-        <source>Add URI</source>
-        <translation>Añadir IRU</translation>
-    </message>
-    <message>
         <source>Add Stream</source>
         <translation>Añadir secuencia</translation>
     </message>

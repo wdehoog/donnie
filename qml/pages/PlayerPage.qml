@@ -188,9 +188,10 @@ Page {
         anchors.fill: parent
 
         PullDownMenu {
-            /*MenuItem {
-                text: qsTr("Add URI")
+            MenuItem {
+                text: qsTr("Add Stream")
                 enabled: false
+                visible: false
                 onClicked: {
                     app.showEditURIDialog(qsTr("Add Stream"), "", "", UPnP.AudioItemType.MusicTrack, function(title, uri, streamType) {
                         if(uri === "")
@@ -200,7 +201,7 @@ Page {
                             addTracks([track])
                     })
                 }
-            }*/
+            }
             MenuItem {
                 text: qsTr("Empty List")
                 onClicked: clearList()

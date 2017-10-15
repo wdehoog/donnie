@@ -223,6 +223,10 @@ Can not Resume.</source>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Add Stream</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RendererPage</name>
