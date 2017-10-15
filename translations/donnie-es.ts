@@ -24,7 +24,7 @@
     <name>Browse</name>
     <message>
         <source>Browse</source>
-        <translation>Navega</translation>
+        <translation>Directorios</translation>
     </message>
     <message>
         <source>Load Previous Set</source>
@@ -86,7 +86,7 @@
     </message>
     <message>
         <source>Built-in Player</source>
-        <translation>Reproductor incorporado</translation>
+        <translation>Reproductor nativo</translation>
     </message>
     <message>
         <source>Sailfish QTAudio Player</source>
@@ -101,27 +101,27 @@
     <name>EditURIDialog</name>
     <message>
         <source>Stream Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de secuencia</translation>
     </message>
     <message>
         <source>Type of stream the URI referes to</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de secuencia la que refiere la IRU para</translation>
     </message>
     <message>
         <source>Music Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Pista</translation>
     </message>
     <message>
         <source>Audio Broadcast</source>
-        <translation type="unfinished"></translation>
+        <translation>Emisión de audio</translation>
     </message>
     <message>
         <source>URI</source>
-        <translation type="unfinished"></translation>
+        <translation>IRU</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation type="unfinished">Título</translation>
+        <translation>Título</translation>
     </message>
 </context>
 <context>
@@ -228,11 +228,11 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>Add URI</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir IRU</translation>
     </message>
     <message>
         <source>Add Stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir secuencia</translation>
     </message>
 </context>
 <context>
@@ -397,7 +397,7 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>Show Open Log Page button</source>
-        <translation>Mostrar botón Abrir página de registro</translation>
+        <translation>Mostrar botón al abrir página de registro</translation>
     </message>
 </context>
 <context>
