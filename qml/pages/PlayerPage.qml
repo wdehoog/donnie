@@ -186,7 +186,12 @@ Page {
         model: trackListModel
         width: parent.width
         anchors.fill: parent
-        anchors.margins: Theme.paddingMedium
+        anchors {
+            topMargin: 0
+            bottomMargin: 0
+            leftMargin: Theme.paddingMedium
+            rightMargin: Theme.paddingMedium
+        }
 
         PullDownMenu {
             MenuItem {
@@ -211,11 +216,11 @@ Page {
 
                 width: parent.width
 
-                Rectangle {
+                /*Rectangle {
                     width: Theme.paddingLarge
                     height: parent.height
                     opacity: 0
-                }
+                }*/
 
                 Image {
                     id: imageItem

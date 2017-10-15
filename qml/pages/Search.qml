@@ -112,7 +112,12 @@ Page {
         id: listView
         model: searchModel
         anchors.fill: parent
-        anchors.margins: Theme.paddingMedium
+        anchors {
+            topMargin: 0
+            bottomMargin: 0
+            leftMargin: Theme.paddingMedium
+            rightMargin: Theme.paddingMedium
+        }
 
         header: Column {
             id: lvColumn
