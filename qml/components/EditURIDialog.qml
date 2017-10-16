@@ -8,7 +8,7 @@ Dialog {
 
     property alias uri : uriTextArea.text
     property alias label : labelTextArea.text
-    property string streamType : UPnP.AudioType.MusicTrack
+    property string streamType : UPnP.AudioType.AudioBroadcast
 
     id: editURIDialog
     canAccept: true
@@ -51,7 +51,7 @@ Dialog {
                  description: qsTr("Type of stream the URI referes to")
 
                  currentIndex: {
-                     if(streamType === UPnP.AudioType.AudioBroadcast)
+                     if(streamType === UPnP.AudioItemType.AudioBroadcast)
                          return 1
                      return 0
                  }

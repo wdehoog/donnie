@@ -257,8 +257,15 @@ ApplicationWindow
         var lastPlayingInfo = {}
         lastPlayingInfo.currentTrackId = currentTrack.id
         lastPlayingInfo.queueTrackIds = []
-        for(i=0;i<trackListModel.count;i++)
-            lastPlayingInfo.queueTrackIds.push(trackListModel.get(i).id)
+        for(i=0;i<trackListModel.count;i++) {
+            var item = trackListModel.get(i)
+            var info
+            if(item.dtype === UPnP.DonnieItemType.ContentServer)
+                info = { dtype: "cs", data: item.id}
+            else
+                info = { dtype: "ud", data: { title: item.title, uri: item.uri, streamType: item.upnpclass}}
+            lastPlayingInfo.queueTrackIds.push(info)
+        }
         last_playing_info.value = JSON.stringify(lastPlayingInfo)
     }
 

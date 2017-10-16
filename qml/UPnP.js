@@ -254,6 +254,7 @@ function createListContainer(container) {
     if("object.container.album.musicAlbum" === container.properties["upnp:class"])
         return {
             type: "Container",
+            dtype: DonnieItemType.ContentServer,
             id: container["id"],
             pid: container["pid"],
             title: container["title"],
@@ -269,6 +270,7 @@ function createListContainer(container) {
     else
         return {
             type: "Container",
+            dtype: DonnieItemType.ContentServer,
             id: container["id"],
             pid: container["pid"],
             title: container["title"],
@@ -283,6 +285,7 @@ function createListItem(item) {
 
     var listItem = {
         type: "Item",
+        dtype: DonnieItemType.ContentServer,
         id: item["id"],
         pid: item["pid"],
         title: item["title"],
@@ -322,13 +325,14 @@ function createDIDL(id, pid, uri, title, protocolInfo, streamType) {
 }
 
 var createdTrackId = 1;
-function createTrack(uri, label, streamType) {
-    var id = createdTrackId++;
+function createUserAddedTrack(uri, label, streamType) {
+    var id = "" + createdTrackId++;
     var pid = id;
     var protocolInfo = "http-get:*:*:*";
     var title = label ? label : "URI[" + id + "]";
     return {
         type: "Item",
+        dtype: DonnieItemType.UserDefined,
         id: id,
         pid: pid,
         title: title,
@@ -411,6 +415,11 @@ function getUPNPErrorString(errorCode) {
 var AudioItemType = {
     MusicTrack: "object.item.audioItem.musicTrack",
     AudioBroadcast: "object.item.audioItem.audioBroadcast"
+}
+
+var DonnieItemType = {
+    ContentServer: "Content Server",
+    UserDefined: "User Defined"
 }
 
 function isBroadcast(track) {

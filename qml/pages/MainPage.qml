@@ -390,6 +390,7 @@ Page {
         }
     }
 
+    property var userDefinedItems : []
     function loadResumeMetaData() {
         var i
         showBusy = true
@@ -401,8 +402,13 @@ Page {
 
                 metaDataCurrentTrackId = linfo.currentTrackId
 
-                for(i=0;i<linfo.queueTrackIds.length;i++)
-                    ids[pos++] = linfo.queueTrackIds[i]
+                userDefinedItems = []
+                for(i=0;i<linfo.queueTrackIds.length;i++) {
+                    if(linfo.queueTrackIds[i].dtype === "cs")
+                        ids[pos++] = linfo.queueTrackIds[i].data
+                    else if(linfo.queueTrackIds[i].dtype === "ud")
+                        userDefinedItems.push({index: i, data: linfo.queueTrackIds[i].data})
+                }
 
                 if(ids.length > 0) {
                     resumeState = 1
@@ -533,6 +539,7 @@ Page {
             }
         }
 
+        // called when metadata has been collected from stored resume info
         onMetaData: {
             //console.log("onMetaData: " + metaDataJson);
             if(error !== 0) {
@@ -551,18 +558,34 @@ Page {
                 switch(resumeState) {
                 case 1:
                     // restore queue and current track
-                    var currentTrackIndex = -1;
-                    var tracks = [];
+                    var currentTrackIndex = -1
+                    var tracks = []
+                    var i
+                    var track
                     // todo: getPlayerPage().reset() but does not exist
-                    for(var i=0;i<metaData.length;i++) {
+
+                    // create items for stored id's
+                    for(i=0;i<metaData.length;i++) {
                         if(metaData[i].items && metaData[i].items.length>0) {
-                            var track = UPnP.createListItem(metaData[i].items[0]);
-                            tracks.push(track);
+                            track = UPnP.createListItem(metaData[i].items[0])
+                            tracks.push(track)
                             if(track.id === metaDataCurrentTrackId)
                                 currentTrackIndex = tracks.length - 1
                         }
                     }
+
+                    // create items for user added uris
+                    for(i=0;i<userDefinedItems.length;i++) {
+                        track = UPnP.createUserAddedTrack(userDefinedItems[i].data.uri,
+                                                          userDefinedItems[i].data.title,
+                                                          userDefinedItems[i].data.streamType)
+                        tracks.splice(userDefinedItems[i].index, 0, track)
+                        if(track.id === metaDataCurrentTrackId)
+                            currentTrackIndex = tracks.length - 1
+                    }
+
                     metaDataCurrentTrackId = ""
+
                     getPlayerPage().addTracks(tracks,
                                               currentTrackIndex,
                                               UPnP.isBroadcast(track) ? -1 : app.last_playing_position.value)
