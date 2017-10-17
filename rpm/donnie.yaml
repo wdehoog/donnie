@@ -29,6 +29,7 @@ PkgBR:
   - libupnpp >= 0.15.1
   - mpris-qt5-devel
   - qt5-qttools-linguist
+  - -post-build-checks
 
 # Runtime dependencies which are not automatically detected
 Requires:
