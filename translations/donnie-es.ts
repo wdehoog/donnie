@@ -436,7 +436,7 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>User entered URI</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuario a ingresado IRU</translation>
     </message>
 </context>
 <context>
