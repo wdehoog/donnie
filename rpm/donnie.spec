@@ -21,6 +21,7 @@ Group:      Applications/Multimedia
 License:    GPLv2
 URL:        http://example.org/
 Source0:    %{name}-%{version}.tar.gz
+Source1:    %{name}-rpmlintrc
 Source100:  donnie.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
 Requires:   mpris-qt5
@@ -31,7 +32,6 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  libupnpp >= 0.15.1
 BuildRequires:  mpris-qt5-devel
 BuildRequires:  qt5-qttools-linguist
-BuildRequires:  -post-build-checks
 BuildRequires:  desktop-file-utils
 
 %description

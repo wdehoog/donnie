@@ -9,6 +9,7 @@ License: GPLv2
 # Usually this line does not need to be modified.
 Sources:
 - '%{name}-%{version}.tar.gz'
+- '%{name}-rpmlintrc'
 Description: |
   UPnP control point and player for Sailfish OS
 Configure: none
@@ -29,7 +30,6 @@ PkgBR:
   - libupnpp >= 0.15.1
   - mpris-qt5-devel
   - qt5-qttools-linguist
-  - -post-build-checks
 
 # Runtime dependencies which are not automatically detected
 Requires:
@@ -43,6 +43,7 @@ Files:
   - '%{_datadir}/applications/%{name}.desktop'
   - '%{_datadir}/icons/hicolor/*/apps/%{name}.png'
   - '%{_datadir}/%{name}/translations'
+
 
 # For more information about yaml and what's supported in Sailfish OS
 # build system, please see https://wiki.merproject.org/wiki/Spectacle

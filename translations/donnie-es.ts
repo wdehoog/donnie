@@ -285,6 +285,10 @@ No se puede reanudar</translation>
         <source>Lost connection with Renderer.</source>
         <translation>Conexión perdida con Rendererizador</translation>
     </message>
+    <message>
+        <source>Add Stream</source>
+        <translation type="unfinished">Añadir secuencia</translation>
+    </message>
 </context>
 <context>
     <name>Search</name>
