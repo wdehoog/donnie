@@ -1,6 +1,6 @@
 Name: donnie
 Summary: UPnP Controller with built in Player
-Version: 0.1
+Version: 0.7
 Release: 1
 # The contents of the Group field should be one of the groups listed here:
 # http://gitorious.org/meego-developer-tools/spectacle/blobs/master/data/GROUPS
@@ -35,7 +35,6 @@ PkgBR:
 # Runtime dependencies which are not automatically detected
 Requires:
   - sailfishsilica-qt5 >= 0.10.9 
-  - libupnpp >= 0.15.1
   - mpris-qt5
 
 # All installed files

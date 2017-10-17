@@ -13,7 +13,7 @@ Name:       donnie
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    UPnP Controller with built in Player
-Version:    0.1
+Version:    0.7
 Release:    1
 Group:      Applications/Music
 License:    GPLv2
@@ -21,7 +21,6 @@ URL:        http://example.org/
 Source0:    %{name}-%{version}.tar.gz
 Source100:  donnie.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
-Requires:   libupnpp >= 0.15.1
 Requires:   mpris-qt5
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)

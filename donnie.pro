@@ -40,8 +40,8 @@ CONFIG += sailfishapp_i18n
 INCLUDEPATH += /usr/include/qt5/MprisQt
 INCLUDEPATH += /usr/include/qt5/QtDBus
 
-LIBS += -lupnpp
-LIBS += -lmpris-qt5
+#LIBS += -lupnpp
+#LIBS += -lmpris-qt5
 
 DISTFILES += \
     qml/pages/Browse.qml \
@@ -87,3 +87,15 @@ TRANSLATIONS += \
     translations/donnie-nl.ts \
     translations/donnie.ts 
 
+QMAKE_RPATHDIR += /usr/share/donnie/lib
+
+LIBS.path = /usr/share/donnie/lib/
+
+# libupnp6
+LIBS.files  = /usr/lib/libixml.so.2
+LIBS.files += /usr/lib/libthreadutil.so.6
+LIBS.files += /usr/lib/libupnp.so.6
+# libupnpp
+LIBS.files += /usr/lib/libupnpp.so.6
+
+INSTALLS += LIBS
