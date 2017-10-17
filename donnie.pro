@@ -42,6 +42,7 @@ INCLUDEPATH += /usr/include/qt5/QtDBus
 
 #LIBS += -lupnpp
 #LIBS += -lmpris-qt5
+QMAKE_LFLAGS += -lupnpp -lmpris-qt5
 
 DISTFILES += \
     qml/pages/Browse.qml \
