@@ -26,7 +26,6 @@ OTHER_FILES += qml/donnie.qml \
     qml/cover/CoverPage.qml \
     qml/pages/FirstPage.qml \
     qml/pages/SecondPage.qml \
-    rpm/donnie.changes.in \
     rpm/donnie.spec \
     rpm/donnie.yaml \
     donnie.desktop
@@ -66,7 +65,8 @@ DISTFILES += \
     translations/donnie.ts \
     translations/donnie-es.ts \
     translations/donnie-nl.ts \
-    qml/components/EditURIDialog.qml
+    qml/components/EditURIDialog.qml \
+    rpm/donnie-rpmlintrc
 
 HEADERS += \
     src/upnp.h \
