@@ -76,4 +76,16 @@ desktop-file-install --delete-original       \
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/%{name}/translations
 # >> files
+%changelog
+* Fri Oct 20 2017 Willem-Jan de Hoog <wdehoog@exalondelft.nl> 0.7
+- Translatable, added Spanish translation
+- Option to resume
+- Many Fixes
+- Include required shared libraries in package
+
+* Fri Oct 6 2017 Willem-Jan de Hoog <wdehoog@exalondelft.nl> 0.6
+- Browse, Search, Play local and Play in Remote Renderer
+
+* Thu Apr 13 2017 Willem-Jan de Hoog <wdehoog@exalondelft.nl> 0.0.1
+- initial upload
 # << files
