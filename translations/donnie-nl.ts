@@ -285,6 +285,10 @@ Can not Resume.</source>
         <source>Lost connection with Renderer.</source>
         <translation>De verbinding met de Afspeler is verbroken</translation>
     </message>
+    <message>
+        <source>Add Stream</source>
+        <translation type="unfinished">Stream Toevoegen</translation>
+    </message>
 </context>
 <context>
     <name>Search</name>

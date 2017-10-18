@@ -282,6 +282,10 @@ Can not Resume.</source>
         <source>Lost connection with Renderer.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Add Stream</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Search</name>
