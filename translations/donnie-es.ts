@@ -188,7 +188,7 @@
     </message>
     <message>
         <source>Load previously saved queue?</source>
-        <translation>Cargar la cola previamente guardada?</translation>
+        <translation>Cargar cola previamente guardada?</translation>
     </message>
     <message>
         <source>Load</source>
@@ -222,7 +222,7 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>There seems to be no internet connection (wifi off). Your Renderer and Media Server might not be reachable.</source>
-        <translation>Parece que no hay conexión a internet (wifi apagado). Es posible que su Renderizador y el servidor de medios no sean accesibles.</translation>
+        <translation>Parece que no hay conexión a internet (wifi apagado). Es posible que su renderizador y el servidor de medios no sean accesibles.</translation>
     </message>
     <message>
         <source>Continue</source>
