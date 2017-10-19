@@ -18,26 +18,6 @@ Page {
 
     ListModel {
       id: devicesModel;
-      /*ListElement {
-          type: "Renderer"
-          friendlyName: "A"
-          modelName: "AA"
-      }
-      ListElement {
-          type: "Renderer"
-          friendlyName: "B"
-          modelName: "BB"
-      }
-      ListElement {
-          type: "Server"
-          friendlyName: "A"
-          modelName: "AA"
-      }
-      ListElement {
-          type: "Server"
-          friendlyName: "B"
-          modelName: "BB"
-      }*/
     }
 
     SilicaListView {
@@ -51,13 +31,6 @@ Page {
                 text: qsTr("Discover UPnP Devices")
                 onClicked: discover();
             }
-            /*MenuItem {
-                text: qsTr("Browse")
-                onClicked: {
-                    browsePage.reset();
-                    pageStack.push(browsePage, {cid: "0"});
-                }
-            }*/
         }
 
         header: PageHeader {
@@ -76,7 +49,13 @@ Page {
             property: "type"
             criteria: ViewSection.FullString
             delegate: SectionHeader {
-                text: section;
+                text: {
+                    switch(section) {
+                    case "Renderer": return qsTr("Renderer")
+                    case "Content Server": return qsTr("Content Server")
+                    default: return section
+                    }
+                }
             }
         }
 

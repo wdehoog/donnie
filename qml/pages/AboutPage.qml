@@ -72,7 +72,8 @@ Page {
                         horizontalAlignment: implicitWidth > width ? Text.AlignLeft : Text.AlignHCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Theme.fontSizeExtraSmall
-                        text: "Copyright (C) 2017 Willem-Jan de Hoog"
+                        //: I doubt this needs to be translated
+                        text: qsTr("Copyright (C) 2017 Willem-Jan de Hoog")
                         truncationMode: TruncationMode.Fade
                         width: parent.width
                     }
@@ -80,7 +81,7 @@ Page {
                         horizontalAlignment: implicitWidth > width ? Text.AlignLeft : Text.AlignHCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Theme.fontSizeExtraSmall
-                        text: "License: MIT"
+                        text: qStr("License: MIT")
                         truncationMode: TruncationMode.Fade
                         width: parent.width
                     }
@@ -120,11 +121,11 @@ Page {
                 wrapMode: Text.WordWrap
                 text:
 "Carlos Gonzalez for testing and UI rigor
-J.F.Dockes for upplay + libupnpp, amazing UPnP support
-equeim for unplayer
-jabbounet for upnpplayer
-kimmoli for IconProvider and MultiItemPicker
-Morpog for icon shape"
+J.F.Dockes: upplay & libupnpp
+equeim: unplayer
+jabbounet: upnpplayer
+kimmoli: IconProvider & MultiItemPicker
+Morpog: icon shape"
             }
         }
 

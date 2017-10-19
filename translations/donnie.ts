@@ -19,6 +19,11 @@
         <source>Thanks to</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Copyright (C) 2017 Willem-Jan de Hoog</source>
+        <extracomment>I doubt this needs to be translated</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browse</name>
@@ -94,6 +99,14 @@
     </message>
     <message>
         <source>a page with audio player controls and list of tracks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Renderer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Content Server</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -265,6 +265,22 @@ Page {
 
         PullDownMenu {
             MenuItem {
+                text: qsTr("Add Stream")
+                visible: false
+                onClicked: {
+                    app.showEditURIDialog(qsTr("Add Stream"), "", "", UPnP.AudioItemType.MusicTrack, function(title, uri, streamType) {
+                        if(uri === "")
+                            return
+                        var track = UPnP.createUserAddedTrack(uri, title, streamType)
+                        if(track !== null) {
+                            trackListModel.append(track)
+                            currentItem = trackListModel.count-1
+                            loadTrack(track)
+                        }
+                    })
+                }
+            }
+            MenuItem {
                 text: qsTr("Empty List")
                 onClicked: {
                     clearList()

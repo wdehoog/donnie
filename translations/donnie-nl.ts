@@ -19,6 +19,11 @@
         <source>Translations</source>
         <translation>Vertalingen</translation>
     </message>
+    <message>
+        <source>Copyright (C) 2017 Willem-Jan de Hoog</source>
+        <extracomment>I doubt this needs to be translated</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browse</name>
@@ -90,38 +95,46 @@
     </message>
     <message>
         <source>Sailfish QTAudio Player</source>
-        <translation>SAlifish QT Audio Speler</translation>
+        <translation>Sailfish QT Audio Speler</translation>
     </message>
     <message>
         <source>a page with audio player controls and list of tracks</source>
         <translation>Een pagina met audio speler bediening en een lijst van nummers</translation>
+    </message>
+    <message>
+        <source>Renderer</source>
+        <translation>Afspeler</translation>
+    </message>
+    <message>
+        <source>Content Server</source>
+        <translation>Media Server</translation>
     </message>
 </context>
 <context>
     <name>EditURIDialog</name>
     <message>
         <source>Stream Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Stream Type</translation>
     </message>
     <message>
         <source>Type of stream the URI referes to</source>
-        <translation type="unfinished"></translation>
+        <translation>Type Stream van de URI</translation>
     </message>
     <message>
         <source>Music Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Nummer</translation>
     </message>
     <message>
         <source>Audio Broadcast</source>
-        <translation type="unfinished"></translation>
+        <translation>Radio</translation>
     </message>
     <message>
         <source>URI</source>
-        <translation type="unfinished"></translation>
+        <translation>URI</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation type="unfinished">Titel</translation>
+        <translation>Titel</translation>
     </message>
 </context>
 <context>

@@ -19,6 +19,11 @@
         <source>Translations</source>
         <translation>Traductores</translation>
     </message>
+    <message>
+        <source>Copyright (C) 2017 Willem-Jan de Hoog</source>
+        <extracomment>I doubt this needs to be translated</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browse</name>
@@ -95,6 +100,14 @@
     <message>
         <source>a page with audio player controls and list of tracks</source>
         <translation>una página con controles del reproductor de audio y una lista de pistas</translation>
+    </message>
+    <message>
+        <source>Renderer</source>
+        <translation type="unfinished">Renderizador</translation>
+    </message>
+    <message>
+        <source>Content Server</source>
+        <translation type="unfinished">Servidor</translation>
     </message>
 </context>
 <context>
