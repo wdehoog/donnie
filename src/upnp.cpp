@@ -44,10 +44,21 @@ UPNP::UPNP(QObject *parent) :
 
     mprisPlayer->setServiceName("donnie");
     mprisPlayer->setCanControl(true);
+
+    QStringList sl;
+    sl << "http" << "https";
+    mprisPlayer->setSupportedUriSchemes(sl);
+
+    sl.clear();
+    sl << "audio/mpeg" << "audio/aacp";
+    sl.append("");
+    mprisPlayer->setSupportedMimeTypes(sl);
+
     connect(mprisPlayer, &MprisPlayer::playRequested, this, &UPNP::mprisPlay);
     connect(mprisPlayer, &MprisPlayer::pauseRequested, this, &UPNP::mprisPause);
     connect(mprisPlayer, &MprisPlayer::nextRequested, this, &UPNP::mprisNext);
     connect(mprisPlayer, &MprisPlayer::previousRequested, this, &UPNP::mprisPrevious);
+    connect(mprisPlayer, &MprisPlayer::openUriRequested, this, &UPNP::openUri);
 }
 
 void UPNP::init(int search_window) {
@@ -713,6 +724,10 @@ void UPNP::mprisNext() {
 
 void UPNP::mprisPrevious() {
     emit mprisControl("Previous");
+}
+
+void UPNP::openUri(QUrl uri) {
+    emit mprisOpenUri(uri.toString());
 }
 
 void UPNP::mprisSetStateMask(unsigned int mask) {

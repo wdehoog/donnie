@@ -190,7 +190,7 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: qsTr("Add Stream")
-                visible: false
+                //visible: false
                 onClicked: {
                     app.showEditURIDialog(qsTr("Add Stream"), "", "", UPnP.AudioItemType.MusicTrack, function(title, uri, streamType) {
                         if(uri === "")
@@ -421,7 +421,7 @@ Page {
                         anchors.right: parent.right
                         color: currentItem === index ? Theme.secondaryHighlightColor : Theme.secondaryColor
                         font.pixelSize: Theme.fontSizeExtraSmall
-                        text: durationText
+                        text: durationText ? durationText : ""
                     }
                 }
 
@@ -503,10 +503,20 @@ Page {
         //    return;
     //}
 
-    function addTracks(tracks) {
+    function addTracksNoStart(tracks) {
         var i;
         for(i=0;i<tracks.length;i++)
             trackListModel.append(tracks[i])
+    }
+
+    function openTrack(track) {
+        addTracksNoStart([track])
+        currentItem = trackListModel.count - 1
+        loadTrack(trackListModel.get(currentItem))
+    }
+
+    function addTracks(tracks) {
+        addTracksNoStart(tracks)
         if(currentItem == -1 && trackListModel.count>0) {
             if(arguments.length >= 2 && arguments[1] > -1) // is index passed?
                 currentItem = arguments[1] - 1 // next will do +1

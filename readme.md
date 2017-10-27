@@ -38,13 +38,13 @@ Packages of Donnie and some libraries it needs also can be installed from my [OB
 To add this repo:
 
 ```
-devel-su ssu ar wdehoog http://repo.merproject.org/obs/home:/wdehoog:/donnie/sailfish_latest_armv7hl/
+devel-su ssu ar wdehoog-donnie http://repo.merproject.org/obs/home:/wdehoog:/donnie/sailfish_latest_armv7hl/
 ```
 
 Then install with
 
 ```
-devel-su pkcon ref
+devel-su pkcon ref wdehoog-donnie
 devel-su pkcon install donnie
 ```
 

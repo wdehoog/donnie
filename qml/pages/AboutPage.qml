@@ -58,7 +58,7 @@ Page {
                     Label {
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Theme.fontSizeLarge
-                        text: "Donnie 0.7"
+                        text: "Donnie 0.8"
                     }
 
                     Label {
@@ -120,7 +120,7 @@ Page {
                 font.pixelSize: Theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 text:
-"Carlos Gonzalez for testing and UI rigor
+"Carlos Gonzalez: testing and UI rigor
 J.F.Dockes: upplay & libupnpp
 equeim: unplayer
 jabbounet: upnpplayer

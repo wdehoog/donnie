@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QVariantList>
 #include <QVariantMap>
+#include <QUrl>
 
 #include <string>
 
@@ -91,6 +92,7 @@ public:
     Q_INVOKABLE void mprisPause();
     Q_INVOKABLE void mprisNext();
     Q_INVOKABLE void mprisPrevious();
+    Q_INVOKABLE void openUri(QUrl uri);
     // 0x01: play, 0x02: pause, 0x04: next, 0x08: previous
     // 0x0100: playing, 0x0200: paused
     Q_INVOKABLE void mprisSetStateMask(unsigned int mask);
@@ -104,6 +106,7 @@ signals:
     void searchDone(QString searchResultsJson);
     void error(QString msg);
     void mprisControl(QString action);
+    void mprisOpenUri(QString uri);
     void transportInfo(int error, QString transportInfoJson);
     void mediaInfo(int error, QString mediaInfoJson);
     void positionInfo(int error, QString positionInfoJson);

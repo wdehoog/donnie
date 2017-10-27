@@ -539,6 +539,12 @@ Page {
             }
         }
 
+        onMprisOpenUri: {
+            console.log("Donnie.onMprisOpenUri: " + uri)
+            var track = UPnP.createUserAddedTrack(uri, "Mpris Added", UPnP.AudioItemType.MusicTrack)
+            app.getPlayerPage().openTrack(track)
+        }
+
         // called when metadata has been collected from stored resume info
         onMetaData: {
             //console.log("onMetaData: " + metaDataJson);

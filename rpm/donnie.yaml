@@ -1,10 +1,10 @@
 Name: donnie
 Summary: UPnP Controller with built in Player
-Version: 0.7
+Version: 0.8
 Release: 1
 Group: Applications/Multimedia
-URL: http://example.org/
-License: GPLv2
+URL: https://github.com/wdehoog/donnie
+License: MIT
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
 Sources:
