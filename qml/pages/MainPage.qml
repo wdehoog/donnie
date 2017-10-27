@@ -541,7 +541,8 @@ Page {
 
         onMprisOpenUri: {
             console.log("Donnie.onMprisOpenUri: " + uri)
-            var track = UPnP.createUserAddedTrack(uri, "Mpris Added", UPnP.AudioItemType.MusicTrack)
+            // assume broadcast
+            var track = UPnP.createUserAddedTrack(uri, "Mpris Added", UPnP.AudioItemType.AudioBroadcast)
             app.getPlayerPage().openTrack(track)
         }
 
