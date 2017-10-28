@@ -269,6 +269,24 @@ ApplicationWindow
         last_playing_info.value = JSON.stringify(lastPlayingInfo)
     }
 
+    function getAppIconSource() {
+        var iconSize = Theme.iconSizeExtraLarge
+        return getAppIconSource2(iconSize)
+    }
+
+    function getAppIconSource2(iconSize) {
+        if (iconSize < 108)
+            iconSize = 86
+        else if (iconSize < 128)
+            iconSize = 108
+        else if (iconSize < 256)
+            iconSize = 128
+        else
+            iconSize = 256
+
+        return "/usr/share/icons/hicolor/" + iconSize + "x" + iconSize + "/apps/donnie.png"
+    }
+
     //Component.onDestruction: { nothing happens
         //console.log("lastPlayingPosition:") //+lastPlayingPosition)
         //last_playing_position.value = lastPlayingPosition

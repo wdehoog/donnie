@@ -29,18 +29,7 @@ Page {
 
                     anchors.horizontalCenter: parent.horizontalCenter
                     asynchronous: true
-                    source: {
-                        var iconSize = Theme.iconSizeExtraLarge
-                        if (iconSize < 108)
-                            iconSize = 86
-                        else if (iconSize < 128)
-                            iconSize = 108
-                        else if (iconSize < 256)
-                            iconSize = 128
-                        else iconSize = 256
-
-                        return "/usr/share/icons/hicolor/" + iconSize + "x" + iconSize + "/apps/donnie.png"
-                    }
+                    source: app.getAppIconSource()
                 }
 
                 Column {

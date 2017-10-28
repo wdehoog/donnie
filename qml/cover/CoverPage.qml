@@ -11,7 +11,7 @@ import Sailfish.Silica 1.0
 CoverBackground {
     id: cover
 
-    property string defaultImageSource : "image://theme/icon-l-music"
+    property string defaultImageSource : app.getAppIconSource2(Theme.iconSizeLarge)
     property string imageSource : defaultImageSource
     property string playIconSource : "image://theme/icon-cover-play"
     property alias coverProgressBar : coverProgressBar
@@ -24,7 +24,7 @@ CoverBackground {
         // nothing works. try a filler...
         Rectangle {
             width: parent.width
-            height:Theme.paddingMedium
+            height: Theme.paddingMedium
             opacity: 0
         }
 
@@ -37,14 +37,20 @@ CoverBackground {
             visible: imageSource.toString().length == 0
         }
 
-        Image {
-            id: image
+        Column {
             width: parent.width - (Theme.paddingMedium * 2)
-            height: parent.width - (Theme.paddingMedium * 2)
-            //anchors.topMargin: Theme.paddingMedium
-            //anchors.top: parent.top + Theme.paddingMedium
-            anchors.horizontalCenter: parent.horizontalCenter
-            source: imageSource
+            height: width
+            x: Theme.paddingMedium
+
+            Image {
+                id: image
+
+                fillMode: Image.PreserveAspectFit
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                source: imageSource
+
+            }
         }
 
         ProgressBar {
