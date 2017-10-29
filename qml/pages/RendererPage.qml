@@ -268,7 +268,7 @@ Page {
                 text: qsTr("Add Stream")
                 //visible: false
                 onClicked: {
-                    app.showEditURIDialog(qsTr("Add Stream"), "", "", UPnP.AudioItemType.MusicTrack, function(title, uri, streamType) {
+                    app.showEditURIDialog(qsTr("Add Stream"), "", "", UPnP.AudioItemType.AudioBroadcast, function(title, uri, streamType) {
                         if(uri === "")
                             return
                         var track = UPnP.createUserAddedTrack(uri, title, streamType)
