@@ -52,6 +52,7 @@ UPNP::UPNP(QObject *parent) :
     sl.clear();
     sl << "audio/mpeg" << "audio/ogg" << "audio/vorbis" << "audio/mp4";
     sl << "audio/aac" << "audio/aacp" << "audio/vnd.wav";
+    sl << "application/octet-stream"; // default?
     sl << "*/*" << "*" << "." << "";
     mprisPlayer->setSupportedMimeTypes(sl);
 
