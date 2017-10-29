@@ -340,6 +340,7 @@ function createUserAddedTrack(uri, label, streamType) {
         metaText: qsTr("User entered URI"),
         uri: uri,
         upnpclass: streamType,
+        duration: 0,
         protocolInfo: protocolInfo,
         didl: createDIDL(id, pid, uri, label, protocolInfo, streamType)
     }

@@ -50,8 +50,9 @@ UPNP::UPNP(QObject *parent) :
     mprisPlayer->setSupportedUriSchemes(sl);
 
     sl.clear();
-    sl << "audio/mpeg" << "audio/aacp";
-    sl.append("");
+    sl << "audio/mpeg" << "audio/ogg" << "audio/vorbis" << "audio/mp4";
+    sl << "audio/aac" << "audio/aacp" << "audio/vnd.wav";
+    sl << "*/*" << "*" << "." << "";
     mprisPlayer->setSupportedMimeTypes(sl);
 
     connect(mprisPlayer, &MprisPlayer::playRequested, this, &UPNP::mprisPlay);

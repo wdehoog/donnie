@@ -474,17 +474,23 @@ Page {
         onTriggered: {
             var title = audio.metaData.title
             var publisher = audio.metaData.publisher
+            var logo = audio.metaData.coverArtUrlLarge
+            if(!logo)
+                logo = audio.metaData.coverArtUrlSmall
 
             /*if(title !== undefined)
                 albumText = title;
             if(publisher !== undefined)
                 trackText = publisher;*/
 
-            if(title === undefined)
-                return
-            trackMetaText1 = title
-            trackMetaText2 = publisher
+            trackMetaText1 = title ? title : ""
+            trackMetaText2 = publisher ? publisher : ""
             updateMprisForTrackMetaData(getCurrentTrack())
+            if(logo) {
+                cover.imageSource = logo
+                imageItemSource = logo
+            } else
+                cover.labelText = publisher
         }
     }
 

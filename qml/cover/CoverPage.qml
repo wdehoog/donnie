@@ -15,6 +15,7 @@ CoverBackground {
     property string imageSource : defaultImageSource
     property string playIconSource : "image://theme/icon-cover-play"
     property alias coverProgressBar : coverProgressBar
+    property string labelText : ""
 
     Column {
         width: parent.width
@@ -28,15 +29,6 @@ CoverBackground {
             opacity: 0
         }
 
-        Label {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            id: label
-            text: qsTr("Donnie")
-            horizontalAlignment: Text.AlignHCenter
-            visible: imageSource.toString().length == 0
-        }
-
         Column {
             width: parent.width - (Theme.paddingMedium * 2)
             height: width
@@ -47,10 +39,19 @@ CoverBackground {
 
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+                //anchors.verticalCenter: parent.verticalCenter
                 source: imageSource
 
             }
+        }
+
+        Label {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            id: label
+            text: labelText.length > 0 ? labelText : qsTr("Donnie")
+            horizontalAlignment: Text.AlignHCenter
+            visible: imageSource === defaultImageSource
         }
 
         ProgressBar {

@@ -470,6 +470,9 @@ Page {
     //property bool rendererDone: false
     //property bool serverDone: false
 
+    // for qtmpis mime type hack
+    property string qtmprisQuirckUID: "DA0NCAAMBQILAQwHBAUBCg"
+
     Connections {
         target: upnp
 
@@ -541,6 +544,14 @@ Page {
 
         onMprisOpenUri: {
             console.log("Donnie.onMprisOpenUri: " + uri)
+
+            // check for quirck
+            var qi = uri.indexOf(qtmprisQuirckUID)
+            if(qi > -1) {
+                uri = uri.substring(0, qi-1)
+                console.log("Fixed uri for qtmprisQuirckUID: " + uri)
+            }
+
             // assume broadcast
             var track = UPnP.createUserAddedTrack(uri, "Mpris Added", UPnP.AudioItemType.AudioBroadcast)
             app.getPlayerPage().openTrack(track)
