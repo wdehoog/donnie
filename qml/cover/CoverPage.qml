@@ -29,19 +29,19 @@ CoverBackground {
             opacity: 0
         }
 
-        Column {
+        Item {
             width: parent.width - (Theme.paddingMedium * 2)
             height: width
             x: Theme.paddingMedium
 
             Image {
                 id: image
-
+                width: imageSource === defaultImageSource ? sourceSize.width : parent.width
+                height: width
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
-                //anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenter: parent.verticalCenter
                 source: imageSource
-
             }
         }
 
