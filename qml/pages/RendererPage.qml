@@ -104,7 +104,7 @@ Page {
                 return;
             }
             playIconSource =  "image://theme/icon-l-play"
-            cover.playIconSource = "image://theme/icon-cover-play"
+            cover.updatePlayIcon("image://theme/icon-cover-play")
             app.last_playing_position.value = timeSliderValue
         } else {
             play()
@@ -123,7 +123,7 @@ Page {
         rendererConnected = true
         playing = true
         playIconSource = "image://theme/icon-l-pause"
-        cover.playIconSource = "image://theme/icon-cover-pause"
+        cover.updatePlayIcon("image://theme/icon-cover-pause")
     }
 
     function stop() {
@@ -134,7 +134,7 @@ Page {
         }
         playing = false
         playIconSource =  "image://theme/icon-l-play"
-        cover.playIconSource = "image://theme/icon-cover-play"
+        cover.updatePlayIcon("image://theme/icon-cover-play")
         app.last_playing_position.value = timeSliderValue
     }
 
@@ -142,7 +142,7 @@ Page {
         playing = false
         transportState = -1
         playIconSource =  "image://theme/icon-l-play"
-        cover.playIconSource = "image://theme/icon-cover-play"
+        cover.updatePlayIcon("image://theme/icon-cover-play")
     }
 
     function setVolume(volume) {
@@ -174,13 +174,9 @@ Page {
     }
 
     function updateUIForTrack(track) {
-        if(track.albumArtURI) {
-            imageItemSource = track.albumArtURI
-            cover.imageSource = track.albumArtURI
-        } else {
-            imageItemSource = defaultImageSource
-            cover.imageSource = cover.defaultImageSource
-        }
+        imageItemSource = track.albumArtURI ? track.albumArtURI : defaultImageSource
+        cover.updateDisplayData(track.albumArtURI, track.titleText, track.upnpclass)
+
         trackMetaText1 = track.titleText
         trackMetaText2 = track.metaText
     }
@@ -247,9 +243,7 @@ Page {
         currentItem = -1
         transportState = -1
         imageItemSource = defaultImageSource
-
-        cover.imageSource = cover.defaultImageSource
-        cover.coverProgressBar.label = ""
+        cover.resetDisplayData()
     }
 
     SilicaListView {
@@ -840,14 +834,18 @@ Page {
         //console.log("updateSlidersProgress value:"+value)
         timeSliderValue = value
         timeSliderValueText = UPnP.formatDuration(value)
-        cover.coverProgressBar.value = value
     }
 
-    function updateCoverProgress() {
+    function updateCoverProgress(position) {
+        // VISIT
+        //if(trackClass !== UPnP.AudioItemType.AudioBroadcast) {
+        //}
+        var pLabel
         if(currentItem > -1)
-          cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + timeSliderValueText
+          pLabel = (currentItem+1) + " of " + trackListModel.count + " - " + timeSliderValueText
         else
-          cover.coverProgressBar.label = ""
+          pLabel = timeSliderValueText
+        cover.updateProgressBar(position, audio.duration, pLabel)
     }
 
     function getCurrentTrack() {
@@ -940,7 +938,7 @@ Page {
                 // pretend progress
                 if(transportState === 1 && timeSliderValue > 0) {
                     updateSlidersProgress(timeSliderValue + 1)
-                    updateCoverProgress()
+                    updateCoverProgress(timeSliderValue + 1, timeSliderMaximumValue)
                 }
 
                 // if positionInfo is skipped on purpose
@@ -991,15 +989,12 @@ Page {
             // track duration
             timeSliderLabel = UPnP.formatDuration(trackduration)
             //console.log("setting timeSliderLabel to "+timeSliderLabel + " based on " + trackduration);
-            //cover.coverProgressBar.label = timeSliderLabel;
 
-            if(timeSliderMaximumValue != trackduration && trackduration > -1) {
+            if(timeSliderMaximumValue != trackduration && trackduration > -1)
                 timeSliderMaximumValue = trackduration
-                cover.coverProgressBar.maximumValue = trackduration
-            }
 
             updateSlidersProgress(tracktime)
-            updateCoverProgress()
+            updateCoverProgress(tracktime, trackduration)
 
             // how to detect track change? uri will mostly work
             // but not when a track appears twice and next to each other.

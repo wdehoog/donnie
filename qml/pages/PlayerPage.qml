@@ -15,7 +15,6 @@ import "../UPnP.js" as UPnP
 Page {
     id: playerPage
 
-    property bool playerPageActive: false
     property alias audio: audio
     property string defaultImageSource : "image://theme/icon-l-music"
     property string imageItemSource : defaultImageSource
@@ -74,7 +73,7 @@ Page {
         onBufferProgressChanged: {
             if(bufferProgress == 1.0) {
                 play()
-                updateIcons()
+                updatePlayIcons()
             }
         }
     }
@@ -96,7 +95,7 @@ Page {
     function pause() {
         if(audio.playbackState == Audio.PlayingState) {
             audio.pause()
-            updateIcons()
+            updatePlayIcons()
             app.last_playing_position.value = audio.position
         } else {
             play()
@@ -105,26 +104,21 @@ Page {
 
     function play() {
         audio.play()
-        updateIcons()
+        updatePlayIcons()
     }
 
     function stop() {
         audio.stop()
-        updateIcons()
+        updatePlayIcons()
         app.last_playing_position.value = audio.position
     }
 
     function loadTrack(track) {
         //audio.stop();
         audio.source = track.uri
-        if(track.albumArtURI) {
-            imageItemSource = track.albumArtURI
-            cover.imageSource = track.albumArtURI
-        } else {
-            imageItemSource = defaultImageSource
-            cover.imageSource = cover.defaultImageSource
-        }
-        updateIcons()
+        imageItemSource = track.albumArtURI ? track.albumArtURI : defaultImageSource
+        cover.updateDisplayData(track.albumArtURI, track.titleText, track.upnpclass)
+        updatePlayIcons()
 
         trackMetaText1 = track.titleText
         trackMetaText2 = track.metaText
@@ -135,7 +129,6 @@ Page {
     }
 
     function clearList() {
-        playerPageActive = false
         stop()
         audio.source = ""
         listView.model.clear()
@@ -145,17 +138,16 @@ Page {
         currentItem = -1
         imageItemSource = defaultImageSource
 
-        cover.imageSource = cover.defaultImageSource
-        cover.coverProgressBar.label = ""
+        cover.resetDisplayData()
     }
 
-    function updateIcons() {
+    function updatePlayIcons() {
         if(audio.playbackState == Audio.PlayingState) {
-            playIconSource = "image://theme/icon-l-pause";
-            cover.playIconSource = "image://theme/icon-cover-pause";
+            playIconSource = "image://theme/icon-l-pause"
+            cover.updatePlayIcon("image://theme/icon-cover-pause")
         } else {
-            playIconSource =  "image://theme/icon-l-play";
-            cover.playIconSource = "image://theme/icon-cover-play";
+            playIconSource =  "image://theme/icon-l-play"
+            cover.updatePlayIcon("image://theme/icon-cover-play")
         }
     }
 
@@ -237,7 +229,7 @@ Page {
 
                 Image {
                     id: imageItem
-                    source: imageItemSource
+                    source: imageItemSource ? imageItemSource : defaultImageSource
                     width: parent.width / 2
                     height: width
                     fillMode: Image.PreserveAspectFit
@@ -300,64 +292,36 @@ Page {
             Timer {
                 id: updateTimer
 
-                running: playerPageActive
+                running: audio.playbackState == Audio.PlayingState
                 interval: 1000
                 repeat: true
 
                 onTriggered: {
                      if(timeSlider !== null) {
 
-                        // slider on this page and progress bar on cover page
-                        if(timeSlider.maximumValue != audio.duration) {
-                            timeSlider.maximumValue = audio.duration
-                            timeSlider.label = formatTrackDuration(audio.duration)
-                            cover.coverProgressBar.maximumValue = audio.duration
-                        }
+                         // User is using the slider, don't update the value
+                         if(timeSlider.down)
+                             return
 
+                        timeSlider.maximumValue = audio.duration
+                        timeSlider.value = audio.position
+                        timeSlider.label = formatTrackDuration(audio.duration)
                         timeSlider.valueText = formatTrackDuration(timeSlider.value);
 
-                        if(currentItem > -1)
-                          cover.coverProgressBar.label = (currentItem+1) + " of " + trackListModel.count + " - " + timeSlider.valueText
-                        else
-                          cover.coverProgressBar.label = ""
+                        if(trackClass !== UPnP.AudioItemType.AudioBroadcast) {
+                            var pLabel = ""
+                            if(currentItem > -1)
+                               pLabel = (currentItem+1) + " of " + trackListModel.count + " - " + timeSlider.valueText
+                            else
+                               pLabel = timeSlider.valueText
+                            cover.updateProgressBar(audio.position, audio.duration, pLabel)
+                        }
 
-                        // User is using the slider, don't update the value
-                        if(timeSlider.down)
-                            return
-
-                        timeSlider.value = audio.position
-                        cover.coverProgressBar.value = audio.position
                         app.lastPlayingPosition = audio.position
                     }
                 }
 
             }
-
-// player controls in a row
-//            Row {
-//              id: playerButtons
-//              //property int currentPlayerState: Audio.Pl
-
-//              anchors.horizontalCenter: parent.horizontalCenter
-//              //spacing: 38
-//              height: playIcon.height
-
-//              IconButton {
-//                  icon.source: "image://theme/icon-m-previous"
-//                  onClicked: prev()
-//              }
-
-//              IconButton {
-//                  id: playIcon
-//                  icon.source: playIconSource
-//                  onClicked: pause()
-//              }
-
-//              IconButton {
-//                  icon.source: "image://theme/icon-m-next"
-//                  onClicked: next()
-//              }
-//            }
 
             Column {
                 anchors.left: parent.left
@@ -469,7 +433,7 @@ Page {
     // for internet radio the QT Audio object seems to support some metadata
     Timer {
         interval: 5000;
-        running: useBuiltInPlayer && audio.hasAudio && trackClass === "object.item.audioItem.audioBroadcast"
+        running: useBuiltInPlayer && audio.hasAudio && trackClass === UPnP.AudioItemType.AudioBroadcast
         repeat: true
         onTriggered: {
             var title = audio.metaData.title
@@ -486,11 +450,8 @@ Page {
             trackMetaText1 = title ? title : ""
             trackMetaText2 = publisher ? publisher : ""
             updateMprisForTrackMetaData(getCurrentTrack())
-            if(logo) {
-                cover.imageSource = logo
-                imageItemSource = logo
-            } else
-                cover.labelText = publisher
+            imageItemSource = logo ? logo : defaultImageSource
+            cover.updateDisplayData(logo, publisher, trackClass)
         }
     }
 
@@ -503,11 +464,6 @@ Page {
         console.debug("PlayerPage safeLastPlayingInfo")
         //mainPage.saveLastPlayingJSON(getCurrentTrack(), audio.position, trackListModel)
     }*/
-
-    //onStatusChanged: {
-        //if(status !== PageStatus.Active)
-        //    return;
-    //}
 
     function addTracksNoStart(tracks) {
         var i;
@@ -530,7 +486,6 @@ Page {
                 requestedAudioPosition = arguments[2]
             next();
         }
-        playerPageActive = true;
     }
 
     function getCurrentTrack() {
