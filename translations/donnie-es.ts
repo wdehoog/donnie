@@ -45,19 +45,19 @@
     </message>
     <message>
         <source>Add To Player</source>
-        <translation>Agregar al reproductor</translation>
+        <translation>Agregar</translation>
     </message>
     <message>
         <source>Replace In Player</source>
-        <translation>Reponer al reproductor</translation>
+        <translation>Reponer</translation>
     </message>
     <message>
         <source>Add All To Player</source>
-        <translation>Agregar todos al reproductor</translation>
+        <translation>Agregar todos</translation>
     </message>
     <message>
         <source>Replace All In Player</source>
-        <translation>Reponer todos al reproductor</translation>
+        <translation>Reponer todos</translation>
     </message>
     <message>
         <source>Choose Path</source>
@@ -79,7 +79,7 @@
     <name>DiscoveryPage</name>
     <message>
         <source>Discover UPnP Devices</source>
-        <translation>Descubrir</translation>
+        <translation>Buscar</translation>
     </message>
     <message>
         <source>UPnP Devices</source>
@@ -95,7 +95,7 @@
     </message>
     <message>
         <source>Sailfish QTAudio Player</source>
-        <translation>Reproductor Sailfish QTAudio</translation>
+        <translation>Reproducir en SailfishOS</translation>
     </message>
     <message>
         <source>a page with audio player controls and list of tracks</source>
@@ -382,7 +382,7 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>Also show Containers in search results</source>
-        <translation>Mostrar contenedores en los resultados de búsqueda</translation>
+        <translation>Muestra contenedores en los resultados de búsqueda</translation>
     </message>
     <message>
         <source>Resume</source>
@@ -390,19 +390,19 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>Load saved track queue at startup and resume playing</source>
-        <translation>Cargar la cola de pistas guardadas al inicio y reanudar la reproducción</translation>
+        <translation>Carga la cola de pistas guardadas al inicio y reanuda la reproducción</translation>
     </message>
     <message>
         <source>Never</source>
-        <translation>Nunca</translation>
+        <translation>nunca</translation>
     </message>
     <message>
         <source>Ask</source>
-        <translation>Reproductor</translation>
+        <translation>reproductor</translation>
     </message>
     <message>
         <source>Always</source>
-        <translation>Siempre</translation>
+        <translation>siempre</translation>
     </message>
     <message>
         <source>Log Page</source>
@@ -410,22 +410,22 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>Show Open Log Page button</source>
-        <translation>Mostrar botón al abrir página de registro</translation>
+        <translation>Muestra botón al abrir la página de registro</translation>
     </message>
 </context>
 <context>
     <name>UPnP</name>
     <message>
         <source>Artist</source>
-        <translation>Artista</translation>
+        <translation>artista</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation>Título</translation>
+        <translation>título</translation>
     </message>
     <message>
         <source>Album</source>
-        <translation>Album</translation>
+        <translation>album</translation>
     </message>
     <message>
         <source>Genre</source>
@@ -433,7 +433,7 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>Creator</source>
-        <translation>Creador</translation>
+        <translation>creador</translation>
     </message>
     <message>
         <source>Publisher</source>
