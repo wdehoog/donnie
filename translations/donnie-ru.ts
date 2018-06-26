@@ -9,7 +9,7 @@
     </message>
     <message>
         <source>UPnP control point and player for Sailfish OS</source>
-        <translation>Контроллер и проигрыватель UPnP для ОС Sailfish</translation>
+        <translation>UPnP контроллер и проигрыватель для ОС Sailfish</translation>
     </message>
     <message>
         <source>Translations</source>
@@ -79,7 +79,7 @@
     <name>DiscoveryPage</name>
     <message>
         <source>Discover UPnP Devices</source>
-        <translation>Поиск UPnP-устройств</translation>
+        <translation>Поиск UPnP устройств</translation>
     </message>
     <message>
         <source>UPnP Devices</source>
@@ -370,11 +370,11 @@ Can not Resume.</source>
     </message>
     <message>
         <source>How long to search for UPnp Devices (sec)</source>
-        <translation>Сколько ждать ответа UPnP устройств (сек.)</translation>
+        <translation>Ожидание ответа UPnP устройств (сек.)</translation>
     </message>
     <message>
         <source>Maximum number of results per request</source>
-        <translation>Предельное число результатов по одному запросу</translation>
+        <translation>Предельное число результатов запроса</translation>
     </message>
     <message>
         <source>Allow Containers</source>
