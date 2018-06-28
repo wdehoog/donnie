@@ -327,7 +327,7 @@ Can not Resume.</source>
     </message>
     <message>
         <source>Search In</source>
-        <translation>Искать в</translation>
+        <translation>Искать в поле:</translation>
     </message>
     <message>
         <source>None</source>
@@ -335,7 +335,7 @@ Can not Resume.</source>
     </message>
     <message>
         <source>Group By</source>
-        <translation>Группировать по</translation>
+        <translation>Сортировка:</translation>
     </message>
     <message>
         <source>Album</source>
