@@ -109,12 +109,12 @@ Page {
                 font.pixelSize: Theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 text:
-"carlosgonz: qsTr("testing and UI rigor"), 
-J.F.Dockes: upplay & libupnpp
-equeim: unplayer
-jabbounet: upnpplayer
-kimmoli: IconProvider & MultiItemPicker
-Morpog: icon shape"
+"carlosgonz: " + qsTr("testing and UI rigor") + "\n"
+"J.F.Dockes: upplay & libupnpp" + "\n"
+"equeim: unplayer" + "\n"
+"jabbounet: upnpplayer" + "\n"
+"kimmoli: IconProvider & MultiItemPicker" + "\n"
+"Morpog: icon shape"
             }
         }
 
