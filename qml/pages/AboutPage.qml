@@ -109,7 +109,7 @@ Page {
                 font.pixelSize: Theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 text:
-"carlosgonz: qsTr("testing and UI rigor") 
+"carlosgonz: qsTr("testing and UI rigor"), 
 J.F.Dockes: upplay & libupnpp
 equeim: unplayer
 jabbounet: upnpplayer
