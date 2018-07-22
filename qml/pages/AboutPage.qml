@@ -108,13 +108,16 @@ Page {
                 }
                 font.pixelSize: Theme.fontSizeSmall
                 wrapMode: Text.WordWrap
-                text:
-"Carlos Gonzalez: testing and UI rigor
-J.F.Dockes: upplay & libupnpp
-equeim: unplayer
-jabbounet: upnpplayer
-kimmoli: IconProvider & MultiItemPicker
-Morpog: icon shape"
+                text: {
+                    var s = ""
+                    s += "Carlos Gonzalez: " + qsTr("testing and UI rigor") + "\n"
+                    s += "J.F.Dockes: upplay & libupnpp\n"
+                    s += "equeim: unplayer\n"
+                    s += "jabbounet: upnpplayer\n"
+                    s += "kimmoli: IconProvider & MultiItemPicker\n"
+                    s += "Morpog: icon shape"
+                    return s
+                }
             }
         }
 

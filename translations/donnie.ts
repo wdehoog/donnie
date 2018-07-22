@@ -24,6 +24,10 @@
         <extracomment>I doubt this needs to be translated</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>testing and UI rigor</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browse</name>

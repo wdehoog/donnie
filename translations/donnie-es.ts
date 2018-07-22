@@ -24,6 +24,10 @@
         <extracomment>I doubt this needs to be translated</extracomment>
         <translation>Derechos de autor (C) 2017 Willem-Jan de Hoog</translation>
     </message>
+    <message>
+        <source>testing and UI rigor</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browse</name>
