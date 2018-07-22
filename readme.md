@@ -44,7 +44,7 @@ devel-su ssu ar wdehoog-donnie http://repo.merproject.org/obs/home:/wdehoog:/don
 Then install with
 
 ```
-devel-su pkcon ref wdehoog-donnie
+devel-su pkcon refresh wdehoog-donnie
 devel-su pkcon install donnie
 ```
 
