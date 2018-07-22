@@ -836,7 +836,7 @@ Page {
         timeSliderValueText = UPnP.formatDuration(value)
     }
 
-    function updateCoverProgress(position) {
+    function updateCoverProgress(position, duration) {
         // VISIT
         //if(trackClass !== UPnP.AudioItemType.AudioBroadcast) {
         //}
@@ -845,7 +845,7 @@ Page {
           pLabel = (currentItem+1) + " of " + trackListModel.count + " - " + timeSliderValueText
         else
           pLabel = timeSliderValueText
-        cover.updateProgressBar(position, audio.duration, pLabel)
+        cover.updateProgressBar(position, duration, pLabel)
     }
 
     function getCurrentTrack() {
