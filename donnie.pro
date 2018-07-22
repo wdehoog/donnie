@@ -66,7 +66,8 @@ DISTFILES += \
     translations/donnie-es.ts \
     translations/donnie-nl.ts \
     qml/components/EditURIDialog.qml \
-    rpm/donnie-rpmlintrc
+    rpm/donnie-rpmlintrc \
+    translations/donnie-ru.ts
 
 HEADERS += \
     src/upnp.h \

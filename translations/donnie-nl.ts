@@ -234,6 +234,17 @@ Can not Resume.</source>
     </message>
 </context>
 <context>
+    <name>MultiItemPicker</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PlayerPage</name>
     <message>
         <source>Empty List</source>
