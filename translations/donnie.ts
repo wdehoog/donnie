@@ -12,16 +12,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Copyright (C) 2017 Willem-Jan de Hoog</source>
+        <extracomment>I doubt this needs to be translated</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Thanks to</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copyright (C) 2017 Willem-Jan de Hoog</source>
-        <extracomment>I doubt this needs to be translated</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -90,6 +90,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Renderer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Content Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>No Devices</source>
         <translation type="unfinished"></translation>
     </message>
@@ -105,17 +113,17 @@
         <source>a page with audio player controls and list of tracks</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Renderer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Content Server</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>EditURIDialog</name>
+    <message>
+        <source>URI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Stream Type</source>
         <translation type="unfinished"></translation>
@@ -132,14 +140,6 @@
         <source>Audio Broadcast</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>URI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>LogPage</name>
@@ -151,11 +151,11 @@
 <context>
     <name>MainPage</name>
     <message>
-        <source>Settings</source>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>About</source>
+        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -244,15 +244,15 @@ Can not Resume.</source>
 <context>
     <name>PlayerPage</name>
     <message>
+        <source>Add Stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Empty List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Stream</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -276,6 +276,10 @@ Can not Resume.</source>
     </message>
     <message>
         <source>Failed to mute/unmute Renderer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Stream</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -308,10 +312,6 @@ Can not Resume.</source>
     </message>
     <message>
         <source>Lost connection with Renderer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Stream</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
