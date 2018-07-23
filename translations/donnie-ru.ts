@@ -24,6 +24,10 @@
         <extracomment>I doubt this needs to be translated</extracomment>
         <translation>Автор (C) 2017 Willem-Jan de Hoog</translation>
     </message>
+    <message>
+        <source>testing and UI rigor</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Browse</name>
@@ -227,6 +231,17 @@ Can not Resume.</source>
 Can not Resume.</source>
         <translation>Невозможно использовать ранее сохранённые Id.
 Нельзя продолжить.</translation>
+    </message>
+</context>
+<context>
+    <name>MultiItemPicker</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
