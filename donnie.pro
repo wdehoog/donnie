@@ -62,12 +62,8 @@ DISTFILES += \
     qml/components/Messagebox.qml \
     qml/components/ErrorDialog.qml \
     qml/components/ConfirmDialog.qml \
-    translations/donnie.ts \
-    translations/donnie-es.ts \
-    translations/donnie-nl.ts \
     qml/components/EditURIDialog.qml \
     rpm/donnie-rpmlintrc \
-    translations/donnie-ru.ts
 
 HEADERS += \
     src/upnp.h \
@@ -87,7 +83,8 @@ HEADERS += \
 TRANSLATIONS += \
     translations/donnie-es.ts \
     translations/donnie-nl.ts \
-    translations/donnie.ts 
+    translations/donnie-ru.ts \
+    translations/donnie.ts
 
 QMAKE_RPATHDIR += /usr/share/donnie/lib
 
