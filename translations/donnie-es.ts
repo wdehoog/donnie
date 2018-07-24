@@ -26,7 +26,7 @@
     </message>
     <message>
         <source>testing and UI rigor</source>
-        <translation type="unfinished"></translation>
+        <translation>por ensayos y calidad en UI</translation>
     </message>
 </context>
 <context>
@@ -180,7 +180,7 @@
     </message>
     <message>
         <source>Browser</source>
-        <translation>Navegar</translation>
+        <translation>Archivos</translation>
     </message>
     <message>
         <source>Search</source>
@@ -237,11 +237,11 @@ No se puede reanudar</translation>
     <name>MultiItemPicker</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>Aceptar</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -385,7 +385,7 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>How long to search for UPnp Devices (sec)</source>
-        <translation>Cuánto tiempo buscar dispositivos UPnP (seg)</translation>
+        <translation>Tiempo en buscar dispositivos UPnP (seg)</translation>
     </message>
     <message>
         <source>Maximum number of results per request</source>
