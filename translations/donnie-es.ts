@@ -26,7 +26,7 @@
     </message>
     <message>
         <source>testing and UI rigor</source>
-        <translation>por ensayos y calidad en UI</translation>
+        <translation>por ensayos y calidad interfaz</translation>
     </message>
 </context>
 <context>
