@@ -20,13 +20,17 @@
         <translation>Traductores</translation>
     </message>
     <message>
-        <source>Copyright (C) 2017 Willem-Jan de Hoog</source>
-        <extracomment>I doubt this needs to be translated</extracomment>
-        <translation>Derechos de autor (C) 2017 Willem-Jan de Hoog</translation>
-    </message>
-    <message>
         <source>testing and UI rigor</source>
         <translation>por ensayos y calidad interfaz</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2018 Willem-Jan de Hoog</source>
+        <extracomment>I doubt this needs to be translated</extracomment>
+        <translation type="unfinished">Derechos de autor (C) 2017 Willem-Jan de Hoog {2018 ?}</translation>
+    </message>
+    <message>
+        <source>License: MIT</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

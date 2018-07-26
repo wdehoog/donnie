@@ -12,11 +12,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Copyright (C) 2017 Willem-Jan de Hoog</source>
-        <extracomment>I doubt this needs to be translated</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Translations</source>
         <translation type="unfinished"></translation>
     </message>
@@ -26,6 +21,15 @@
     </message>
     <message>
         <source>testing and UI rigor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2018 Willem-Jan de Hoog</source>
+        <extracomment>I doubt this needs to be translated</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>License: MIT</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
