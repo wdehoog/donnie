@@ -63,7 +63,7 @@ DISTFILES += \
     qml/components/ErrorDialog.qml \
     qml/components/ConfirmDialog.qml \
     qml/components/EditURIDialog.qml \
-    rpm/donnie-rpmlintrc \
+    rpm/donnie-rpmlintrc
 
 HEADERS += \
     src/upnp.h \
@@ -81,6 +81,7 @@ HEADERS += \
     src/upnpgetmetadatarunnable.h
     
 TRANSLATIONS += \
+    translations/donnie-de.ts \
     translations/donnie-es.ts \
     translations/donnie-nl.ts \
     translations/donnie-ru.ts \
