@@ -26,11 +26,11 @@
     <message>
         <source>Copyright (C) 2018 Willem-Jan de Hoog</source>
         <extracomment>I doubt this needs to be translated</extracomment>
-        <translation type="unfinished">Derechos de autor (C) 2017 Willem-Jan de Hoog {2018 ?}</translation>
+        <translation>Derechos de autor (C) 2018 Willem-Jan de Hoog</translation>
     </message>
     <message>
         <source>License: MIT</source>
-        <translation type="unfinished"></translation>
+        <translation>Licencia: MIT</translation>
     </message>
 </context>
 <context>
@@ -230,7 +230,7 @@ No se puede reanudar</translation>
     </message>
     <message>
         <source>There seems to be no internet connection (wifi off). Your Renderer and Media Server might not be reachable.</source>
-        <translation>Parece que no hay conexión a internet (wifi apagado). Es posible que su renderizador y el servidor de medios no sean accesibles.</translation>
+        <translation>Parece que no hay conexión a internet (WLAN apagado). Es posible que su renderizador y el servidor de medios no sean accesibles.</translation>
     </message>
     <message>
         <source>Continue</source>
