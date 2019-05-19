@@ -21,16 +21,16 @@
     </message>
     <message>
         <source>testing and UI rigor</source>
-        <translation type="unfinished"></translation>
+        <translation>тестирование и доработка интерфейса</translation>
     </message>
     <message>
         <source>Copyright (C) 2018 Willem-Jan de Hoog</source>
-        <extracomment>I doubt this needs to be translated</extracomment>
-        <translation type="unfinished">Автор (C) 2017 Willem-Jan de Hoog {2018 ?}</translation>
+        <extracomment>I doubt this needs to be translated - The first word has to be changed.</extracomment>
+        <translation>Автор (C) 2018 Willem-Jan de Hoog</translation>
     </message>
     <message>
         <source>License: MIT</source>
-        <translation type="unfinished"></translation>
+        <translation>Лицензия: MIT</translation>
     </message>
 </context>
 <context>
@@ -241,11 +241,11 @@ Can not Resume.</source>
     <name>MultiItemPicker</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>ОК</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Отменить</translation>
     </message>
 </context>
 <context>
