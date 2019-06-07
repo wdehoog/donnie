@@ -43,6 +43,13 @@ INCLUDEPATH += /usr/include/qt5/QtDBus
 #LIBS += -lmpris-qt5
 QMAKE_LFLAGS += -lupnpp -lmpris-qt5
 
+TRANSLATIONS += \
+    translations/donnie-de.ts \
+    translations/donnie-es.ts \
+    translations/donnie-nl.ts \
+    translations/donnie-ru.ts \
+    translations/donnie.ts
+
 DISTFILES += \
     qml/pages/Browse.qml \
     qml/pages/DiscoveryPage.qml \
@@ -63,7 +70,9 @@ DISTFILES += \
     qml/components/ErrorDialog.qml \
     qml/components/ConfirmDialog.qml \
     qml/components/EditURIDialog.qml \
-    rpm/donnie-rpmlintrc
+    translations/*.ts \
+    rpm/donnie.yaml \
+    rpm/donnie.spec
 
 HEADERS += \
     src/upnp.h \
@@ -80,13 +89,6 @@ HEADERS += \
     src/upnpsetnexttrackrunnable.h \
     src/upnpgetmetadatarunnable.h
     
-TRANSLATIONS += \
-    translations/donnie-de.ts \
-    translations/donnie-es.ts \
-    translations/donnie-nl.ts \
-    translations/donnie-ru.ts \
-    translations/donnie.ts
-
 QMAKE_RPATHDIR += /usr/share/donnie/lib
 
 LIBS.path = /usr/share/donnie/lib/
