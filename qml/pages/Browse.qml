@@ -37,7 +37,7 @@ Page {
 
             try {
 
-                console.log(contentsJson)
+                //console.log(contentsJson)
                 contents = JSON.parse(contentsJson);
 
                 // no ".." for the root or if there already is one
