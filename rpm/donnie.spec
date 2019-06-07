@@ -77,6 +77,9 @@ desktop-file-install --delete-original       \
 %{_datadir}/%{name}/translations
 # >> files
 %changelog
+* Fri Jun 7 2019 Willem-Jan de Hoog <wdehoog@exalondelft.nl> 0.8
+- Translations update (de,es,ru)
+
 * Fri Oct 20 2017 Willem-Jan de Hoog <wdehoog@exalondelft.nl> 0.7
 - Translatable, added Spanish translation
 - Option to resume
