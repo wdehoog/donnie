@@ -92,7 +92,8 @@ Page {
                 font.pixelSize: Theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 text:
-"Carlos Gonzalez"
+"es: Carlos Gonzalez
+ru: Вячеслав Диконов"
             }
 
             SectionHeader {
