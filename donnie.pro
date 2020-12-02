@@ -39,9 +39,11 @@ CONFIG += sailfishapp_i18n
 INCLUDEPATH += /usr/include/qt5/MprisQt
 INCLUDEPATH += /usr/include/qt5/QtDBus
 
-#LIBS += -lupnpp
-#LIBS += -lmpris-qt5
-QMAKE_LFLAGS += -lupnpp -lmpris-qt5
+# upnpp
+LIBS += -lupnpp
+# -lcurl -pthread -lupnp -lthreadutil -lixml
+#mpris qt5
+LIBS += -lmpris-qt5
 
 TRANSLATIONS += \
     translations/donnie-de.ts \
