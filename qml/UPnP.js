@@ -75,7 +75,7 @@ function getDurationString(d) {
       // assume ms
       d /= 1000;
       var minutes = Math.floor(d / 60);
-      var seconds = "0" + (d - minutes * 60);
+      var seconds = "0" + Math.floor(d - minutes * 60);
       return minutes + ":" + seconds.substr(-2);
     }
 }
@@ -231,9 +231,12 @@ function createDisplayProperties(item) {
         metaText += item.album;
     }
 
-    var audioType = getAudioType(item);
-    if(audioType.length > 0)
-        metaText += " - " + audioType;
+    item.audioType = getAudioType(item);
+    if(item.audioType.length > 0) {
+        if(metaText.length > 0)
+            metaText += " - ";
+        metaText += item.audioType;
+    }
 
     return {
         titleText: titleText,
@@ -250,63 +253,72 @@ function getDateYear(dateStr) {
         return "";
 }
 
-function createListContainer(container) {
-    if("object.container.album.musicAlbum" === container.properties["upnp:class"])
+function createNewListItem(type) {
         return {
-            type: "Container",
-            dtype: DonnieItemType.ContentServer,
-            id: container["id"],
-            pid: container["pid"],
-            title: container["title"],
-            titleText: container["title"],
-            metaText: container.properties["upnp:artist"],
-            durationText: getDateYear(container.properties["dc:date"]),
-            artist: container.properties["upnp:artist"],
-            album: container["title"],
-            albumArtURI: container.properties["upnp:albumArtURI"],
-            duration: "",
-            upnpclass: container.properties["upnp:class"]
-        };
-    else
-        return {
-            type: "Container",
-            dtype: DonnieItemType.ContentServer,
-            id: container["id"],
-            pid: container["pid"],
-            title: container["title"],
-            titleText: container["title"],
-            metaText: "", durationText: "",
-            artist: "", album: "", albumArtURI: "", duration: "",
-            upnpclass: container.properties["upnp:class"]
+        type: type, dtype: DonnieItemType.ContentServer,
+        id: "", pid: "",
+        trackNumber: -1, uri: "",
+        title: "", titleText: "",
+        artist: "", album: "", albumArtURI: "",
+        metaText: "", duration: "", durationText: "",
+        upnpclass: "", protocolInfo: "", didl: "", audioType: ""
         };
 }
 
+function createListContainer(container) {
+    var nli = createNewListItem("Container");
+    nli.id = container["id"];
+    nli.pid = container["pid"];
+    nli.title = container["title"];
+    nli.titleText = container["title"];
+    nli.upnpclass = container.properties["upnp:class"];
+    if("object.container.album.musicAlbum" === container.properties["upnp:class"]) {
+        nli.metaText = container.properties["upnp:artist"];
+        nli.durationText = getDateYear(container.properties["dc:date"]);
+        nli.artist = container.properties["upnp:artist"];
+        nli.album = container["title"];
+        nli.albumArtURI = container.properties["upnp:albumArtURI"];
+    }
+    return nli;
+}
+
 function createListItem(item) {
+    //console.log("item: " + JSON.stringify(item))
+    var nli = createNewListItem("Item");
 
-    var listItem = {
-        type: "Item",
-        dtype: DonnieItemType.ContentServer,
-        id: item["id"],
-        pid: item["pid"],
-        title: item["title"],
-        artist: item.properties["dc:creator"],
-        album: item.properties["upnp:album"],
-        albumArtURI: item.properties["upnp:albumArtURI"],
-        uri: item.resources[0]["Uri"],
-        didl: item["didl"],
-        duration: (item.resources[0] && item.resources[0].attributes["duration"])
-                      ? item.resources[0].attributes["duration"] : "",
-        protocolInfo: (item.resources[0] && item.resources[0].attributes["protocolInfo"])
-                      ? item.resources[0].attributes["protocolInfo"] : "",
-        upnpclass: item.properties["upnp:class"]
-    };
+    nli.id = item["id"];
+    nli.pid = item["pid"];
+    nli.title = item["title"];
 
-    var dprops = createDisplayProperties(listItem);
-    listItem.titleText = dprops.titleText;
-    listItem.metaText = dprops.metaText;
-    listItem.durationText = dprops.durationText;
+    nli.artist = item.properties["dc:creator"];
+    if(!nli.artist)
+        nli.artist = item.properties["upnp:artist"];
 
-    return listItem;
+    nli.album = item.properties["upnp:album"];
+    nli.albumArtURI = item.properties["upnp:albumArtURI"];
+
+    if(item.properties["upnp:originalTrackNumber"]) {
+        nli.trackNumber = parseInt(item.properties["upnp:originalTrackNumber"], 10);
+    } else {
+        // as a fallback search in the title
+        var tn = nli.title.match(/\d+/);
+        nli.trackNumber = tn ? parseInt(tn, 10) : 100; // unknown so put at the end
+    }
+
+    nli.uri = item.resources[0]["Uri"];
+    nli.didl = item["didl"];
+    nli.duration = (item.resources[0] && item.resources[0].attributes["duration"])
+                    ? item.resources[0].attributes["duration"] : "";
+    nli.protocolInfo = (item.resources[0] && item.resources[0].attributes["protocolInfo"])
+                        ? item.resources[0].attributes["protocolInfo"] : "";
+    nli.upnpclass = item.properties["upnp:class"];
+
+    var dprops = createDisplayProperties(nli);
+    nli.titleText = dprops.titleText;
+    nli.metaText = dprops.metaText;
+    nli.durationText = dprops.durationText;
+
+    return nli;
 }
 
 var DIDL_FRAME_START = "<DIDL-Lite " +
@@ -330,20 +342,18 @@ function createUserAddedTrack(uri, label, streamType) {
     var pid = id;
     var protocolInfo = "http-get:*:*:*";
     var title = label ? label : "URI[" + id + "]";
-    return {
-        type: "Item",
-        dtype: DonnieItemType.UserDefined,
-        id: id,
-        pid: pid,
-        title: title,
-        titleText: title,
-        metaText: qsTr("User entered URI"),
-        uri: uri,
-        upnpclass: streamType,
-        duration: 0,
-        protocolInfo: protocolInfo,
-        didl: createDIDL(id, pid, uri, label, protocolInfo, streamType)
-    }
+    var nli = createNewListItem("Item");
+    nli.dtype = DonnieItemType.UserDefined;
+    nli.id = id;
+    nli.pid = pid;
+    nli.title = title;
+    nli.titleText = title;
+    nli.metaText = i18n.tr("User entered URI");
+    nli.uri = uri;
+    nli.upnpclass = streamType;
+    nli.protocolInfo = protocolInfo;
+    nli.didl = createDIDL(id, pid, uri, label, protocolInfo, streamType);
+    return nli;
 }
 
 
